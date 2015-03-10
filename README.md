@@ -33,7 +33,8 @@ There's not actually any gloda in here.  So, no.
 ```
 - Serve the contents of this repo via http on localhost somehow.  Here's an
   example of the site I added to my /etc/apache2/sites-available as
-  glodastrophe.conf and then enable via "a2ensite glodastrophe":
+  glodastrophe.conf and then enabled via "a2ensite glodastrophe".  Your paths
+  will vary.
 ```
 <VirtualHost *:80>
   ServerName glodastrophe
@@ -74,4 +75,4 @@ ExpiresDefault "access plus 3 seconds"
 - Probably reload the page so we can make sure that the dangerous permissions
   are totally available to the code.
 - Now you can add an email account!  Hooray!
-- Contribute to gaia-email-libs-and-more/convoy
+- Contribute to gaia-email-libs-and-more/convoy and this repo.
