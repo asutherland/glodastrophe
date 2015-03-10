@@ -20,7 +20,9 @@ There's not actually any gloda in here.  So, no.
 
 - Be a contributor to gaia-email-libs-and-more who doesn't cringe at the
   thought of making contributions to gaia-email-libs-and-more.
-- Check out this repo
+- Clone this repo with "--recursive" because it has submodules.  Oh yes,
+  submodules.  If you forgot to do this, now is the time to do
+  "git submodule update --init --recursive".
 - Be using Ubuntu or maybe Debian linux.  Or understand how to translate from
   those to whatever your platform is, or just understand the goals described
   below.  (Really you just need to serve this directory.  We could probably
