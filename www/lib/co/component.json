@@ -1,0 +1,15 @@
+{
+  "name": "co",
+  "version": "4.4.0",
+  "description": "generator async control flow goodness",
+  "keywords": [
+    "async",
+    "flow",
+    "generator",
+    "coro",
+    "coroutine"
+  ],
+  "repo": "tj/co",
+  "scripts": ["index.js"],
+  "licence": "MIT"
+}

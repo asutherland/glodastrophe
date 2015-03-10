@@ -1,0 +1,3 @@
+[submodule "deps/gelam"]
+	path = deps/gelam
+	url = git@github.com:mozilla-b2g/gaia-email-libs-and-more.git

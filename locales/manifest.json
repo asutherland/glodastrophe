@@ -1,0 +1,8 @@
+{
+  "locales": [
+    "en-US"
+  ],
+  "resources": [
+    "{{locale}}/mysteriousmail.l20n",
+  ]
+}
