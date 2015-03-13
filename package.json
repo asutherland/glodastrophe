@@ -4,7 +4,6 @@
     "baseUrl": "www/lib",
     "dependencies": {
       "react-list": "github:orgsync/react-list/0.1.2",
-      "co": "github:tj/co/4.4.0",
       "react-intl.min": "github:yahoo/react-intl/v1.1.0#dist/react-intl.min.js"
     }
   }
