@@ -61,6 +61,10 @@ ExpiresDefault "access plus 3 seconds"
 - Verify that you can see this README.md file at http://glodastrophe/README.md
 - You can't?  You must've screwed something up.  Or I told you the wrong thing.
   I do feel bad about things either way.
+- Set the preference boolean pref "dom.workers.latestJSVersion" to true so that
+  the worker can use "let".  You will need to create the pref yourself.  Once
+  https://bugzil.la/1151739 is addressed/duped/mooted, you don't need to do
+  this.
 - Install the extension from https://github.com/mykmelez/tcpsocketpup in your
   Firefox (preferably nightly) by going to that URL, clicking on "Latest
   release", then clicking on the XPI download.  A door-hanger thing should

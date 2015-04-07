@@ -26,18 +26,20 @@ var ViewSliceList = React.createClass({
   },
 
   componentWillMount: function() {
-    this.boundDirtyHandler = this.handleDirty.bind(this);
-    this.boundRenderer = this.renderItem.bind(this);
+    this.boundDirtyHandler = this.handleDirty; //.bind(this);
+    this.boundRenderer = this.renderItem; //.bind(this);
 
     var slice = this.props.slice;
-    slice.on('changes', this.boundDirtyHandler);
-    slice.on('splice', this.boundDirtyHandler);
+    // seeked is for windowed list views
+    slice.on('seeked', this.boundDirtyHandler);
+    // complete is for entire list views
+    slice.on('complete', this.boundDirtyHandler);
   },
 
   componentWillUnmount: function() {
     var slice = this.props.slice;
-    slice.removeListener('changes', this.boundDirtyHandler);
-    slice.removeListener('splice', this.boundDirtyHandler);
+    slice.removeListener('seeked', this.boundDirtyHandler);
+    slice.removeListener('complete', this.boundDirtyHandler);
   },
 
   handleDirty: function() {

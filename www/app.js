@@ -10,6 +10,7 @@ requirejs.config({
         gelam: '../../deps/gelam/js',
         locales: '../locales'
     },
+    scriptType: 'application/javascript;version=1.7',
     jsx: {
       fileExtension: '.jsx'
     }

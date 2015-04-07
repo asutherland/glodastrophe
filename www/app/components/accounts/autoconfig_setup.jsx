@@ -25,7 +25,7 @@ var AutoconfigSetup = React.createClass({
     var errorNodes = [];
     if (this.state.errorCode) {
       errorNodes.push(
-        <div>
+        <div key={this.state.errorCode}>
           {this.state.errorCode}: {JSON.stringify(this.state.errorDetails)}
         </div>
       );
