@@ -50,11 +50,24 @@ var FolderListPane = React.createClass({
     }
 
 console.log('trying to render ViewSlice for accounts');
-    return <ViewSliceList
-              slice={this.state.account.folders}
-              widget={FolderSummary}
-              />
+    return (
+      <div>
+        <ViewSliceList
+          slice={this.state.account.folders}
+          widget={FolderSummary}
+          />
+        <button onClick={ this.syncFolderList }>
+          <FormattedMessage
+            message={ this.getIntlMessage('refreshFolderList') }
+            />
+        </button>
+      </div>
+    );
   },
+
+  syncFolderList: function() {
+    this.state.account.syncFolderList();
+  }
 });
 
 return FolderListPane;

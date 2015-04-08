@@ -17,8 +17,11 @@ return {
   /**
    * The button that actually starts the process of trying to automatically
    * configure the account.
-   */  
+   */
   setupAutoconfigTriggerAutoconfigButtonLabel: 'Add Account…',
+
+  // -- folder_list.jsx
+  refreshFolderList: 'Refresh folder list',
 };
 
 });
