@@ -16,7 +16,7 @@ var Home = require('jsx!./components/home/home');
 var AutoconfigSetup = require('jsx!./components/accounts/autoconfig_setup');
 // - Views
 var FolderListPane = require('jsx!./components/panes/folder_list');
-var MessageListPane = require('jsx!./components/panes/message_list');
+var ConversationListPane = require('jsx!./components/panes/conversation_list');
 
 var queryString = require('./query_string');
 
@@ -63,7 +63,7 @@ var App = React.createClass({
   },
 
   viewFolder: function(folderId) {
-    return <MessageListPane mailApi={mailApi} folderId={folderId} />;
+    return <ConversationListPane mailApi={mailApi} folderId={folderId} />;
   },
 
   viewMessage: function(messageId) {
