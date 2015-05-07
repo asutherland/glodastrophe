@@ -50,9 +50,15 @@ body {
 }
 
 .conv-tidbit-author {
+  display: inline-block;
+  margin-right: 1em;
+}
+
+.conv-tidbit-date {
+  display: inline-block;
   margin-right: 1em;
 }
 
 .conv-tidbit-snippet {
-
+  display: inline-block;
 }

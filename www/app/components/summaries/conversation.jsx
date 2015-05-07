@@ -16,6 +16,9 @@ var ConversationSummary = React.createClass({
       return (
         <div className="conv-tidbit">
           <div className="conv-tidbit-author">{ tidbit.author.name || tidbit.author.address }</div>
+          <div className="conv-tidbit-date">
+            <FormattedRelative value={tidbit.date} />
+          </div>
           <div className="conv-tidbit-snippet">{ tidbit.snippet }</div>
         </div>
       );

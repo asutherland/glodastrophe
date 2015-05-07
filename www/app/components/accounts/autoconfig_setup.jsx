@@ -23,6 +23,11 @@ var AutoconfigSetup = React.createClass({
 
   render: function() {
     var errorNodes = [];
+    if (this.state.autoconfigInProgress) {
+      return (
+        <div>AutoconfiguratinG</div>
+      );
+    }
     if (this.state.errorCode) {
       errorNodes.push(
         <div key={this.state.errorCode}>
