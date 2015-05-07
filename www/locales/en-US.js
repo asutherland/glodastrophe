@@ -1,6 +1,11 @@
 define(function(require) {
 
 return {
+  // --- Account Home
+  accountHomeShowFolders: 'Folders',
+  /** Delete the account permanently */
+  deleteAccount: 'Delete Account',
+
   // --- Settings / Setup stuff
   /** Hyperlink text to navigate to the add an account page */
   settingsAccountAddLink: 'Add a new account…',
@@ -22,6 +27,10 @@ return {
 
   // -- folder_list.jsx
   refreshFolderList: 'Refresh folder list',
+
+  // -- conversation list / sync stuff
+  syncRefresh: 'Refresh',
+  syncGrow: 'Grow'
 };
 
 });

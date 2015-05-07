@@ -49,7 +49,6 @@ var FolderListPane = React.createClass({
       return <div>LoadinG AccounT...</div>;
     }
 
-console.log('trying to render ViewSlice for accounts');
     return (
       <div>
         <ViewSliceList

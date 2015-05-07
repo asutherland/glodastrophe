@@ -62,6 +62,9 @@ var ViewSliceList = React.createClass({
 
   renderItem: function(item) {
     var Widget = this.props.widget;
+    if (!item) {
+      return <div>LoadinG</div>;
+    }
     return <Widget key={item.id} item={item} />
   }
 });

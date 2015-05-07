@@ -53,6 +53,16 @@ var MessageListPane = React.createClass({
     return (
       <div>
         <h1>{this.state.folder.name}</h1>
+        <div>
+          <button onClick={ this.syncRefresh }><FormattedMessage
+            message={ this.getIntlMessage('syncRefresh') }
+            />
+          </button>
+          <button onClick={ this.syncGrowFolder }><FormattedMessage
+            message={ this.getIntlMessage('syncGrow') }
+            />
+          </button>
+        </div>
         <ViewSliceList
           slice={this.state.slice}
           widget={ConversationSummary}
@@ -60,6 +70,18 @@ var MessageListPane = React.createClass({
       </div>
     );
   },
+
+  syncRefresh: function() {
+    if (this.state.slice) {
+      this.state.slice.refresh();
+    }
+  },
+
+  syncGrowFolder: function() {
+    if (this.state.slice) {
+      this.state.slice.grow();
+    }
+  }
 });
 
 return MessageListPane;

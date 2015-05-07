@@ -118,7 +118,9 @@ var AutoconfigSetup = React.createClass({
         // Once we know about the inbox for the account, bring it up.  (This
         // should be nearly immediate since we speculatively create the inbox
         // prior to even running syncFolderList.)
+        console.log('waiting for inbox');
         account.latestOnce('inbox', function(inboxFolder) {
+          console.log('got inbox!');
           navigate('/view/folder/' + inboxFolder.id);
         }.bind(this))
       }.bind(this)

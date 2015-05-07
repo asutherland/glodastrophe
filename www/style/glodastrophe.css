@@ -1,3 +1,58 @@
 body {
   background-color: white;
 }
+
+.account-home-summary {
+  display: flex;
+  flex-flow: column;
+  margin: 0.5em;
+  padding: 0.5em;
+  border: 1px solid gray;
+}
+
+.ahs-contents {
+  display: flex;
+  flex-flow: row;
+}
+
+.ahs-details {
+  flex: 1;
+}
+
+.ahs-actions {
+  display: flex;
+  flex-flow: row;
+  flex: none;
+}
+
+.conv-summary {
+  border-bottom: 1px solid gray;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+}
+
+.conv-summary-date {
+  display: inline-block;
+  margin-right: 1em;
+}
+
+.conv-summary-subject {
+  display: inline-block;
+  font-weight: bold;
+}
+
+.conv-summary-tidbits {
+  padding-left: 1em;
+}
+
+.conv-tidbit {
+
+}
+
+.conv-tidbit-author {
+  margin-right: 1em;
+}
+
+.conv-tidbit-snippet {
+
+}
