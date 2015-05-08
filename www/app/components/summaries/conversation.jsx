@@ -6,6 +6,8 @@ var IntlMixin = require('react-intl').IntlMixin;
 var FormattedMessage = require('react-intl').FormattedMessage;
 var FormattedRelative = require('react-intl').FormattedRelative;
 
+var navigate = require('react-mini-router').navigate;
+
 var ConversationSummary = React.createClass({
   mixins: [IntlMixin],
 
@@ -24,7 +26,7 @@ var ConversationSummary = React.createClass({
       );
     });
     return (
-      <div className="conv-summary">
+      <div className="conv-summary" onClick={ this.showConversation} >
         <div>
           <div className="conv-summary-date">
             <FormattedRelative value={msg.mostRecentMessageDate} />
@@ -34,6 +36,10 @@ var ConversationSummary = React.createClass({
         <div className="conv-summary-tidbits">{ tidbits }</div>
       </div>
     );
+  },
+
+  showConversation: function() {
+    navigate('/view/conversation/' + this.props.item.id);
   }
 });
 

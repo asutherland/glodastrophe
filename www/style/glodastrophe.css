@@ -62,3 +62,26 @@ body {
 .conv-tidbit-snippet {
   display: inline-block;
 }
+
+.message-item {
+  border-bottom: 1px solid gray;
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+}
+
+.message-envelope {
+
+}
+
+.message-author {
+  display: inline-block;
+  margin-right: 1em;
+}
+
+.message-date {
+
+}
+
+.message-subject {
+
+}

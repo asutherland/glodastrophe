@@ -17,6 +17,7 @@ var AutoconfigSetup = require('jsx!./components/accounts/autoconfig_setup');
 // - Views
 var FolderListPane = require('jsx!./components/panes/folder_list');
 var ConversationListPane = require('jsx!./components/panes/conversation_list');
+var MessageListPane = require('jsx!./components/panes/message_list');
 
 var queryString = require('./query_string');
 
@@ -31,7 +32,8 @@ var App = React.createClass({
     '/settings/accounts/:accountId': 'accountSettings',
     '/view/folders/:accountId': 'viewAccountFolders',
     '/view/folder/:folderId': 'viewFolder',
-    '/view/folder/:folderId/message/:messageId': 'viewMessage'
+    '/view/conversation/:conversationId': 'viewConversation',
+    '/view/message/:messageId': 'viewMessage'
   },
 
   render: function() {
@@ -64,6 +66,11 @@ var App = React.createClass({
 
   viewFolder: function(folderId) {
     return <ConversationListPane mailApi={mailApi} folderId={folderId} />;
+  },
+
+  viewConversation: function(conversationId) {
+    return <MessageListPane mailApi={mailApi}
+                            conversationId={conversationId} />;
   },
 
   viewMessage: function(messageId) {

@@ -16,43 +16,31 @@ var MessageListPane = React.createClass({
   getInitialState: function() {
     return {
       error: null,
-      folder: null,
       slice: null
     };
   },
 
   componentWillMount: function() {
-    this.props.mailApi.eventuallyGetFolderById(this.props.folderId).then(
-      function gotFolder(folder) {
-        this.setState({
-          folder: folder,
-          slice: this.props.mailApi.viewFolderMessages(folder)
-        });
-      }.bind(this),
-      function noSuchFolder() {
-        this.setState({
-          error: true
-        });
-      }.bind(this)
-    );
+    this.setState({
+      slice: this.props.mailApi.viewConversationHeaders(
+               this.props.conversationId)
+    });
   },
 
   componentWillUnmount: function() {
-
+    if (this.state.slice) {
+      this.state.slice.release();
+    }
   },
 
   render: function() {
     if (this.state.error) {
-      return <div>No SucH FoldeR</div>;
-    }
-
-    if (!this.state.folder) {
-      return <div>LoadinG FoldeR: {this.props.folderId}...</div>;
+      return <div>No SucH ConversatioN</div>;
     }
 
     return (
       <div>
-        <h1>{this.state.folder.name}</h1>
+        <h1>{this.props.conversationId}</h1>
         <ViewSliceList
           slice={this.state.slice}
           widget={MessageSummary}

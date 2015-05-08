@@ -11,7 +11,7 @@ var ConversationSummary = require('jsx!../summaries/conversation');
 
 var navigate = require('react-mini-router').navigate;
 
-var MessageListPane = React.createClass({
+var ConversationListPane = React.createClass({
   mixins: [IntlMixin],
   getInitialState: function() {
     return {
@@ -38,7 +38,9 @@ var MessageListPane = React.createClass({
   },
 
   componentWillUnmount: function() {
-
+    if (this.state.slice) {
+      this.state.slice.release();
+    }
   },
 
   render: function() {
@@ -84,5 +86,5 @@ var MessageListPane = React.createClass({
   }
 });
 
-return MessageListPane;
+return ConversationListPane;
 });
