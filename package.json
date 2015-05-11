@@ -3,7 +3,7 @@
   "volo": {
     "baseUrl": "www/lib",
     "dependencies": {
-      "react-list": "github:orgsync/react-list/0.1.2",
+      "react-list": "github:orgsync/react-list/0.4.2",
       "react-intl.min": "github:yahoo/react-intl/v1.1.0#dist/react-intl.min.js"
     }
   }
