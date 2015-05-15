@@ -8,13 +8,15 @@ var FormattedRelative = require('react-intl').FormattedRelative;
 
 var navigate = require('react-mini-router').navigate;
 
+var SliceItemMixin = require('../slice_item_mixin');
+
 var ConversationSummary = React.createClass({
-  mixins: [IntlMixin],
+  mixins: [IntlMixin, SliceItemMixin],
 
   render: function() {
-    var msg = this.props.item;
+    var conv = this.props.item;
 
-    var tidbits = msg.messageTidbits.map(function(tidbit) {
+    var tidbits = conv.messageTidbits.map(function(tidbit) {
       return (
         <div className="conv-tidbit">
           <div className="conv-tidbit-author">{ tidbit.author.name || tidbit.author.address }</div>
@@ -25,13 +27,18 @@ var ConversationSummary = React.createClass({
         </div>
       );
     });
+    var height = 20 * conv.height;
+    var inlineStyle = {
+      height: height,
+    };
     return (
-      <div className="conv-summary" onClick={ this.showConversation} >
+      <div className="conv-summary" onClick={ this.showConversation }
+           style={ inlineStyle } >
         <div>
           <div className="conv-summary-date">
-            <FormattedRelative value={msg.mostRecentMessageDate} />
+            <FormattedRelative value={ conv.mostRecentMessageDate } />
           </div>
-          <div className="conv-summary-subject">{ msg.firstSubject }</div>
+          <div className="conv-summary-subject">{ conv.firstSubject }</div>
         </div>
         <div className="conv-summary-tidbits">{ tidbits }</div>
       </div>

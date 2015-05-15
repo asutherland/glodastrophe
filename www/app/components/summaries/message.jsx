@@ -11,6 +11,9 @@ var navigate = require('react-mini-router').navigate;
 var MessageSummary = React.createClass({
   mixins: [IntlMixin],
 
+  defaultProps: {
+  },
+
   render: function() {
     var msg = this.props.item;
     return (

@@ -5,7 +5,7 @@ var React = require('react');
 var IntlMixin = require('react-intl').IntlMixin;
 var FormattedMessage = require('react-intl').FormattedMessage;
 
-var ViewSliceList = require('jsx!../view_slice_list');
+var EntireList = require('jsx!../entire_list');
 
 var FolderSummary = require('jsx!../summaries/folder');
 
@@ -51,9 +51,9 @@ var FolderListPane = React.createClass({
 
     return (
       <div>
-        <ViewSliceList
-          slice={this.state.account.folders}
-          widget={FolderSummary}
+        <EntireList
+          slice={ this.state.account.folders }
+          widget={ FolderSummary }
           />
         <button onClick={ this.syncFolderList }>
           <FormattedMessage

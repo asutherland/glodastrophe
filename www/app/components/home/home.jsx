@@ -5,7 +5,7 @@ var React = require('react');
 var IntlMixin = require('react-intl').IntlMixin;
 var FormattedMessage = require('react-intl').FormattedMessage;
 
-var ViewSliceList = require('jsx!../view_slice_list');
+var EntireList = require('jsx!../entire_list');
 
 var AccountHome = require('jsx!../summaries/account_home');
 
@@ -24,7 +24,7 @@ var Home = React.createClass({
   render: function() {
     return (
       <div>
-        <ViewSliceList
+        <EntireList
           slice={this.props.mailApi.accounts}
           widget={AccountHome}
           />

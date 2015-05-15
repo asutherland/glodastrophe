@@ -5,7 +5,7 @@ var React = require('react');
 var IntlMixin = require('react-intl').IntlMixin;
 var FormattedMessage = require('react-intl').FormattedMessage;
 
-var ViewSliceList = require('jsx!../view_slice_list');
+var WindowedList = require('jsx!../windowed_list');
 
 var ConversationSummary = require('jsx!../summaries/conversation');
 
@@ -65,9 +65,10 @@ var ConversationListPane = React.createClass({
             />
           </button>
         </div>
-        <ViewSliceList
-          slice={this.state.slice}
-          widget={ConversationSummary}
+        <WindowedList
+          unitSize={ 20 }
+          slice={ this.state.slice }
+          widget={ ConversationSummary }
           />
       </div>
     );

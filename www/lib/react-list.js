@@ -361,4 +361,141 @@
   })(List);
 
   exports.UniformList = UniformList;
+
+  var QuantizedHeightList = (function (_List2) {
+    function QuantizedHeightList() {
+      _classCallCheck(this, QuantizedHeightList);
+
+      if (_List2 != null) {
+        _List2.apply(this, arguments);
+      }
+
+      this.state = {};
+    }
+
+    _inherits(QuantizedHeightList, _List2);
+
+    _createClass(QuantizedHeightList, [{
+      key: 'scrollTo',
+      value: function scrollTo(unitOffset) {
+        this.setScroll(this.getSpace(unitOffset));
+      }
+    }, {
+      key: 'componentDidUpdate',
+      value: function componentDidUpdate() {}
+    }, {
+      key: 'updateFrame',
+      value: function updateFrame(event) {
+        var _props3 = this.props;
+        var totalHeight = _props3.totalHeight;
+        var threshold = _props3.threshold;
+        var unitSize = _props3.unitSize;
+
+        // the scroll position can be negative if there's a header or other things.
+        // But as far as we are concerned 0 is as high as we can scroll since there
+        // is nothing to render in negative-space.
+        var scroll = Math.max(0, this.getScroll());
+
+        // If this was a scroll event and we haven't scrolled far enough since our
+        // last seek, then don't issue a new seek.
+        if (event && event.type === 'scroll' && this._lastScroll && Math.abs(scroll - this._lastScroll) < this.props.seekThreshold) {
+          return;
+        }
+        console.log('event.type', event && event.type, '_lastScroll', this._lastScroll, 'new scroll', scroll);
+        this._lastScroll = scroll;
+
+        var top = Math.max(0, scroll - threshold);
+
+        var viewportHeight = this.getViewportHeight();
+
+        // Note that we don't have a concept of a maximum offset; it's up to the
+        // seek implementation to make sure to appropriately cap what it sends us.
+        var firstOffset = Math.floor(top / unitSize);
+        var firstVisibleOffset = Math.floor(scroll / unitSize);
+        var lastVisibleOffset = Math.ceil((scroll + viewportHeight) / unitSize);
+        var lastOffset = Math.ceil((top + viewportHeight + threshold) / unitSize);
+        this.props.seek(firstOffset, firstVisibleOffset - firstOffset, lastVisibleOffset - firstVisibleOffset, lastOffset - lastVisibleOffset);
+      }
+    }, {
+      key: 'getSpace',
+      value: function getSpace(unitOffset) {
+        return unitOffset * this.props.unitSize;
+      }
+    }, {
+      key: 'render',
+      value: function render() {
+        var _this3 = this;
+
+        if (!this.props.seekedData) {
+          return _React.createElement('div', null);
+        }
+
+        var unitSize = this.props.unitSize;
+
+        var items = this.props.seekedData.map(function (item, i) {
+          return _this3.props.itemRenderer(item, i, unitSize);
+        });
+        var container = this.props.itemsRenderer(items, function (c) {
+          return _this3.items = c;
+        });
+
+        var transform = 'translate(0, ' + this.getSpace(this.props.seekedOffset) + 'px)';
+        return _React.createElement(
+          'div',
+          {
+            style: { position: 'relative', height: this.getSpace(this.props.totalHeight) }
+          },
+          _React.createElement(
+            'div',
+            { style: { WebkitTransform: transform, transform: transform } },
+            container
+          )
+        );
+      }
+    }], [{
+      key: 'propTypes',
+      value: {
+        initialIndex: _React.PropTypes.number,
+        itemRenderer: _React.PropTypes.func,
+        itemsRenderer: _React.PropTypes.func,
+        seek: _React.PropTypes.func,
+        seekedData: _React.PropTypes.array,
+        seekedOffset: _React.PropTypes.number,
+        seekThreshold: _React.PropTypes.number,
+        threshold: _React.PropTypes.number,
+        totalHeight: _React.PropTypes.number,
+        unitSize: _React.PropTypes.number
+      },
+      enumerable: true
+    }, {
+      key: 'defaultProps',
+      value: {
+        itemRenderer: function itemRenderer(i, j) {
+          return _React.createElement(
+            'div',
+            { key: j },
+            i
+          );
+        },
+        itemsRenderer: function itemsRenderer(items, ref) {
+          return _React.createElement(
+            'div',
+            { ref: ref },
+            items
+          );
+        },
+        length: 0,
+        seekedData: [], // (immutable, so its reuse does not matter)
+        seekedOffset: 0,
+        seekThreshold: 100,
+        threshold: 500,
+        unitSize: 40
+      },
+      enumerable: true
+    }]);
+
+    return QuantizedHeightList;
+  })(List);
+
+  exports.QuantizedHeightList = QuantizedHeightList;
 });

@@ -29,6 +29,8 @@ body {
   border-bottom: 1px solid gray;
   margin-bottom: 10px;
   padding-bottom: 10px;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .conv-summary-date {
