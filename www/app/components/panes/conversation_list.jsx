@@ -64,6 +64,7 @@ var ConversationListPane = React.createClass({
             message={ this.getIntlMessage('syncGrow') }
             />
           </button>
+          <button onClick={ this.ensureSnippets }>EnsurE SnippetS</button>
         </div>
         <WindowedList
           unitSize={ 20 }
@@ -83,6 +84,12 @@ var ConversationListPane = React.createClass({
   syncGrowFolder: function() {
     if (this.state.slice) {
       this.state.slice.grow();
+    }
+  },
+
+  ensureSnippets: function() {
+    if (this.state.slice) {
+      this.state.slice.ensureSnippets();
     }
   }
 });

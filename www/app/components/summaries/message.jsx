@@ -28,7 +28,8 @@ var MessageSummary = React.createClass({
             <FormattedRelative value={msg.date} />
           </div>
         </div>
-        <div className="message-subject">{ this.props.item.subject }</div>
+        <div className="message-subject">{ msg.subject }</div>
+        <div className="message-snippet">{ msg.snippet || '' }</div>
       </div>
     );
   },

@@ -63,6 +63,7 @@ body {
 
 .conv-tidbit-snippet {
   display: inline-block;
+  font-style: italic;
 }
 
 .message-item {

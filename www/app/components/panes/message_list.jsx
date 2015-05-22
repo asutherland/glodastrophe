@@ -21,6 +21,8 @@ var MessageListPane = React.createClass({
   },
 
   componentWillMount: function() {
+    // XXX there needs to be some feedback path for viewConversationHeaders to
+    // generate an error state because the conversation does not exist.
     this.setState({
       slice: this.props.mailApi.viewConversationHeaders(
                this.props.conversationId)
@@ -38,9 +40,13 @@ var MessageListPane = React.createClass({
       return <div>No SucH ConversatioN</div>;
     }
 
+    // This auto-suppresses against spamming.
+    this.state.slice.ensureSnippets();
+
     return (
       <div>
         <h1>{this.props.conversationId}</h1>
+        <button onClick={ this.ensureSnippets }>EnsurE SnippetS</button>
         <WindowedList
           slice={this.state.slice}
           widget={MessageSummary}
@@ -48,6 +54,10 @@ var MessageListPane = React.createClass({
       </div>
     );
   },
+
+  ensureSnippets: function() {
+    this.state.slice.ensureSnippets();
+  }
 });
 
 return MessageListPane;
