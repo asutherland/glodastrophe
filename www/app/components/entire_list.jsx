@@ -38,7 +38,7 @@ var EntireList = React.createClass({
 
   getInitialState: function() {
     return {
-      serial: this.props.slice.serial,
+      serial: this.props.view.serial,
     };
   },
 
@@ -47,13 +47,13 @@ var EntireList = React.createClass({
     this.boundRenderer = this.renderItem; //.bind(this);
     this.boundSeek = this.seek;
 
-    var slice = this.props.slice;
-    slice.on('complete', this.boundDirtyHandler);
+    var view = this.props.view;
+    view.on('complete', this.boundDirtyHandler);
   },
 
   componentWillUnmount: function() {
-    var slice = this.props.slice;
-    slice.removeListener('complete', this.boundDirtyHandler);
+    var view = this.props.view;
+    view.removeListener('complete', this.boundDirtyHandler);
   },
 
   shouldComponentUpdate: function(nextProps, nextState) {
@@ -62,21 +62,21 @@ var EntireList = React.createClass({
 
   handleDirty: function() {
     console.log('got a dirty notification!',
-                this.props.slice._itemConstructor.name,
-                'offset:', this.props.slice.offset, 'count:',
-                this.props.slice.items.length);
+                this.props.view._itemConstructor.name,
+                'offset:', this.props.view.offset, 'count:',
+                this.props.view.items.length);
     this.setState({
-      serial: this.props.slice.serial
+      serial: this.props.view.serial
     });
   },
 
   render: function() {
     return (
       <ReactList
-        length={ this.props.slice.items.length }
+        length={ this.props.view.items.length }
         itemHeight={ this.props.itemHeight }
         itemRenderer={ this.boundRenderer }
-        serial={ this.props.slice.serial }
+        serial={ this.props.view.serial }
         />
     );
   },
@@ -85,13 +85,14 @@ var EntireList = React.createClass({
     // Note: The react-widget seems to be making the assumption that we'll use
     // the relIndex as our key, although it doesn't actually depend on this.
     var Widget = this.props.widget;
-    var item = this.props.slice.items[absIndex];
+    var item = this.props.view.items[absIndex];
     if (!item) {
       // if not yet loaded and to allow some DOM stability, key off the absolute
       // index.
       return <div key={ 'abs' + absIndex }>LoadinG</div>;
     }
-    return <Widget key={ item.id } item={ item } serial={ item.serial } />
+    return <Widget key={ item.id } item={ item } serial={ item.serial }
+                   pick={ this.props.pick }/>
   }
 });
 

@@ -2,6 +2,7 @@ define(function(require) {
 
 return {
   // --- Account Home
+  accountHomeShow3Pane: '3-Pane View',
   accountHomeShowFolders: 'Folders',
   /** Delete the account permanently */
   deleteAccount: 'Delete Account',

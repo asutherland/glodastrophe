@@ -13,6 +13,7 @@ var navigate = require('react-mini-router').navigate;
 
 var FolderListPane = React.createClass({
   mixins: [IntlMixin],
+
   getInitialState: function() {
     return {
       error: null,
@@ -20,10 +21,16 @@ var FolderListPane = React.createClass({
     };
   },
 
-  componentWillMount: function() {
-    this.props.mailApi.eventuallyGetAccountById(this.props.accountId).then(
+  _getAccount: function(accountId) {
+    if (!accountId) {
+      this.setState({
+        error: null,
+        account: null
+      });
+    }
+
+    this.props.mailApi.eventuallyGetAccountById(accountId).then(
       function gotAccount(account) {
-        console.log('got account', account);
         this.setState({
           account: account
         });
@@ -36,11 +43,23 @@ var FolderListPane = React.createClass({
     );
   },
 
-  componentWillUnmount: function() {
+  componentWillMount: function() {
+    this._getAccount(this.props.accountId);
+  },
 
+  componentWillReceiveProps: function(nextProps) {
+    this._getAccount(nextProps.accountId);
+  },
+
+  componentWillUnmount: function() {
+    // We don't want to release the folders view; it's not owned by us.
   },
 
   render: function() {
+    if (!this.props.accountId) {
+      return <div></div>
+    }
+
     if (this.state.error) {
       return <div>No SucH AccounT</div>;
     }
@@ -52,8 +71,9 @@ var FolderListPane = React.createClass({
     return (
       <div>
         <EntireList
-          slice={ this.state.account.folders }
+          view={ this.state.account.folders }
           widget={ FolderSummary }
+          pick={ this.props.pick }
           />
         <button onClick={ this.syncFolderList }>
           <FormattedMessage

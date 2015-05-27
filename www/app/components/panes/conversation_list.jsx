@@ -17,33 +17,74 @@ var ConversationListPane = React.createClass({
     return {
       error: null,
       folder: null,
-      slice: null
+      view: null
     };
   },
 
-  componentWillMount: function() {
-    this.props.mailApi.eventuallyGetFolderById(this.props.folderId).then(
+  _getConversationView: function(folderId) {
+    if (this.state.view) {
+      this.state.view.release();
+    }
+
+    if (!folderId) {
+      this.setState({
+        error: null,
+        folder: null,
+        view: null
+      });
+      return;
+    }
+
+    // Make sure any already existing view is forgotten since the below lookup
+    // is async and we want to forget the view in the same turn we release it.
+    this.setState({
+      view: null
+    });
+console.log('trying to get folder', folderId);
+    this.props.mailApi.eventuallyGetFolderById(folderId).then(
       function gotFolder(folder) {
+console.log('GOT IT!');
         this.setState({
           folder: folder,
-          slice: this.props.mailApi.viewFolderConversations(folder)
+          view: this.props.mailApi.viewFolderConversations(folder),
+          error: false
         });
       }.bind(this),
-      function noSuchFolder() {
+      function noSuchFolder(err) {
+console.log('BOO NO NO NO', err);
         this.setState({
+          folder: null,
+          view: null,
           error: true
         });
       }.bind(this)
     );
   },
 
+  componentWillMount: function() {
+    this._getConversationView(this.props.folderId);
+  },
+
+  componentWillReceiveProps: function(nextProps) {
+    this._getConversationView(nextProps.folderId);
+  },
+
   componentWillUnmount: function() {
-    if (this.state.slice) {
-      this.state.slice.release();
+    if (this.state.view) {
+      this.state.view.release();
     }
   },
 
+  shouldComponentUpdate: function(nextProps, nextState) {
+    return true;
+  },
+
   render: function() {
+    // Be empty when there's no folder selected.
+    if (!this.props.folderId) {
+      return <div></div>
+    }
+
     if (this.state.error) {
       return <div>No SucH FoldeR</div>;
     }
@@ -68,8 +109,9 @@ var ConversationListPane = React.createClass({
         </div>
         <WindowedList
           unitSize={ 20 }
-          slice={ this.state.slice }
+          view={ this.state.view }
           widget={ ConversationSummary }
+          pick={ this.props.pick }
           />
       </div>
     );

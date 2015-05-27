@@ -32,7 +32,7 @@ var ConversationSummary = React.createClass({
       height: height,
     };
     return (
-      <div className="conv-summary" onClick={ this.showConversation }
+      <div className="conv-summary" onClick={ this.clickConversation }
            style={ inlineStyle } >
         <div>
           <div className="conv-summary-date">
@@ -45,8 +45,10 @@ var ConversationSummary = React.createClass({
     );
   },
 
-  showConversation: function() {
-    navigate('/view/conversation/' + this.props.item.id);
+  clickConversation: function() {
+    if (this.props.pick) {
+      this.props.pick(this.props.item);
+    }
   }
 });
 

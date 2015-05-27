@@ -25,7 +25,7 @@ var Home = React.createClass({
     return (
       <div>
         <EntireList
-          slice={this.props.mailApi.accounts}
+          view={this.props.mailApi.accounts}
           widget={AccountHome}
           />
         <div>

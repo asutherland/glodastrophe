@@ -14,7 +14,12 @@ var AccountHome = React.createClass({
         <div className='ahs-header'>Account: { this.props.item.name }</div>
         <div className='ahs-contents'>
           <div className='ahs-details'>
-            <a href={'#!/view/folders/' + this.props.item.id}>
+            <a href={ '#!/view/3pane/' + this.props.item.id + '/./.' }>
+              <FormattedMessage
+                message={ this.getIntlMessage('accountHomeShow3Pane') }
+                />
+            </a>
+            <a href={ '#!/view/folders/' + this.props.item.id }>
               <FormattedMessage
                 message={ this.getIntlMessage('accountHomeShowFolders') }
                 />

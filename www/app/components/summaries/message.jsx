@@ -19,7 +19,7 @@ var MessageSummary = React.createClass({
     return (
       // XXX we can't use an 'a' link because BAD things happen if multiple
       // tabs with us inside get opened.  Need SharedWorkers!
-      <div className="message-item" onClick={ this.showMessage }>
+      <div className="message-item" onClick={ this.clickMessage }>
         <div className="message-envelope">
           <div className="message-author">
             { msg.author.name || msg.author.address }
@@ -34,8 +34,10 @@ var MessageSummary = React.createClass({
     );
   },
 
-  showMessage: function() {
-    navigate('/view/message/' + this.props.item.id);
+  clickMessage: function() {
+    if (this.props.pick) {
+      this.props.pick(this.props.item);
+    }
   }
 });
 

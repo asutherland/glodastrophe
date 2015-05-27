@@ -16,6 +16,7 @@ requirejs.config({
     }
 });
 
-// Start loading the main app file. Put all of
-// your application logic in there.
-requirejs(['jsx!app/main']);
+// The explicit require on react and react-vendor-prefix is because the
+// browserify-built standalone react-split-pane is not interacting correctly
+// with requirejs.
+requirejs(['react', 'react-vendor-prefix', 'jsx!app/main']);

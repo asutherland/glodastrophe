@@ -9,7 +9,13 @@ var FolderSummary = React.createClass({
   mixins: [IntlMixin],
 
   render: function() {
-    return <div><a href={'#!/view/folder/' + this.props.item.id}>{ this.props.item.path }</a></div>;
+    return <div onClick={ this.clickFolder }>{ this.props.item.path }</div>;
+  },
+
+  clickFolder: function() {
+    if (this.props.pick) {
+      this.props.pick(this.props.item);
+    }
   }
 });
 

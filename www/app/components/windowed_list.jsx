@@ -34,7 +34,7 @@ var WindowedList = React.createClass({
 
   getInitialState: function() {
     return {
-      serial: this.props.slice.serial,
+      serial: this.props.view.serial,
     };
   },
 
@@ -43,17 +43,17 @@ var WindowedList = React.createClass({
     this.boundRenderer = this.renderItem; //.bind(this);
     this.boundSeek = this.seek;
 
-    var slice = this.props.slice;
+    var view = this.props.view;
     // seeked is for windowed list views
-    slice.on('seeked', this.boundDirtyHandler);
+    view.on('seeked', this.boundDirtyHandler);
     // complete is for entire list views
-    slice.on('complete', this.boundDirtyHandler);
+    view.on('complete', this.boundDirtyHandler);
   },
 
   componentWillUnmount: function() {
-    var slice = this.props.slice;
-    slice.removeListener('seeked', this.boundDirtyHandler);
-    slice.removeListener('complete', this.boundDirtyHandler);
+    var view = this.props.view;
+    view.removeListener('seeked', this.boundDirtyHandler);
+    view.removeListener('complete', this.boundDirtyHandler);
   },
 
   shouldComponentUpdate: function(nextProps, nextState) {
@@ -62,33 +62,33 @@ var WindowedList = React.createClass({
 
   handleDirty: function() {
     console.log('got a dirty notification!',
-                this.props.slice._itemConstructor.name,
-                'offset:', this.props.slice.offset, 'count:',
-                this.props.slice.items.length);
+                this.props.view._itemConstructor.name,
+                'offset:', this.props.view.offset, 'count:',
+                this.props.view.items.length);
     this.setState({
-      serial: this.props.slice.serial
+      serial: this.props.view.serial
     });
   },
 
   seek: function(offset, before, visible, after) {
-    this.props.slice.seekInCoordinateSpace(
+    this.props.view.seekInCoordinateSpace(
       offset, before, visible, after
     );
   },
 
   render: function() {
     console.log(
-      're-rendering', this.props.slice._itemConstructor.name,
-      'offset:', this.props.slice.offset, 'count:',
-      this.props.slice.items.length);
+      're-rendering', this.props.view._itemConstructor.name,
+      'offset:', this.props.view.offset, 'count:',
+      this.props.view.items.length);
     return (
       <ReactList
         seek={ this.boundSeek }
-        totalHeight={ this.props.slice.totalHeight }
+        totalHeight={ this.props.view.totalHeight }
         itemRenderer={ this.boundRenderer }
-        seekedOffset={ this.props.slice.heightOffset }
-        seekedData={ this.props.slice.items }
-        serial={ this.props.slice.serial }
+        seekedOffset={ this.props.view.heightOffset }
+        seekedData={ this.props.view.items }
+        serial={ this.props.view.serial }
         unitSize={ this.props.unitSize }
         />
     );
@@ -102,7 +102,8 @@ var WindowedList = React.createClass({
       // XXX come up with a better placeholder in the future.
       return <div key={ 'rel' + relIndex }>LoadinG</div>;
     }
-    return <Widget key={ item.id } item={ item } serial={ item.serial } />
+    return <Widget key={ item.id } item={ item } serial={ item.serial }
+                   pick={ this.props.pick } />
   }
 });
 
