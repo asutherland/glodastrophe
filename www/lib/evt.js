@@ -1,5 +1,8 @@
 /*
- * Custom events lib. Notable features:
+ * evt, an event lib. Version 1.0.0.
+ * Copyright 2013-2015, Mozilla Foundation
+ *
+ * Notable features:
  *
  * - the module itself is an event emitter. Useful for "global" pub/sub.
  * - evt.mix can be used to mix in an event emitter into existing object.
@@ -11,9 +14,18 @@
  *   event emitter.
  * - Uses "this" internally, so always call object with the emitter args.
  */
-'use strict';
-define(function() {
-
+//
+(function (root, factory) {
+  'use strict';
+  if (typeof define === 'function' && define.amd) {
+    define(factory);
+  } else if (typeof exports === 'object') {
+    module.exports = factory();
+  } else {
+    root.evt = factory();
+  }
+}(this, function () {
+  'use strict';
   var evt,
       slice = Array.prototype.slice,
       props = ['_events', '_pendingEvents', 'on', 'once', 'latest',
@@ -130,7 +142,11 @@ define(function() {
           listeners = this._events[id];
 
       if (listeners) {
-        listeners.concat().forEach(function(fn) {
+        // Use a for loop instead of forEach, in case the listener removes
+        // itself on the emit notification. In that case need to set the loop
+        // index back one.
+        for (var i = 0; i < listeners.length; i++) {
+          var fn = listeners[i];
           try {
             fn.apply(null, args);
           } catch (e) {
@@ -144,7 +160,13 @@ define(function() {
               throw e;
             });
           }
-        });
+
+          // If listener removed itself, set the index back a number, so that
+          // a subsequent listener does not get skipped.
+          if (listeners[i] !== fn) {
+            i -= 1;
+          }
+        }
       }
     }
   };
@@ -164,4 +186,4 @@ define(function() {
   };
 
   return evt;
-});
+}));
