@@ -56,15 +56,17 @@ var EntireList = React.createClass({
     view.removeListener('complete', this.boundDirtyHandler);
   },
 
+  componentWillReceiveProps: function(nextProps) {
+    this.props.view.removeListener('complete', this.boundDirtyHandler);
+    nextProps.view.on('complete', this.boundDirtyHandler);
+  },
+
   shouldComponentUpdate: function(nextProps, nextState) {
-    return this.state.serial !== nextState.serial;
+    return this.props.view.handle !== nextProps.view.handle ||
+           this.state.serial !== nextState.serial;
   },
 
   handleDirty: function() {
-    console.log('got a dirty notification!',
-                this.props.view._itemConstructor.name,
-                'offset:', this.props.view.offset, 'count:',
-                this.props.view.items.length);
     this.setState({
       serial: this.props.view.serial
     });

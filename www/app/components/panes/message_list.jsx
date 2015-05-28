@@ -5,12 +5,17 @@ var React = require('react');
 var IntlMixin = require('react-intl').IntlMixin;
 var FormattedMessage = require('react-intl').FormattedMessage;
 
-var WindowedList = require('jsx!../windowed_list');
+var WholeWindowedList = require('jsx!../whole_windowed_list');
 
 var MessageSummary = require('jsx!../summaries/message');
 
 var navigate = require('react-mini-router').navigate;
 
+/**
+ * An expandable message list implementation.  Because we are a desktop client
+ * and heights effectively cannot be pre-computed, we have to go for a fully
+ * instantiated list.
+ */
 var MessageListPane = React.createClass({
   mixins: [IntlMixin],
   getInitialState: function() {
@@ -72,7 +77,7 @@ var MessageListPane = React.createClass({
       <div className="message-list-pane">
         <h1>{this.props.conversationId}</h1>
         <button onClick={ this.ensureSnippets }>EnsurE SnippetS</button>
-        <WindowedList
+        <WholeWindowedList
           view={ this.state.view }
           widget={ MessageSummary }
           pick={ this.props.pick }

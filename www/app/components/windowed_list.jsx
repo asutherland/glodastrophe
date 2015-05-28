@@ -46,18 +46,21 @@ var WindowedList = React.createClass({
     var view = this.props.view;
     // seeked is for windowed list views
     view.on('seeked', this.boundDirtyHandler);
-    // complete is for entire list views
-    view.on('complete', this.boundDirtyHandler);
   },
 
   componentWillUnmount: function() {
     var view = this.props.view;
     view.removeListener('seeked', this.boundDirtyHandler);
-    view.removeListener('complete', this.boundDirtyHandler);
   },
 
   shouldComponentUpdate: function(nextProps, nextState) {
-    return this.state.serial !== nextState.serial;
+    return this.props.view.handle !== nextProps.view.handle ||
+           this.state.serial !== nextState.serial;
+  },
+
+  componentWillReceiveProps: function(nextProps) {
+    this.props.view.removeListener('seeked', this.boundDirtyHandler);
+    nextProps.view.on('seeked', this.boundDirtyHandler);
   },
 
   handleDirty: function() {
