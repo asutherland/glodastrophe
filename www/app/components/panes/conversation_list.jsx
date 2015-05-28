@@ -23,6 +23,7 @@ var ConversationListPane = React.createClass({
 
   _getConversationView: function(folderId) {
     if (this.state.view) {
+      console.log('releasing view in _getConversationView');
       this.state.view.release();
     }
 
@@ -40,10 +41,9 @@ var ConversationListPane = React.createClass({
     this.setState({
       view: null
     });
-console.log('trying to get folder', folderId);
+    console.log('fetching view in _getConversationView');
     this.props.mailApi.eventuallyGetFolderById(folderId).then(
       function gotFolder(folder) {
-console.log('GOT IT!');
         this.setState({
           folder: folder,
           view: this.props.mailApi.viewFolderConversations(folder),
@@ -51,7 +51,6 @@ console.log('GOT IT!');
         });
       }.bind(this),
       function noSuchFolder(err) {
-console.log('BOO NO NO NO', err);
         this.setState({
           folder: null,
           view: null,
@@ -66,11 +65,14 @@ console.log('BOO NO NO NO', err);
   },
 
   componentWillReceiveProps: function(nextProps) {
-    this._getConversationView(nextProps.folderId);
+    if (this.props.folderId !== nextProps.folderId) {
+      this._getConversationView(nextProps.folderId);
+    }
   },
 
   componentWillUnmount: function() {
     if (this.state.view) {
+      console.log('releasing view in unmount');
       this.state.view.release();
     }
   },
@@ -94,7 +96,7 @@ console.log('BOO NO NO NO', err);
     }
 
     return (
-      <div>
+      <div className="conversation-list-pane">
         <h1>{this.state.folder.name}</h1>
         <div>
           <button onClick={ this.syncRefresh }><FormattedMessage
@@ -108,7 +110,7 @@ console.log('BOO NO NO NO', err);
           <button onClick={ this.ensureSnippets }>EnsurE SnippetS</button>
         </div>
         <WindowedList
-          unitSize={ 20 }
+          unitSize={ 40 }
           view={ this.state.view }
           widget={ ConversationSummary }
           pick={ this.props.pick }
@@ -118,20 +120,20 @@ console.log('BOO NO NO NO', err);
   },
 
   syncRefresh: function() {
-    if (this.state.slice) {
-      this.state.slice.refresh();
+    if (this.state.view) {
+      this.state.view.refresh();
     }
   },
 
   syncGrowFolder: function() {
-    if (this.state.slice) {
-      this.state.slice.grow();
+    if (this.state.view) {
+      this.state.view.grow();
     }
   },
 
   ensureSnippets: function() {
-    if (this.state.slice) {
-      this.state.slice.ensureSnippets();
+    if (this.state.view) {
+      this.state.view.ensureSnippets();
     }
   }
 });

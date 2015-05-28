@@ -69,7 +69,7 @@ var FolderListPane = React.createClass({
     }
 
     return (
-      <div>
+      <div className="folder-pane">
         <EntireList
           view={ this.state.account.folders }
           widget={ FolderSummary }

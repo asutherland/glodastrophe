@@ -1,6 +1,31 @@
+/* Purple purple purple.  Purple!
+   (Created by randomly picking a purple using the picker at paletton.com.
+   Although I see I picked a hue of 300 degrees, so maybe that's not in fact
+   all that random.)
+*/
+:root {
+  --scheme-darkest: #260339;
+  --scheme-dark: #3d1255;
+  --scheme-mid: #58a272;
+  --scheme-lighter: #764b83;
+  --scheme-lightest: #9775aa;
+  --scheme-light-text: #ffffff;
+
+  --dark-border: var(--scheme-darkest);
+  --selected-bg-color: var(--scheme-dark);
+  --selected-fg-color: var(--scheme-light-text);
+  --selected-text-weight: bold;
+
+  --pane-padding: 4px;
+
+
+}
+
 body {
   background-color: white;
 }
+
+/* ===== Account Home */
 
 .account-home-summary {
   display: flex;
@@ -25,30 +50,85 @@ body {
   flex: none;
 }
 
+/* ===== Folder Pane ===== */
+
+.folder-pane {
+  padding: var(--pane-padding);
+}
+
+/* ===== Folder Summaries ====== */
+
+/* ===== Conversation List Pane ===== */
+
+.conversation-list-pane {
+  padding: var(--pane-padding);
+}
+
+/* ===== Conversation Summaries ===== */
+
 .conv-summary {
+  display: flex;
+  flex-direction: column;
   border-bottom: 1px solid gray;
-  margin-bottom: 10px;
-  padding-bottom: 10px;
   box-sizing: border-box;
   overflow: hidden;
 }
 
+.conv-summary-envelope-row {
+  display: flex;
+  flex-direction: row;
+  overflow: hidden;
+  box-sizing: border-box;
+  height: 20px;
+}
+
 .conv-summary-date {
-  display: inline-block;
-  margin-right: 1em;
+  box-sizing: border-box;
+  padding-right: 1em;
+  flex: 0 0 content;
 }
 
 .conv-summary-subject {
-  display: inline-block;
+  flex: 1 10 auto;
   font-weight: bold;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.conv-summary-aggregates-row {
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+  height: 20px;
+}
+
+.conv-summary-message-count {
+  color: gray;
+  flex: 0 0 content;
+}
+
+.conv-summary-authors {
+  color: gray;
+  flex: 1 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .conv-summary-tidbits {
+  display: flex;
+  flex-direction: column;
   padding-left: 1em;
 }
 
 .conv-tidbit {
+  display: flex;
+  flex-direction: column;
+  height: 40px;
+}
 
+.conv-tidbit-envelope-row {
+  display: flex;
+  flex-direction: row;
 }
 
 .conv-tidbit-author {
@@ -62,9 +142,20 @@ body {
 }
 
 .conv-tidbit-snippet {
-  display: inline-block;
+  display: block;
   font-style: italic;
+  overflow: hidden;
+  color: gray;
+  text-overflow: ellipsis;
 }
+
+/* ===== Message List Pane ===== */
+
+.message-list-pane {
+  padding: var(--pane-padding);
+}
+
+/* ===== Message Summaries ===== */
 
 .message-item {
   border-bottom: 1px solid gray;
@@ -89,6 +180,7 @@ body {
 
 }
 
+/* ===== Splitter Stuff ===== */
 
 .Pane {
   position: relative;

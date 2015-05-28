@@ -4,7 +4,8 @@ define(function(require) {
 return {
   shouldComponentUpdate: function(nextProps, nextState) {
     console.log('check update. curSerial:', this.props.serial, 'nextSerial:', nextProps.serial);
-    return this.props.serial !== nextProps.serial;
+    return (this.props.serial !== nextProps.serial) ||
+           (this.props.selected !== nextProps.selected);
   }
 };
 });

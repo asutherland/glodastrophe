@@ -137,11 +137,13 @@ var App = React.createClass({
             mailApi={ mailApi }
             accountId={ accountId }
             pick={ navigateToFolder }
+            selectedId={ folderId }
             />
           <SplitPane orientation="horizontal">
             <ConversationListPane
               mailApi={ mailApi }
               folderId={ folderId }
+              selectedId={ conversationId }
               pick={ navigateToConv }
               />
             <MessageListPane

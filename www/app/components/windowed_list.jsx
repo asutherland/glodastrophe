@@ -103,6 +103,7 @@ var WindowedList = React.createClass({
       return <div key={ 'rel' + relIndex }>LoadinG</div>;
     }
     return <Widget key={ item.id } item={ item } serial={ item.serial }
+                   selected={ this.props.selectedId === item.id }
                    pick={ this.props.pick } />
   }
 });

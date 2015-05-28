@@ -69,7 +69,7 @@ var MessageListPane = React.createClass({
     this.state.view.ensureSnippets();
 
     return (
-      <div>
+      <div className="message-list-pane">
         <h1>{this.props.conversationId}</h1>
         <button onClick={ this.ensureSnippets }>EnsurE SnippetS</button>
         <WindowedList
