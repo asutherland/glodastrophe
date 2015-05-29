@@ -12,7 +12,7 @@ var ConversationSummary = require('jsx!../summaries/conversation');
 var navigate = require('react-mini-router').navigate;
 
 var ConversationListPane = React.createClass({
-  mixins: [IntlMixin],
+  mixins: [IntlMixin, React.addons.PureRenderMixin],
   getInitialState: function() {
     return {
       error: null,
@@ -77,10 +77,6 @@ var ConversationListPane = React.createClass({
     }
   },
 
-  shouldComponentUpdate: function(nextProps, nextState) {
-    return true;
-  },
-
   render: function() {
     // Be empty when there's no folder selected.
     if (!this.props.folderId) {
@@ -113,6 +109,7 @@ var ConversationListPane = React.createClass({
           unitSize={ 40 }
           view={ this.state.view }
           widget={ ConversationSummary }
+          selectedId={ this.props.selectedId }
           pick={ this.props.pick }
           />
       </div>

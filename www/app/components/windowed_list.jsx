@@ -30,7 +30,7 @@ var ReactList = require('react-list').QuantizedHeightList;
  * and the new props.
  */
 var WindowedList = React.createClass({
-  mixins: [IntlMixin],
+  mixins: [IntlMixin, React.addons.PureRenderMixin],
 
   getInitialState: function() {
     return {
@@ -53,37 +53,52 @@ var WindowedList = React.createClass({
     view.removeListener('seeked', this.boundDirtyHandler);
   },
 
-  shouldComponentUpdate: function(nextProps, nextState) {
-    return this.props.view.handle !== nextProps.view.handle ||
-           this.state.serial !== nextState.serial;
-  },
-
   componentWillReceiveProps: function(nextProps) {
-    this.props.view.removeListener('seeked', this.boundDirtyHandler);
-    nextProps.view.on('seeked', this.boundDirtyHandler);
+    if (this.props.view) {
+      this.props.view.removeListener('seeked', this.boundDirtyHandler);
+    }
+    if (nextProps.view) {
+      this.setState({ serial: nextProps.view.serial });
+      nextProps.view.on('seeked', this.boundDirtyHandler);
+    }
   },
 
   handleDirty: function() {
     console.log('got a dirty notification!',
                 this.props.view._itemConstructor.name,
-                'offset:', this.props.view.offset, 'count:',
-                this.props.view.items.length);
+                'offset:', this.props.view.offset, 'totalHeight:',
+                this.props.view.totalHeight, 'new serial',
+                this.props.view.serial);
     this.setState({
       serial: this.props.view.serial
     });
   },
 
   seek: function(offset, before, visible, after) {
-    this.props.view.seekInCoordinateSpace(
-      offset, before, visible, after
-    );
+    if (this.props.view) {
+      this.props.view.seekInCoordinateSpace(
+        offset, before, visible, after
+      );
+    }
   },
 
   render: function() {
-    console.log(
-      're-rendering', this.props.view._itemConstructor.name,
-      'offset:', this.props.view.offset, 'count:',
-      this.props.view.items.length);
+    if (!this.props.view) {
+      return <div></div>;
+    }
+
+    // We pass in the following props exclusively to cause shouldComponentUpdate
+    // to decide that it does need to update:
+    // - serial: The serial/generation number of the list.  Strictly increasing
+    //   for the given view.
+    // - viewHandle: The handle of the view.  If all views used the same
+    //   generation clock, we wouldn't need this.  We could also pass the view
+    //   in since the equivalency test would do the right thing, but there is
+    //   no actual need for the list to ever look at the view, so the handle is
+    //   arguably better because it's simpler.
+    // - selectedId: When the selection changes the list needs to be re-rendered
+    //   so the impacted items can update.  Only those whose selection states
+    //   have changed will actually update/re-render.
     return (
       <ReactList
         seek={ this.boundSeek }
@@ -92,7 +107,9 @@ var WindowedList = React.createClass({
         seekedOffset={ this.props.view.heightOffset }
         seekedData={ this.props.view.items }
         serial={ this.props.view.serial }
+        viewHandle={ this.props.view.handle }
         unitSize={ this.props.unitSize }
+        selectedId={ this.props.selectedId }
         />
     );
   },

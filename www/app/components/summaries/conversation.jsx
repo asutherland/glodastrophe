@@ -36,8 +36,14 @@ var ConversationSummary = React.createClass({
 
     var authorNames = conv.authors.slice(0, 3).map(x => (x.name || x.address));
 
+    var rootClasses = 'conv-summary';
+    if (this.props.selected) {
+      rootClasses += ' conv-summary-selected';
+    }
+
     return (
-      <div className="conv-summary" onClick={ this.clickConversation }
+      <div className={ rootClasses }
+           onClick={ this.clickConversation }
            style={ inlineStyle } >
         <div className="conv-summary-envelope-row">
           <div className="conv-summary-date">

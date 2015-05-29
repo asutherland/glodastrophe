@@ -6,9 +6,10 @@
 requirejs.config({
     baseUrl: 'lib',
     paths: {
-        app: '../app',
-        gelam: '../../deps/gelam/js',
-        locales: '../locales'
+      app: '../app',
+      gelam: '../../deps/gelam/js',
+      mail_app_logic: '../felam',
+      locales: '../locales'
     },
     scriptType: 'application/javascript;version=1.7',
     jsx: {

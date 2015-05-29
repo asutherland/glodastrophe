@@ -30,7 +30,7 @@ var ReactList = require('react-list').UniformList;
  * and the new props.
  */
 var EntireList = React.createClass({
-  mixins: [IntlMixin],
+  mixins: [IntlMixin, React.addons.PureRenderMixin],
 
   defaultProps: {
     itemHeight: 0
@@ -57,13 +57,13 @@ var EntireList = React.createClass({
   },
 
   componentWillReceiveProps: function(nextProps) {
-    this.props.view.removeListener('complete', this.boundDirtyHandler);
-    nextProps.view.on('complete', this.boundDirtyHandler);
-  },
-
-  shouldComponentUpdate: function(nextProps, nextState) {
-    return this.props.view.handle !== nextProps.view.handle ||
-           this.state.serial !== nextState.serial;
+    if (this.props.view) {
+      this.props.view.removeListener('complete', this.boundDirtyHandler);
+    }
+    if (nextProps.view) {
+      this.setState({ serial: nextProps.view.serial });
+      nextProps.view.on('complete', this.boundDirtyHandler);
+    }
   },
 
   handleDirty: function() {
@@ -79,6 +79,7 @@ var EntireList = React.createClass({
         itemHeight={ this.props.itemHeight }
         itemRenderer={ this.boundRenderer }
         serial={ this.props.view.serial }
+        selectedId={ this.props.selectedId }
         />
     );
   },

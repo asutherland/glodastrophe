@@ -9,8 +9,15 @@ var FolderSummary = React.createClass({
   mixins: [IntlMixin],
 
   render: function() {
+    var classes = 'folder-item';
+    if (this.props.selected) {
+      classes += ' folder-item-selected';
+    }
+
     return (
-      <div onClick={ this.clickFolder }>{ this.props.item.path }</div>
+      <div className={ classes } onClick={ this.clickFolder }>
+        { this.props.item.path }
+      </div>
     );
   },
 

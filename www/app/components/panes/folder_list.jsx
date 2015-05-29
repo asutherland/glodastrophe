@@ -12,7 +12,7 @@ var FolderSummary = require('jsx!../summaries/folder');
 var navigate = require('react-mini-router').navigate;
 
 var FolderListPane = React.createClass({
-  mixins: [IntlMixin],
+  mixins: [IntlMixin, React.addons.PureRenderMixin],
 
   getInitialState: function() {
     return {
@@ -73,6 +73,7 @@ var FolderListPane = React.createClass({
         <EntireList
           view={ this.state.account.folders }
           widget={ FolderSummary }
+          selectedId={ this.props.selectedId }
           pick={ this.props.pick }
           />
         <button onClick={ this.syncFolderList }>

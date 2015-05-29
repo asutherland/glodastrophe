@@ -7,14 +7,17 @@
   --scheme-darkest: #260339;
   --scheme-dark: #3d1255;
   --scheme-mid: #58a272;
-  --scheme-lighter: #764b83;
-  --scheme-lightest: #9775aa;
+  --scheme-lighter: #7e5595;
+  --scheme-lightest: #b295c3;
   --scheme-light-text: #ffffff;
 
   --dark-border: var(--scheme-darkest);
   --selected-bg-color: var(--scheme-dark);
   --selected-fg-color: var(--scheme-light-text);
   --selected-text-weight: bold;
+
+  --conversation-background: var(--scheme-lightest);
+  --conversation-border: var(--scheme-dark);
 
   --envelope-background: var(--scheme-lightest);
   --envelope-border: var(--scheme-dark);
@@ -25,7 +28,25 @@
 body {
   background-color: white;
   margin: 0;
+  font-size: 13px;
 }
+
+h1 {
+  font-size: 24px;
+  font-family: sans-serif;
+}
+
+h2 {
+  font-size: 20px;
+  font-family: sans-serif;
+}
+
+h3, h4, h5, h6 {
+  font-size: 15px;
+  font-family: sans-serif;
+}
+
+
 
 /* ===== Account Home */
 
@@ -58,6 +79,11 @@ body {
   padding: var(--pane-padding);
 }
 
+.folder-item-selected {
+  background-color: var(--selected-bg-color);
+  color: var(--selected-fg-color);
+}
+
 /* ===== Folder Summaries ====== */
 
 /* ===== Conversation List Pane ===== */
@@ -69,11 +95,19 @@ body {
 /* ===== Conversation Summaries ===== */
 
 .conv-summary {
+  border: 1px solid var(--conversation-border);
+  border-radius: 4px;
+  padding: 2px;
+  margin-bottom: 2px;
+
   display: flex;
   flex-direction: column;
-  border-bottom: 1px solid gray;
   box-sizing: border-box;
   overflow: hidden;
+}
+
+.conv-summary-selected {
+  border-width: 2px;
 }
 
 .conv-summary-envelope-row {
@@ -194,17 +228,18 @@ body {
 
 }
 
+/* The outer div, each body part lives inside one of the following: */
 .message-body-container {
   overflow: hidden;
+  padding: 2px;
+}
+
+.message-text-part-container {
   white-space: pre-wrap;
   word-wrap: break-word;
 }
 
-.message-text-container {
-
-}
-
-.message-html-container {
+.message-html-part-container {
 
 }
 

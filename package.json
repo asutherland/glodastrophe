@@ -5,7 +5,8 @@
     "dependencies": {
       "react-list": "github:orgsync/react-list/0.4.2",
       "react-intl.min": "github:yahoo/react-intl/v1.1.0#dist/react-intl.min.js",
-      "evt": "github:jrburke/evt/master"
+      "evt": "github:jrburke/evt/master",
+      "require": "github:jrburke/requirejs/2.1.17"
     }
   }
 }

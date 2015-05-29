@@ -50,8 +50,10 @@ var MessageBody = React.createClass({
       contentNode.appendChild(node);
 
       if (rep.type === 'plain') {
+        node.setAttribute('class', 'message-text-part-container');
         embodyPlain(rep.contentBlob, node);
       } else if (rep.type === 'html') {
+        node.setAttribute('class', 'message-text-html-container');
         embodyHTML(rep.contentBlob, node);
       }
     });

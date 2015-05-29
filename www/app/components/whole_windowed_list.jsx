@@ -13,7 +13,7 @@ var IntlMixin = require('react-intl').IntlMixin;
  * a top-capped seek with an absurd number of requested items.)
  */
 var WholeWindowedList = React.createClass({
-  mixins: [IntlMixin],
+  mixins: [IntlMixin, React.addons.PureRenderMixin],
 
   getInitialState: function() {
     return {
@@ -23,7 +23,6 @@ var WholeWindowedList = React.createClass({
 
   componentWillMount: function() {
     this.boundDirtyHandler = this.handleDirty; //.bind(this);
-    this.boundRenderer = this.renderItem; //.bind(this);
     this.boundSeek = this.seek;
 
     var view = this.props.view;
@@ -35,13 +34,21 @@ var WholeWindowedList = React.createClass({
   },
 
   componentWillUnmount: function() {
-    var view = this.props.view;
-    view.removeListener('seeked', this.boundDirtyHandler);
+    if (this.props.view) {
+      this.props.view.removeListener('seeked', this.boundDirtyHandler);
+    }
   },
 
-  shouldComponentUpdate: function(nextProps, nextState) {
-    return this.props.view.handle !== nextProps.view.handle ||
-           this.state.serial !== nextState.serial;
+  componentWillReceiveProps: function(nextProps) {
+    if (this.props.view) {
+      this.props.view.removeListener('seeked', this.boundDirtyHandler);
+    }
+    if (nextProps.view) {
+      this.setState({ serial: nextProps.view.serial });
+      nextProps.view.on('seeked', this.boundDirtyHandler);
+      // A thousand of whatever this is is enough!
+      nextProps.view.seekToTop(10, 990);
+    }
   },
 
   handleDirty: function() {
@@ -51,7 +58,7 @@ var WholeWindowedList = React.createClass({
   },
 
   render: function() {
-    var widgets = this.props.view.items.map(this.renderItem.bind(this));
+    var widgets = this.props.view.items.map(this.renderItem);
     return (
       <div>
         {widgets}

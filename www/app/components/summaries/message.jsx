@@ -10,6 +10,7 @@ var navigate = require('react-mini-router').navigate;
 
 var SliceItemMixin = require('../slice_item_mixin');
 
+var Attachment = require('jsx!./message_attachment');
 var MessageBody = require('jsx!./message_body');
 
 var MessageSummary = React.createClass({
@@ -28,6 +29,12 @@ var MessageSummary = React.createClass({
 
   render: function() {
     var msg = this.props.item;
+
+    var attachmentish;
+    if (msg.attachments.length) {
+      var attachments =
+      attachmentish
+    }
 
     var bodyish;
     if (this.state.expanded) {
@@ -49,8 +56,8 @@ var MessageSummary = React.createClass({
               { msg.author.name || msg.author.address }
             </div>
           </div>
-          <div className="message-subject">{ msg.subject }</div>
         </div>
+        { attachmentish }
         { bodyish }
       </div>
     );

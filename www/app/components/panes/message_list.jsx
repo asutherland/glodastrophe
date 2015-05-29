@@ -17,7 +17,7 @@ var navigate = require('react-mini-router').navigate;
  * instantiated list.
  */
 var MessageListPane = React.createClass({
-  mixins: [IntlMixin],
+  mixins: [IntlMixin, React.addons.PureRenderMixin],
   getInitialState: function() {
     return {
       error: null,
