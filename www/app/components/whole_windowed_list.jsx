@@ -66,7 +66,7 @@ var WholeWindowedList = React.createClass({
     );
   },
 
-  renderItem: function(item) {
+  renderItem: function(item, relIndex) {
     // Note: The react-widget seems to be making the assumption that we'll use
     // the relIndex as our key, although it doesn't actually depend on this.
     var Widget = this.props.widget;

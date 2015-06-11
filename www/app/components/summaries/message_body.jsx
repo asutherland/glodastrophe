@@ -21,6 +21,9 @@ var embodyHTML = require('gelam/clientapi/bodies/embody_html');
  * These are non-react DOM generators.  For current implementation simplicity,
  * we take a "we will embody the body exactly once, which is the first instant"
  * we have all of the body parts.
+ * XXX move these out of gelam and into glodastrophe per discussion
+ *
+ * This is a single-use binding and parents should key us appropriately!
  */
 var MessageBody = React.createClass({
   mixins: [IntlMixin],
@@ -34,6 +37,11 @@ var MessageBody = React.createClass({
     };
   },
 
+  /**
+   * Function to create the body parts, if possible.  Bails early if the body
+   * parts aren't retrieved yet.  This allows the method to directly be invoked
+   * every time a "change" event is received for the message.
+   */
   _embody: function() {
     if (this.state.embodied) {
       return;
@@ -67,6 +75,7 @@ var MessageBody = React.createClass({
   componentWillMount: function() {
     this._boundEmbody = this._embody;
 
+    // Trigger body part download if they aren't already downloaded.
     var message = this.props.message;
     if (!message.bodyRepsDownloaded) {
       message.downloadBodyReps();
@@ -76,6 +85,8 @@ var MessageBody = React.createClass({
   },
 
   componentDidMount: function() {
+    // Try and embody if we have the parts.  componentWillMount took care of
+    // making the requests already, if needed.
     this._embody();
   },
 
@@ -83,15 +94,29 @@ var MessageBody = React.createClass({
     this.props.message.removeListener('change', this._boundEmbody);
   },
 
-  shouldComponentUpdate: function() {
-    // for now we handle everything internally
+  componentWillReceiveProps: function(nextProps) {
+    // Assert that our message never changes.
+    if (nextProps.message !== this.props.message) {
+      throw new Error('Our message must never change!');
+    }
+  },
+
+  shouldComponentUpdate: function(nextProps, nextState) {
+    // We handle everything internally for a single message.  We will never
+    // receive new state because we require that our owner/parent be keyed so
+    // that neither it nor its child bindings will be reused.
+    //
+    // (We will be listening for "change" events and directly manipulating the
+    // DOM when the body parts show up.)
     return false;
   },
 
   render: function() {
     var msg = this.props.item;
     return (
-      <div ref="placeholder" className="message-body-container"></div>
+      <div
+        ref="placeholder"
+        className="message-body-container"></div>
     );
   },
 

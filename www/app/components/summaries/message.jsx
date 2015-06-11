@@ -32,8 +32,6 @@ var MessageSummary = React.createClass({
 
     var attachmentish;
     if (msg.attachments.length) {
-      var attachments =
-      attachmentish
     }
 
     var bodyish;

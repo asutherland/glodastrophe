@@ -12,6 +12,7 @@
   --scheme-light-text: #ffffff;
 
   --dark-border: var(--scheme-darkest);
+  --lightest-border: #e8d4e8;
   --selected-bg-color: var(--scheme-dark);
   --selected-fg-color: var(--scheme-light-text);
   --selected-text-weight: bold;
@@ -21,6 +22,8 @@
 
   --envelope-background: var(--scheme-lightest);
   --envelope-border: var(--scheme-dark);
+
+  --tag-color: #ccc;
 
   --pane-padding: 4px;
 }
@@ -158,6 +161,8 @@ h3, h4, h5, h6 {
 }
 
 .conv-tidbit {
+  box-sizing: border-box;
+  border-top: 1px solid var(--lightest-border);
   display: flex;
   flex-direction: column;
   height: 40px;
@@ -198,12 +203,12 @@ h3, h4, h5, h6 {
 .message-item {
   border: 1px solid var(--envelope-border);
   border-radius: 4px;
-  margin-bottom: 10px;
-  padding-bottom: 10px;
+  margin-bottom: 2px;
 }
 
 .message-envelope-container {
   background-color: var(--envelope-background);
+  padding: 2px;
 }
 
 .message-envelope-row {
@@ -217,7 +222,9 @@ h3, h4, h5, h6 {
 }
 
 .message-date {
-
+  box-sizing: border-box;
+  padding-right: 1em;
+  flex: 0 0 content;
 }
 
 .message-subject {
@@ -225,7 +232,9 @@ h3, h4, h5, h6 {
 }
 
 .message-snippet {
-
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* The outer div, each body part lives inside one of the following: */
@@ -298,6 +307,25 @@ h3, h4, h5, h6 {
 .msg-body-disclaimer, .msg-body-list, .msg-body-product, .msg-body-ads {
   color: gray;
   margin: 0.4rem 0;
+}
+
+.taggy-item {
+  border: 1px solid var(--tag-color);
+  border-radius: 1px;
+  display: inline-block;
+  padding: 2px;
+  margin: 2px;
+}
+
+.taggy-name {
+
+}
+
+.taggy-remove-button {
+  border: none;
+  padding: 0;
+  margin-left: 4px;
+  background-color: #eee;
 }
 
 /* ===== Splitter Stuff ===== */

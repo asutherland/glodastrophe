@@ -9,6 +9,9 @@ var WholeWindowedList = require('jsx!../whole_windowed_list');
 
 var MessageSummary = require('jsx!../summaries/message');
 
+var Taggy = require('jsx!../actioners/taggy');
+var TagAdder = require('jsx!../actioners/tag_adder');
+
 var navigate = require('react-mini-router').navigate;
 
 /**
@@ -21,40 +24,72 @@ var MessageListPane = React.createClass({
   getInitialState: function() {
     return {
       error: null,
+      conversation: null,
       view: null
     };
   },
 
-  _getMessagesView: function(conversationId) {
-    // If we're here
+  _getMessagesView: function(conversationId, why) {
+    if (this.state.conversation) {
+      this.state.conversation.release();
+    }
     if (this.state.view) {
+      console.log('releasing messages view because:', why);
       this.state.view.release();
     }
 
     if (!conversationId) {
       this.setState({
         error: null,
+        conversation: null,
         view: null
       });
       return;
     }
 
+    // clear so there's no state ambiguity during the async call.
     this.setState({
-      view: this.props.mailApi.viewConversationMessages(conversationId)
+      conversation: null,
+      view: null
+    });
+    this.props.mailApi.getConversation(conversationId).then((conversation) => {
+      // Because getConversation is async, there could potentially be
+      // multiple of these requests in flight.  Currently relative ordering
+      // will not be guaranteed, so this is an insufficient state machine, but
+      // at least this will not result in "leaks".
+      if (this.state.conversation) {
+        this.state.conversation.release();
+      }
+      if (this.state.view) {
+        this.state.view.release();
+      }
+      this.setState({
+        conversation: conversation,
+        view: this.props.mailApi.viewConversationMessages(conversationId)
+      });
+    }, () => {
+      this.setState({
+        error: true
+      })
     });
   },
 
   componentWillMount: function() {
     // XXX there needs to be some feedback path for viewConversationHeaders to
     // generate an error state because the conversation does not exist.
-    this._getMessagesView(this.props.conversationId);
+    this._getMessagesView(this.props.conversationId, 'mount');
   },
 
   componentWillReceiveProps: function(nextProps) {
-    this._getMessagesView(nextProps.conversationId);
+    if (this.props.conversationId !== nextProps.conversationId) {
+      this._getMessagesView(nextProps.conversationId, 'propchange');
+    }
   },
 
   componentWillUnmount: function() {
+    if (this.state.conversation) {
+      this.state.conversation.release();
+    }
     if (this.state.view) {
       this.state.view.release();
     }
@@ -73,9 +108,17 @@ var MessageListPane = React.createClass({
     // This auto-suppresses against spamming.
     this.state.view.ensureSnippets();
 
+    var conv = this.state.conversation;
+
     return (
       <div className="message-list-pane">
-        <h1>{this.props.conversationId}</h1>
+        <h1 className="conv-header-subject">{ conv.firstSubject }</h1>
+        <div className="conv-header-label-row">
+          { conv.labels.map(folder => <Taggy key={folder.id} folder={folder} />) }
+          <TagAdder
+            conversation={ conv }
+            />
+        </div>
         <button onClick={ this.ensureSnippets }>EnsurE SnippetS</button>
         <WholeWindowedList
           view={ this.state.view }
