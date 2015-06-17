@@ -43,10 +43,10 @@ var MessageBody = React.createClass({
    * every time a "change" event is received for the message.
    */
   _embody: function() {
+    var message = this.props.message;
     if (this.state.embodied) {
       return;
     }
-    var message = this.props.message;
     if (!message.bodyRepsDownloaded) {
       return;
     }

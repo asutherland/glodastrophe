@@ -4,6 +4,8 @@
    all that random.)
 */
 :root {
+  --background-color: white;
+
   --scheme-darkest: #260339;
   --scheme-dark: #3d1255;
   --scheme-mid: #58a272;
@@ -28,8 +30,9 @@
   --pane-padding: 4px;
 }
 
+
 body {
-  background-color: white;
+  background-color: var(--background-color);
   margin: 0;
   font-size: 13px;
 }
@@ -198,6 +201,10 @@ h3, h4, h5, h6 {
   padding: var(--pane-padding);
 }
 
+.converastion-tag-adder {
+  display: inline-block;
+}
+
 /* ===== Message Summaries ===== */
 
 .message-item {
@@ -326,6 +333,59 @@ h3, h4, h5, h6 {
   padding: 0;
   margin-left: 4px;
   background-color: #eee;
+}
+
+/* ===== Autosuggest ===== */
+/* derived  from the compiled example .less styling from react-autosuggest */
+.react-autosuggest {
+  display: inline-block;
+  position: relative;
+  padding: 2px;
+  margin: 2px;
+}
+.react-autosuggest input {
+  border: 1px solid #aaaaaa;
+  border-radius: 4px;
+}
+.react-autosuggest input[aria-expanded="true"] {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.react-autosuggest input:focus {
+  outline: none;
+}
+.react-autosuggest__suggestions {
+  position: absolute;
+  top: 24px;
+  width: 280px;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+  border: 1px solid #aaaaaa;
+  background-color: #fff;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  z-index: 2;
+}
+.react-autosuggest__suggestions-section:first-child .react-autosuggest__suggestions-section-name {
+  border-top: 0;
+}
+.react-autosuggest__suggestions-section-name {
+  padding: 10px 0 0 10px;
+  text-transform: uppercase;
+  color: #777;
+  border-top: 1px dashed #ccc;
+}
+.react-autosuggest__suggestions-section-suggestions {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+.react-autosuggest__suggestion {
+  cursor: pointer;
+}
+.react-autosuggest__suggestion--focused {
+  background-color: #ddd;
 }
 
 /* ===== Splitter Stuff ===== */
