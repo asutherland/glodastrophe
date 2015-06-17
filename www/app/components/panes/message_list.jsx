@@ -63,6 +63,10 @@ var MessageListPane = React.createClass({
       if (this.state.view) {
         this.state.view.release();
       }
+      // Needed for conversation details; those widgety things should probably
+      // be pushed down into a summary widget that gets its serial bumped as a
+      // prop.
+      conversation.on('change', this.forceUpdate);
       this.setState({
         conversation: conversation,
         view: this.props.mailApi.viewConversationMessages(conversationId)
