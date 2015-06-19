@@ -21,14 +21,22 @@ var Taggy = React.createClass({
     return (
       <div className={ classes } onClick={ this.clickFolder }>
         <span className="taggy-name">{ folder.name }</span>
-        <button className="taggy-remove-button">X</button>
+        <button className="taggy-remove-button" onClick={ this.clickRemove }>
+          X
+        </button>
       </div>
     );
   },
 
   clickFolder: function() {
     if (this.props.pick) {
-      this.props.pick(this.props.item);
+      this.props.pick(this.props.folder);
+    }
+  },
+
+  clickRemove: function() {
+    if (this.props.labelOwner) {
+      this.props.labelOwner.removeLabels([this.props.folder]);
     }
   }
 });

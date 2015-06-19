@@ -10,6 +10,10 @@ var navigate = require('react-mini-router').navigate;
 
 var SliceItemMixin = require('../slice_item_mixin');
 
+var Star = require('jsx!../actioners/star');
+var Unread = require('jsx!../actioners/unread');
+
+
 var ConversationSummary = React.createClass({
   mixins: [IntlMixin, SliceItemMixin],
 
@@ -46,6 +50,8 @@ var ConversationSummary = React.createClass({
            onClick={ this.clickConversation }
            style={ inlineStyle } >
         <div className="conv-summary-envelope-row">
+          <Unread item={ conv } />
+          <Star item={ conv } />
           <div className="conv-summary-date">
             <FormattedRelative value={ conv.mostRecentMessageDate } />
           </div>

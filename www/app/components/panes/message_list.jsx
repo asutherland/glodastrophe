@@ -14,6 +14,7 @@ var TagAdder = require('jsx!../actioners/tag_adder');
 
 var navigate = require('react-mini-router').navigate;
 
+
 /**
  * An expandable message list implementation.  Because we are a desktop client
  * and heights effectively cannot be pre-computed, we have to go for a fully
@@ -66,7 +67,7 @@ var MessageListPane = React.createClass({
       // Needed for conversation details; those widgety things should probably
       // be pushed down into a summary widget that gets its serial bumped as a
       // prop.
-      conversation.on('change', this.forceUpdate);
+      conversation.on('change', this.forceUpdate.bind(this, null));
       this.setState({
         conversation: conversation,
         view: this.props.mailApi.viewConversationMessages(conversationId)
@@ -118,8 +119,10 @@ var MessageListPane = React.createClass({
       <div className="message-list-pane">
         <h1 className="conv-header-subject">{ conv.firstSubject }</h1>
         <div className="conv-header-label-row">
-          { conv.labels.map(folder => <Taggy key={folder.id} folder={folder} />) }
-          <TagAdder
+          { conv.labels.map(folder => <Taggy key={ folder.id }
+                                             labelOwner={ conv }
+                                             folder={ folder } />) }
+          <TagAdder key="adder"
             conversation={ conv }
             />
         </div>

@@ -10,6 +10,10 @@ var navigate = require('react-mini-router').navigate;
 
 var SliceItemMixin = require('../slice_item_mixin');
 
+var Star = require('jsx!../actioners/star');
+var Unread = require('jsx!../actioners/unread');
+
+
 var Attachment = require('jsx!./message_attachment');
 var MessageBody = require('jsx!./message_body');
 
@@ -47,6 +51,8 @@ var MessageSummary = React.createClass({
       <div className="message-item" onClick={ this.clickMessage }>
         <div className="message-envelope-container">
           <div className="message-envelope-row">
+            <Unread item={ msg } />
+            <Star item={ msg } />
             <div className="message-date">
               <FormattedRelative value={msg.date} />
             </div>

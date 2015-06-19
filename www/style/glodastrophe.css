@@ -316,6 +316,10 @@ h3, h4, h5, h6 {
   margin: 0.4rem 0;
 }
 
+/* ===== Message Sub-Widget Stuff ====== */
+
+/* === Taggy === */
+
 .taggy-item {
   border: 1px solid var(--tag-color);
   border-radius: 1px;
@@ -333,6 +337,36 @@ h3, h4, h5, h6 {
   padding: 0;
   margin-left: 4px;
   background-color: #eee;
+}
+
+/* === Star === */
+
+.star-widget {
+  cursor: pointer;
+  width: 1em;
+}
+
+.star-widget-starred {
+  color: yellow;
+  text-shadow: 0px -1px 0 #000, 0px 1px 0 #000, 1px 0 0 #000, -1px 0 0 #000;
+}
+
+.star-widget-unstarred {
+  color: gray;
+}
+
+/* === Unread === */
+
+.unread-widget {
+  cursor: pointer;
+  width: 1em;
+}
+
+.unread-widget-unread {
+  color: #8888ee;
+}
+
+.unread-widget-read {
 }
 
 /* ===== Autosuggest ===== */
