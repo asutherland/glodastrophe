@@ -87,7 +87,13 @@ var EntireList = React.createClass({
   renderItem: function(absIndex, relIndex) {
     // Note: The react-widget seems to be making the assumption that we'll use
     // the relIndex as our key, although it doesn't actually depend on this.
-    var Widget = this.props.widget;
+    var conditionalWidget = this.props.conditionalWidget;
+    var Widget;
+    if (conditionalWidget) {
+      Widget = conditionalWidget(item);
+    } else {
+      Widget = this.props.widget;
+    }
     var item = this.props.view.items[absIndex];
     if (!item) {
       // if not yet loaded and to allow some DOM stability, key off the absolute

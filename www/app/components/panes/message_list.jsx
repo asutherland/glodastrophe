@@ -8,6 +8,7 @@ var FormattedMessage = require('react-intl').FormattedMessage;
 var WholeWindowedList = require('jsx!../whole_windowed_list');
 
 var MessageSummary = require('jsx!../summaries/message');
+var DraftSummary = require('jsx!../summaries/draft');
 
 var Taggy = require('jsx!../actioners/taggy');
 var TagAdder = require('jsx!../actioners/tag_adder');
@@ -100,6 +101,14 @@ var MessageListPane = React.createClass({
     }
   },
 
+  _pickMessageWidget: function(item) {
+    if (item.isDraft) {
+      return DraftSummary;
+    } else {
+      return MessageSummary;
+    }
+  },
+
   render: function() {
     // If there is no view, just be empty.
     if (!this.state.view) {
@@ -129,7 +138,7 @@ var MessageListPane = React.createClass({
         <button onClick={ this.ensureSnippets }>EnsurE SnippetS</button>
         <WholeWindowedList
           view={ this.state.view }
-          widget={ MessageSummary }
+          conditionalWidget={ this._pickMessageWidget }
           pick={ this.props.pick }
           />
       </div>

@@ -31,7 +31,21 @@ return {
 
   // -- conversation list / sync stuff
   syncRefresh: 'Refresh',
-  syncGrow: 'Grow'
+  syncGrow: 'Grow',
+
+  // --- Message Display
+
+  // -- Message actions
+  messageReply: 'Reply',
+
+  // -- compose / drafts
+  composeSend: 'Send',
+  composeAttach: 'Attach',
+  composeDiscard: 'Delete Draft',
+
+  composeLabelTo: 'To:',
+  composeLabelCc: 'Cc:',
+  composeLabelBcc: 'Bcc:'
 };
 
 });

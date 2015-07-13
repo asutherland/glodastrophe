@@ -8,12 +8,13 @@ requirejs.config({
     paths: {
       app: '../app',
       gelam: '../../deps/gelam/js',
-      app_logic: '../felam',
-      locales: '../locales'
+      logic: '../../deps/gelam/js/logic',
+      app_logic: '../app/felam',
+      locales: '../locales',
     },
     config: {
       'gelam/main-frame-setup': {
-        appLogicPath: '../../../www/felam'
+        appLogicPath: '../../../www/app/felam'
       }
     },
     scriptType: 'application/javascript;version=1.7',

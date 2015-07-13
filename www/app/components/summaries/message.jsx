@@ -13,6 +13,8 @@ var SliceItemMixin = require('../slice_item_mixin');
 var Star = require('jsx!../actioners/star');
 var Unread = require('jsx!../actioners/unread');
 
+var MessageReply = require('jsx!../actioners/message_reply');
+
 
 var Attachment = require('jsx!./message_attachment');
 var MessageBody = require('jsx!./message_body');
@@ -36,6 +38,18 @@ var MessageSummary = React.createClass({
 
     var attachmentish;
     if (msg.attachments.length) {
+      var attachments = msg.attachments.map((attachment) => {
+        return (
+          <Attachment key={ attachment.partId }
+            attachment={ attachment }/>
+        );
+      });
+
+      return (
+        <div className="message-attachments">
+          { attachments }
+        </div>
+      );
     }
 
     var bodyish;
@@ -46,8 +60,6 @@ var MessageSummary = React.createClass({
     }
 
     return (
-      // XXX we can't use an 'a' link because BAD things happen if multiple
-      // tabs with us inside get opened.  Need SharedWorkers!
       <div className="message-item" onClick={ this.clickMessage }>
         <div className="message-envelope-container">
           <div className="message-envelope-row">
@@ -58,6 +70,9 @@ var MessageSummary = React.createClass({
             </div>
             <div className="message-author">
               { msg.author.name || msg.author.address }
+            </div>
+            <div className="message-actions">
+              <MessageReply item={ msg }/>
             </div>
           </div>
         </div>

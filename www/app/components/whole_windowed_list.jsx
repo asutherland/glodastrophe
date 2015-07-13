@@ -69,7 +69,13 @@ var WholeWindowedList = React.createClass({
   renderItem: function(item, relIndex) {
     // Note: The react-widget seems to be making the assumption that we'll use
     // the relIndex as our key, although it doesn't actually depend on this.
-    var Widget = this.props.widget;
+    var conditionalWidget = this.props.conditionalWidget;
+    var Widget;
+    if (conditionalWidget) {
+      Widget = conditionalWidget(item);
+    } else {
+      Widget = this.props.widget;
+    }
     if (!item) {
       // XXX come up with a better placeholder in the future.
       return <div key={ 'rel' + relIndex }>LoadinG</div>;

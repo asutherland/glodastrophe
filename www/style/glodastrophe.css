@@ -244,6 +244,11 @@ h3, h4, h5, h6 {
   white-space: nowrap;
 }
 
+.message-actions {
+  display: flex;
+  flex-flow: row-reverse;
+}
+
 /* The outer div, each body part lives inside one of the following: */
 .message-body-container {
   overflow: hidden;
@@ -368,6 +373,46 @@ h3, h4, h5, h6 {
 
 .unread-widget-read {
 }
+
+/* ===== Compose ===== */
+
+/* === Peep === */
+
+.compose-peep {
+  display: inline-block;
+  border-radius: 8px;
+  border: 1px solid var(--peep-border-color);
+  background-color: var(--peep-background-color);
+}
+
+.compose-peep-display-name {
+  font-style: italic;
+  margin-right: 4px;
+}
+
+.compose-peep-address {
+
+}
+
+.compose-peep-remove-button {
+  border: none;
+  padding: 0;
+  margin-left: 4px;
+}
+
+/* === Peep Suggestion === */
+
+.compose-peep-suggestion {
+}
+
+.compose-peep-suggestion-display-name {
+  font-style: italic;
+  margin-right: 4px;
+}
+
+.compose-peep-suggestion-address {
+}
+
 
 /* ===== Autosuggest ===== */
 /* derived  from the compiled example .less styling from react-autosuggest */
