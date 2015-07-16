@@ -41,11 +41,11 @@ var MessageSummary = React.createClass({
       var attachments = msg.attachments.map((attachment) => {
         return (
           <Attachment key={ attachment.partId }
-            attachment={ attachment }/>
+            attachment={ attachment } />
         );
       });
 
-      return (
+      attachmentish = (
         <div className="message-attachments">
           { attachments }
         </div>

@@ -10,7 +10,7 @@ var MessageAttachment = React.createClass({
   mixins: [IntlMixin],
 
   render: function() {
-    var tach = this.props.attachment;
+    var attachment = this.props.attachment;
     return (
       <div className="message-attachment-item">
         <div className="attachment-filename">{ attachment.filename }</div>
