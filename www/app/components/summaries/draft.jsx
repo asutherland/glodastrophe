@@ -64,6 +64,7 @@ var DraftSummary = React.createClass({
     if (!composer) {
       return <div></div>;
     }
+    var api = composer.api;
 
     let makeRecipRow = (bin, l10nId) => {
       let composePeeps = composer[bin].map((nameAddrPair) => {
@@ -84,6 +85,7 @@ var DraftSummary = React.createClass({
           <ComposePeepAdder
             bin={ bin }
             composer={ composer }
+            api={ api }
             />
         </div>
       );
