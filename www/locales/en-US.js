@@ -37,6 +37,7 @@ return {
 
   // -- Message actions
   messageReply: 'Reply',
+  messageForward: 'Forward',
 
   // -- compose / drafts
   composeSend: 'Send',

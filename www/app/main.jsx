@@ -1,7 +1,7 @@
 define(function (require) {
 'use strict';
 
-var React = require('react');
+var React = window.React = require('react');
 
 var IntlMixin = require('react-intl').IntlMixin;
 var localeMessages = require('locales/en-US');

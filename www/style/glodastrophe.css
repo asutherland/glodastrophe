@@ -25,6 +25,12 @@
   --envelope-background: var(--scheme-lightest);
   --envelope-border: var(--scheme-dark);
 
+  --draft-border: #0000ff;
+  --draft-background: #ccccff;
+
+  --peep-border-color: #00ff00;
+  --peep-background-color: #ccffcc;
+
   --tag-color: #ccc;
 
   --pane-padding: 4px;
@@ -376,10 +382,39 @@ h3, h4, h5, h6 {
 
 /* ===== Compose ===== */
 
+.draft-item {
+  border: 1px solid var(--draft-border);
+  border-radius: 4px;
+  margin-bottom: 2px;
+}
+
+.draft-envelope-container {
+  background-color: var(--draft-background);
+  padding: 2px;
+}
+
+.draft-recip-row {
+  display: block;
+}
+
+.draft-subject-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.draft-subject {
+  flex: 1;
+}
+
+.draft-attachments {
+
+}
+
 /* === Peep === */
 
 .compose-peep {
   display: inline-block;
+  overflow: hidden;
   border-radius: 8px;
   border: 1px solid var(--peep-border-color);
   background-color: var(--peep-background-color);
@@ -388,13 +423,15 @@ h3, h4, h5, h6 {
 .compose-peep-display-name {
   font-style: italic;
   margin-right: 4px;
+  margin: 2px;
 }
 
 .compose-peep-address {
-
+  margin: 2px;
 }
 
 .compose-peep-remove-button {
+  display: inline-block;
   border: none;
   padding: 0;
   margin-left: 4px;

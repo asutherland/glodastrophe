@@ -14,7 +14,7 @@ var Star = require('jsx!../actioners/star');
 var Unread = require('jsx!../actioners/unread');
 
 var MessageReply = require('jsx!../actioners/message_reply');
-
+var MessageForward = require('jsx!../actioners/message_forward');
 
 var Attachment = require('jsx!./message_attachment');
 var MessageBody = require('jsx!./message_body');
@@ -72,7 +72,8 @@ var MessageSummary = React.createClass({
               { msg.author.name || msg.author.address }
             </div>
             <div className="message-actions">
-              <MessageReply item={ msg }/>
+              <MessageForward item={ msg } />
+              <MessageReply item={ msg } />
             </div>
           </div>
         </div>

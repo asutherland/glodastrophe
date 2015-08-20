@@ -9,25 +9,25 @@ var FormattedMessage = require('react-intl').FormattedMessage;
  * Reply button for a message.  In theory this could get fancy and provide magic
  * expanding support for reply all/reply list/forward/etc./etc.
  */
-var MessageReply = React.createClass({
+var MessageForward = React.createClass({
   mixins: [IntlMixin],
 
   render: function() {
     return (
-      <button className="message-action-reply"
-              onClick={ this.clickReply }>
+      <button className="message-action-forward"
+              onClick={ this.clickForward }>
         <FormattedMessage
-          message={ this.getIntlMessage('messageReply') } />
+          message={ this.getIntlMessage('messageForward') } />
       </button>
     );
   },
 
-  clickReply: function() {
+  clickForward: function() {
     // Pass noComposer so that a MessageComposition is not automatically created
     // for us and instead
-    this.props.item.replyToMessage('all', { noComposer: true });
+    this.props.item.forwardMessage('inline', { noComposer: true });
   }
 });
 
-return MessageReply;
+return MessageForward;
 });

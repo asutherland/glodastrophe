@@ -108,10 +108,10 @@ var ComposePeepAdder = React.createClass({
       });
   },
 
-  renderSuggestion: function(peep, input) {
+  renderSuggestion: function(peep/*, input*/) {
     // TODO: highlight the matching substring stuff
     return (
-      <ComposePeepSuggestion peep={ peep } />;
+      <ComposePeepSuggestion peep={ peep } />
     );
   },
 
@@ -120,11 +120,7 @@ var ComposePeepAdder = React.createClass({
   },
 
   render: function() {
-    var conv = this.props.conversation;
-    var classes = 'taggy-item';
-    var folder = this.props.folder;
-
-    var idName = "addrecip-" + this.props.bin;
+    var idName = 'addrecip-' + this.props.bin;
 
     var inputAttributes = {
       type: 'email'

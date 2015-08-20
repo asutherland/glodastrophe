@@ -6,16 +6,10 @@ var IntlMixin = require('react-intl').IntlMixin;
 var FormattedMessage = require('react-intl').FormattedMessage;
 var FormattedRelative = require('react-intl').FormattedRelative;
 
-var navigate = require('react-mini-router').navigate;
+var ComposePeep = require('jsx!../actioners/compose_peep');
+var ComposePeepAdder = require('jsx!../actioners/compose_peep_adder');
 
-var SliceItemMixin = require('../slice_item_mixin');
-
-var Star = require('jsx!../actioners/star');
-var Unread = require('jsx!../actioners/unread');
-
-
-var Attachment = require('jsx!./message_attachment');
-var MessageBody = require('jsx!./message_body');
+var MediumEditor = require('jsx!../medium_editor');
 
 /**
  * Editable message draft, intended to be used where you'd otherwise display
@@ -40,10 +34,10 @@ var DraftSummary = React.createClass({
 
   _getComposer: function() {
     this.dirtiedBodyRetriever = null;
-    this.props.message.editAsDraft().then((composer) => {
+    this.props.item.editAsDraft().then((composer) => {
       composer.on('change', () => {
         this.setState({ serial: composer.serial });
-      })
+      });
       this.setState({ composer });
     });
   },
@@ -60,7 +54,7 @@ var DraftSummary = React.createClass({
 
   componentWillReceiveProps: function(nextProps) {
     // Assert that our message never changes.
-    if (nextProps.message !== this.props.message) {
+    if (nextProps.item !== this.props.item) {
       throw new Error('Our message must never change!');
     }
   },
@@ -76,7 +70,8 @@ var DraftSummary = React.createClass({
         return (
           <ComposePeep key={ nameAddrPair.address }
                        bin={ bin }
-                       composer={ composer }/>
+                       composer={ composer }
+                       peep={ nameAddrPair } />
         );
       });
 
@@ -93,24 +88,39 @@ var DraftSummary = React.createClass({
         </div>
       );
     };
-
+/*
+<MediumEditor initialContent={ composer.textBody }
+              onDirty={ this.bodyDirtied }
+              />
+*/
     return (
       <div className="draft-item">
-        { makeRecipRow('to', 'composeLabelTo') }
-        { makeRecipRow('cc', 'composeLabelCc') }
-        { makeRecipRow('bcc', 'composeLabelBcc') }
-        <input type="text"
-               value={ composer.subject }
-               onChange={ this.subjectChange } />
-        <MediumEditor initialContent={ composer.textBody }
-                      onDirty={ this.bodyDirtied }
-                      />
+        <div className="draft-envelope-container">
+          { makeRecipRow('to', 'composeLabelTo') }
+          { makeRecipRow('cc', 'composeLabelCc') }
+          { makeRecipRow('bcc', 'composeLabelBcc') }
+          <div className="draft-subject-row">
+            <input className="draft-subject"
+                   type="text"
+                   value={ composer.subject }
+                   onChange={ this.subjectChange } />
+          </div>
+          <div className="draft-attachments">
+          </div>
+        </div>
+
+        <div className="draft-body-area">
+
+        </div>
         <div className="draft-buttons">
           <button>
             <FormattedMessage
               message={ this.getIntlMessage('composeSend') } />
           </button>
-          <button>{ '\u1f4ce' }</button>
+          <button>
+            <FormattedMessage
+              message={ this.getIntlMessage('composeAttach') } />
+          </button>
           <button>
             <FormattedMessage
               message={ this.getIntlMessage('composeDiscard') } />
