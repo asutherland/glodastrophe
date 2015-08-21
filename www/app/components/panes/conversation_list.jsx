@@ -50,7 +50,7 @@ var ConversationListPane = React.createClass({
           error: false
         });
       }.bind(this),
-      function noSuchFolder(err) {
+      function noSuchFolder() {
         this.setState({
           folder: null,
           view: null,
@@ -103,7 +103,14 @@ var ConversationListPane = React.createClass({
             message={ this.getIntlMessage('syncGrow') }
             />
           </button>
-          <button onClick={ this.ensureSnippets }>EnsurE SnippetS</button>
+          <button onClick={ this.ensureSnippets }><FormattedMessage
+            message={ this.getIntlMessage('hackManualSnippets') }
+            />
+          </button>
+          <button onClick={ this.beginCompose }><FormattedMessage
+            message={ this.getIntlMessage('beginCompose') }
+            />
+          </button>
         </div>
         <WindowedList
           unitSize={ 40 }
@@ -132,6 +139,18 @@ var ConversationListPane = React.createClass({
     if (this.state.view) {
       this.state.view.ensureSnippets();
     }
+  },
+
+  /**
+   * Begin composing a new message... by jumping to the drafts folder and
+   * showing the draft.
+   */
+  beginCompose: function() {
+    this.props.mailApi.beginMessageComposition(
+      null, this.state.folder, { command: 'blank', noComposer: true })
+    .then(({ id }) => {
+      this.props.navigateToDraft(id);
+    });
   }
 });
 

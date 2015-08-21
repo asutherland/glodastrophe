@@ -33,6 +33,10 @@ return {
   syncRefresh: 'Refresh',
   syncGrow: 'Grow',
 
+  hackManualSnippets: 'Sn1pp37s',
+
+  beginCompose: 'Compose',
+
   // --- Message Display
 
   // -- Message actions
@@ -42,6 +46,7 @@ return {
   // -- compose / drafts
   composeSend: 'Send',
   composeAttach: 'Attach',
+  composeSave: 'Save Draft',
   composeDiscard: 'Delete Draft',
 
   composeLabelTo: 'To:',

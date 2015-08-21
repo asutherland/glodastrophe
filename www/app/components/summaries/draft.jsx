@@ -8,6 +8,9 @@ var FormattedRelative = require('react-intl').FormattedRelative;
 
 var ComposePeep = require('jsx!../actioners/compose_peep');
 var ComposePeepAdder = require('jsx!../actioners/compose_peep_adder');
+var ComposeAttachment = require('jsx!../actioners/compose_attachment');
+
+var embodyHTML = require('gelam/clientapi/bodies/embody_html');
 
 var MediumEditor = require('jsx!../medium_editor');
 
@@ -39,6 +42,10 @@ var DraftSummary = React.createClass({
         this.setState({ serial: composer.serial });
       });
       this.setState({ composer });
+      if (composer.htmlBlob) {
+        embodyHTML(composer.htmlBlob,
+                   React.findDOMNode(this.refs.immutableHtml));
+      }
     });
   },
 
@@ -90,11 +97,25 @@ var DraftSummary = React.createClass({
         </div>
       );
     };
-/*
-<MediumEditor initialContent={ composer.textBody }
-              onDirty={ this.bodyDirtied }
-              />
-*/
+
+    let attachments = composer.attachments.map((attachment, idx) => {
+      // ugh, using the index as a key, but we desperately need an id on these
+      // things.
+      return (
+        <ComposeAttachment key={ idx }
+                           composer={ composer }
+                           attachment={ attachment } />
+      );
+    });
+
+    let mediumOptions = {
+      placeholder: false,
+    };
+
+    let displayNone = {
+      display: 'none'
+    };
+
     return (
       <div className="draft-item">
         <div className="draft-envelope-container">
@@ -108,22 +129,34 @@ var DraftSummary = React.createClass({
                    onChange={ this.subjectChange } />
           </div>
           <div className="draft-attachments">
+            { attachments }
           </div>
         </div>
 
         <div className="draft-body-area">
-
+          <MediumEditor initialContent={ composer.textBody }
+                        onDirty={ this.bodyDirtied }
+                        options={ mediumOptions } />
+          <div ref="immutableHtml" />
         </div>
         <div className="draft-buttons">
-          <button>
+          <button onClick={ this.sendMessage }>
             <FormattedMessage
               message={ this.getIntlMessage('composeSend') } />
           </button>
-          <button>
+          <input ref="file"
+                 type="file"
+                 style={ displayNone }
+                 onChange={ this.attachFile }></input>
+          <button onClick={ this.triggerAttach }>
             <FormattedMessage
               message={ this.getIntlMessage('composeAttach') } />
           </button>
-          <button>
+          <button onClick={ this.saveDraft }>
+            <FormattedMessage
+              message={ this.getIntlMessage('composeSave') } />
+          </button>
+          <button onclick={ this.deleteDraft }>
             <FormattedMessage
               message={ this.getIntlMessage('composeDiscard') } />
           </button>
@@ -140,13 +173,48 @@ var DraftSummary = React.createClass({
     this.dirtiedBodyRetriever = retrieveFunc;
   },
 
-  saveDraft: function() {
-    let composer = this.props.composer;
+  _persistStateToComposer: function() {
     if (this.dirtiedBodyRetriever) {
-      composer.textBody = this.dirtiedBodyRetriever();
+      this.state.composer.textBody = this.dirtiedBodyRetriever();
       this.dirtiedBodyRetriever = null;
     }
-    composer.saveDraft();
+  },
+
+  /**
+   * type=file inputs are dumb looking, so we have our attach button trigger the
+   * actual input under the hood.  Which will cascade through to a call to
+   * attachFile below.
+   */
+  triggerAttach: function() {
+    React.findDOMNode(this.refs.file).click();
+  },
+
+  /**
+   * The actual attachment-attaching logic that `triggerAttach` helps us get to
+   * happen.
+   */
+  attachFile: function(event) {
+    var fileInput = event.target;
+    Array.from(fileInput.files).forEach((file) => {
+      this.state.composer.addAttachment({
+        name: file.name,
+        blob: file
+      });
+    });
+  },
+
+  deleteDraft: function() {
+    this.state.composer.abortCompositionDeleteDraft();
+  },
+
+  sendMessage: function() {
+    this._persistStateToComposer();
+    this.state.composer.finishCompositionSendMessage();
+  },
+
+  saveDraft: function() {
+    this._persistStateToComposer();
+    this.state.composer.saveDraft();
   }
 });
 

@@ -27,6 +27,9 @@ var SplitPane = require('react-split-pane');
 
 var queryString = require('./query_string');
 
+var { accountIdFromMessageId, convIdFromMessageId } =
+  require('gelam/id_conversions');
+
 var App = React.createClass({
   mixins: [RouterMixin, IntlMixin],
 
@@ -120,6 +123,14 @@ var App = React.createClass({
     var navigateToConv = function(conv) {
       navigate('/view/3pane/' + accountId + '/' + folderId + '/' + conv.id);
     };
+    var navigateToDraft = function(messageId) {
+      var navAccountId = accountIdFromMessageId(messageId);
+      var convId = accountIdFromMessageId(messageId);
+      // Find the localdrafts folder
+      var account = mailApi.accounts.getAccountById(navAccountId);
+      var folder = account.folders.getFirstFolderWithType('localdrafts');
+      navigate('/view/3pane/' + accountId + '/' + folder.id + '/' + convId);
+    };
 
     // The route doesn't match without placeholders, so normalize period as a
     // placeholder that becomes null and which the panes know how to handle.
@@ -145,6 +156,7 @@ var App = React.createClass({
               folderId={ folderId }
               selectedId={ conversationId }
               pick={ navigateToConv }
+              navigateToDraft={ navigateToDraft }
               />
             <MessageListPane
               mailApi={ mailApi }

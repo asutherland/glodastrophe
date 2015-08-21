@@ -3,6 +3,8 @@ define(function (require) {
 
 var React = require('react');
 
+var RealMediumEditor = require('medium-editor');
+
 /**
  * A non-react-idiomatic use of MediumEditor informed by
  * https://github.com/yabwe/medium-editor/issues/383 but being very paranoid
@@ -24,10 +26,10 @@ var React = require('react');
 var MediumEditor = React.createClass({
   componentDidMount: function() {
     this.dirty = false;
-    this.medium = new MediumEditor(
-      this.getDOMNode(),
+    this.medium = new RealMediumEditor(
+      React.findDOMNode(this),
       this.props.options);
-    this.medium.subscribe('editableInput', (e) => {
+    this.medium.subscribe('editableInput', () => {
       if (!this.dirty) {
         this.dirty = true;
         this.props.onDirty(this.getState);
@@ -37,7 +39,7 @@ var MediumEditor = React.createClass({
 
   getState: function() {
     this.dirty = false;
-    return this.getDOMNode();
+    return React.findDOMNode(this);
   },
 
   shouldComponentUpdate: function() {
@@ -59,4 +61,5 @@ var MediumEditor = React.createClass({
   }
 });
 
+return MediumEditor;
 });

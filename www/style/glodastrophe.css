@@ -410,6 +410,11 @@ h3, h4, h5, h6 {
 
 }
 
+.draft-buttons {
+  overflow: hidden;
+  background-color: gray;
+}
+
 /* === Peep === */
 
 .compose-peep {
@@ -448,6 +453,24 @@ h3, h4, h5, h6 {
 }
 
 .compose-peep-suggestion-address {
+}
+
+/* === Attachments === */
+
+.compose-attachment {
+
+}
+
+.compose-attachment-name {
+  margin: 2px;
+}
+
+.compose-attachment-type {
+  margin: 2px;
+}
+
+.compose-attachment-size {
+  margin: 2px;
 }
 
 
