@@ -410,6 +410,10 @@ h3, h4, h5, h6 {
 
 }
 
+.draft-body-editor {
+  min-height: 4em;
+}
+
 .draft-buttons {
   overflow: hidden;
   background-color: gray;

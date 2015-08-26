@@ -1,4 +1,5 @@
 define(function (require) {
+'use strict';
 
 var React = require('react');
 
@@ -69,14 +70,16 @@ var MessageListPane = React.createClass({
       // be pushed down into a summary widget that gets its serial bumped as a
       // prop.
       conversation.on('change', this.forceUpdate.bind(this, null));
+      conversation.on('remove', this.props.conversationDeleted);
       this.setState({
         conversation: conversation,
         view: this.props.mailApi.viewConversationMessages(conversationId)
       });
-    }, () => {
+    }, (err) => {
+      console.error('got a rejection getting the conversation?', err);
       this.setState({
         error: true
-      })
+      });
     });
   },
 

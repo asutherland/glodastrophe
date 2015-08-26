@@ -71,18 +71,19 @@ var WholeWindowedList = React.createClass({
     // the relIndex as our key, although it doesn't actually depend on this.
     var conditionalWidget = this.props.conditionalWidget;
     var Widget;
+    // - Placeholder (needs to happen before calling conditionalWidget)
+    if (!item) {
+      // XXX come up with a better placeholder in the future.
+      return <div key={ 'rel' + relIndex }>LoadinG</div>;
+    }
     if (conditionalWidget) {
       Widget = conditionalWidget(item);
     } else {
       Widget = this.props.widget;
     }
-    if (!item) {
-      // XXX come up with a better placeholder in the future.
-      return <div key={ 'rel' + relIndex }>LoadinG</div>;
-    }
     return <Widget key={ item.id } item={ item } serial={ item.serial }
                    selected={ this.props.selectedId === item.id }
-                   pick={ this.props.pick } />
+                   pick={ this.props.pick } />;
   }
 });
 

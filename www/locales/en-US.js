@@ -49,6 +49,9 @@ return {
   composeSave: 'Save Draft',
   composeDiscard: 'Delete Draft',
 
+  composeDirtyUnsaved: 'Unsaved changes!',
+  composeCleanSaved: 'All changes saved.',
+
   composeLabelTo: 'To:',
   composeLabelCc: 'Cc:',
   composeLabelBcc: 'Bcc:'

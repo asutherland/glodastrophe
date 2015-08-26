@@ -1,4 +1,5 @@
 define(function (require) {
+'use strict';
 
 var React = require('react');
 
@@ -13,6 +14,11 @@ var ComposeAttachment = require('jsx!../actioners/compose_attachment');
 var embodyHTML = require('gelam/clientapi/bodies/embody_html');
 
 var MediumEditor = require('jsx!../medium_editor');
+
+const draftScopedStyle = `
+p:first-child { margin-block-start: 0; }
+p:last-child { margin-block-end: 0; }
+`;
 
 /**
  * Editable message draft, intended to be used where you'd otherwise display
@@ -31,7 +37,8 @@ var DraftSummary = React.createClass({
   getInitialState: function() {
     return {
       composer: null,
-      serial: 0
+      serial: 0,
+      dirty: false
     };
   },
 
@@ -39,7 +46,10 @@ var DraftSummary = React.createClass({
     this.dirtiedBodyRetriever = null;
     this.props.item.editAsDraft().then((composer) => {
       composer.on('change', () => {
-        this.setState({ serial: composer.serial });
+        this.setState({
+          serial: composer.serial,
+          dirty: true
+        });
       });
       this.setState({ composer });
       if (composer.htmlBlob) {
@@ -116,6 +126,9 @@ var DraftSummary = React.createClass({
       display: 'none'
     };
 
+    let dirtyMessage = this.state.dirty ? 'composeDirtyUnsaved'
+                                        : 'composeCleanSaved';
+
     return (
       <div className="draft-item">
         <div className="draft-envelope-container">
@@ -134,6 +147,7 @@ var DraftSummary = React.createClass({
         </div>
 
         <div className="draft-body-area">
+          <style scoped>{ draftScopedStyle }</style>
           <MediumEditor initialContent={ composer.textBody }
                         onDirty={ this.bodyDirtied }
                         options={ mediumOptions } />
@@ -156,7 +170,11 @@ var DraftSummary = React.createClass({
             <FormattedMessage
               message={ this.getIntlMessage('composeSave') } />
           </button>
-          <button onclick={ this.deleteDraft }>
+          <span>
+            <FormattedMessage
+              message={ this.getIntlMessage(dirtyMessage) } />
+          </span>
+          <button onClick={ this.deleteDraft }>
             <FormattedMessage
               message={ this.getIntlMessage('composeDiscard') } />
           </button>
@@ -166,11 +184,12 @@ var DraftSummary = React.createClass({
   },
 
   subjectChange: function(event) {
-    this.props.composer.setSubject(event.target.value);
+    this.state.composer.setSubject(event.target.value);
   },
 
   bodyDirtied: function(retrieveFunc) {
     this.dirtiedBodyRetriever = retrieveFunc;
+    this.setState({ dirty: true });
   },
 
   _persistStateToComposer: function() {
@@ -215,6 +234,7 @@ var DraftSummary = React.createClass({
   saveDraft: function() {
     this._persistStateToComposer();
     this.state.composer.saveDraft();
+    this.setState({ dirty: false });
   }
 });
 

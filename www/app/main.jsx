@@ -25,8 +25,6 @@ var MessageListPane = require('jsx!./components/panes/message_list');
 
 var SplitPane = require('react-split-pane');
 
-var queryString = require('./query_string');
-
 var { accountIdFromMessageId, convIdFromMessageId } =
   require('gelam/id_conversions');
 
@@ -125,7 +123,7 @@ var App = React.createClass({
     };
     var navigateToDraft = function(messageId) {
       var navAccountId = accountIdFromMessageId(messageId);
-      var convId = accountIdFromMessageId(messageId);
+      var convId = convIdFromMessageId(messageId);
       // Find the localdrafts folder
       var account = mailApi.accounts.getAccountById(navAccountId);
       var folder = account.folders.getFirstFolderWithType('localdrafts');
@@ -140,6 +138,14 @@ var App = React.createClass({
     if (conversationId === '.') {
       conversationId = null;
     }
+
+    // If the conversation gets deleted, the reasonable things to do are:
+    // - end up with nothing selected
+    // - select something else.
+    // We currently pick selecting nothing.
+    var conversationDeleted = () => {
+      navigate('/view/3pane/' + accountId + '/' + folderId + '/.');
+    };
 
     return (
       <div>
@@ -161,6 +167,7 @@ var App = React.createClass({
             <MessageListPane
               mailApi={ mailApi }
               conversationId={ conversationId }
+              conversationDeleted = { conversationDeleted }
               />
           </SplitPane>
         </SplitPane>
