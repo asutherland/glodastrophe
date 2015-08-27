@@ -143,6 +143,7 @@ var MessageListPane = React.createClass({
           view={ this.state.view }
           conditionalWidget={ this._pickMessageWidget }
           pick={ this.props.pick }
+          navigateToDraft={ this.props.navigateToDraft }
           />
       </div>
     );

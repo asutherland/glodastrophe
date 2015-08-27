@@ -27,7 +27,7 @@ var MessageSummary = React.createClass({
     return {
       // expand all messages that are unread or starred
       expanded: !message.isRead || message.isStarred
-    }
+    };
   },
 
   defaultProps: {
@@ -55,9 +55,12 @@ var MessageSummary = React.createClass({
     var bodyish;
     if (this.state.expanded) {
       bodyish = <MessageBody key="body" message={ msg } />;
+      // TODO: attachments should only be displayed in this case... gobble.
     } else {
       bodyish = <div className="message-snippet">{ msg.snippet || '' }</div>;
     }
+
+    // TODO: we need a twisty in here to control the expanded state.
 
     return (
       <div className="message-item" onClick={ this.clickMessage }>
@@ -72,8 +75,8 @@ var MessageSummary = React.createClass({
               { msg.author.name || msg.author.address }
             </div>
             <div className="message-actions">
-              <MessageForward item={ msg } />
-              <MessageReply item={ msg } />
+              <MessageForward {...this.props} item={ msg } />
+              <MessageReply {...this.props} item={ msg } />
             </div>
           </div>
         </div>

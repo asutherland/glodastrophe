@@ -13,8 +13,13 @@ var MessageAttachment = React.createClass({
     var attachment = this.props.attachment;
     return (
       <div className="message-attachment-item">
-        <div className="attachment-filename">{ attachment.filename }</div>
-        <div className="attachment-size">
+        <div className="message-attachment-mimetype">
+          { attachment.mimetype }
+        </div>
+        <div className="message-attachment-filename">
+          { attachment.filename }
+        </div>
+        <div className="message-attachment-size">
           { attachment.sizeEstimateInBytes }
         </div>
       </div>

@@ -13,6 +13,9 @@
   --scheme-lightest: #b295c3;
   --scheme-light-text: #ffffff;
 
+  /* got this by spreading the brightness out */
+  --scheme-super-light: #d8c0e4;
+
   --dark-border: var(--scheme-darkest);
   --lightest-border: #e8d4e8;
   --selected-bg-color: var(--scheme-dark);
@@ -24,6 +27,10 @@
 
   --envelope-background: var(--scheme-lightest);
   --envelope-border: var(--scheme-dark);
+
+  --attachments-outer-border: var(--scheme-lighter);
+  --attachments-inner-border: var(--scheme-lightest);
+  --attachments-background: var(--scheme-super-light);
 
   --draft-border: #0000ff;
   --draft-background: #ccccff;
@@ -255,6 +262,31 @@ h3, h4, h5, h6 {
   flex-flow: row-reverse;
 }
 
+.message-attachments {
+  border-top: 2px solid var(--attachments-outer-border);
+  border-bottom: 2px solid var(--attachments-outer-border);
+}
+
+.message-attachment-item {
+  display: flex;
+  flex-direction: row;
+  background-color: var(--attachments-background);
+  border-bottom: 1px solid var(--attachments-inner-border);
+}
+
+.message-attachment-mimetype {
+  margin: 0 4px;
+}
+
+.message-attachment-filename {
+  margin: 0 4px;
+}
+
+.message-attachment-size {
+  margin: 0 4px;
+}
+
+
 /* The outer div, each body part lives inside one of the following: */
 .message-body-container {
   overflow: hidden;
@@ -378,6 +410,20 @@ h3, h4, h5, h6 {
 }
 
 .unread-widget-read {
+}
+
+/* === Drafts === */
+
+.drafts-widget {
+}
+
+.drafts-widget-no-drafts {
+  display: none;
+}
+
+.drafts-widget-drafts {
+  color: brown;
+  margin-right: 4px;
 }
 
 /* ===== Compose ===== */

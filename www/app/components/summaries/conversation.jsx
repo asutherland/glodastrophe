@@ -12,6 +12,7 @@ var SliceItemMixin = require('../slice_item_mixin');
 
 var Star = require('jsx!../actioners/star');
 var Unread = require('jsx!../actioners/unread');
+var Drafts = require('jsx!../actioners/drafts');
 
 
 var ConversationSummary = React.createClass({
@@ -50,11 +51,12 @@ var ConversationSummary = React.createClass({
            onClick={ this.clickConversation }
            style={ inlineStyle } >
         <div className="conv-summary-envelope-row">
-          <Unread item={ conv } />
-          <Star item={ conv } />
+          <Unread {...this.props} item={ conv } />
+          <Star {...this.props} item={ conv } />
           <div className="conv-summary-date">
             <FormattedRelative value={ conv.mostRecentMessageDate } />
           </div>
+          <Drafts {...this.props} item={ conv } />
           <div className="conv-summary-subject">{ conv.firstSubject }</div>
         </div>
         <div className="conv-summary-aggregates-row">

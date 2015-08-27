@@ -1,4 +1,5 @@
 define(function (require) {
+'use strict';
 
 var React = require('react');
 
@@ -24,8 +25,11 @@ var MessageForward = React.createClass({
 
   clickForward: function() {
     // Pass noComposer so that a MessageComposition is not automatically created
-    // for us and instead
-    this.props.item.forwardMessage('inline', { noComposer: true });
+    // for us.  Because we
+    this.props.item.forwardMessage('inline', { noComposer: true })
+    .then(({ id }) => {
+      this.props.navigateToDraft(id);
+    });
   }
 });
 

@@ -1,4 +1,5 @@
 define(function (require) {
+'use strict';
 
 var React = require('react');
 
@@ -18,8 +19,10 @@ var ComposeAttachment = React.createClass({
     return (
       <div className="compose-attachment">
         <span className="compose-attachment-name">{ attachment.name }</span>
-        <span className="compose-attachment-type">{ attachment.blob.type }</span>
-        <span className="compose-attachment-size">{ attachment.blob.size }</span>
+        <span className="compose-attachment-type">{ attachment.type }</span>
+        <span className="compose-attachment-size">
+          { attachment.sizeEstimate }
+        </span>
         <button className="compose-attachment-remove-button"
                 onClick={ this.clickRemove }>
           X

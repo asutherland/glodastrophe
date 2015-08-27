@@ -168,6 +168,7 @@ var App = React.createClass({
               mailApi={ mailApi }
               conversationId={ conversationId }
               conversationDeleted = { conversationDeleted }
+              navigateToDraft={ navigateToDraft }
               />
           </SplitPane>
         </SplitPane>

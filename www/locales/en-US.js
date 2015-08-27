@@ -37,6 +37,9 @@ return {
 
   beginCompose: 'Compose',
 
+  // --- Conversation Summary Display
+  convHasDrafts: 'Drafts',
+
   // --- Message Display
 
   // -- Message actions

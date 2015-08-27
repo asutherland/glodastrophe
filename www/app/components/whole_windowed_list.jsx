@@ -83,7 +83,8 @@ var WholeWindowedList = React.createClass({
     }
     return <Widget key={ item.id } item={ item } serial={ item.serial }
                    selected={ this.props.selectedId === item.id }
-                   pick={ this.props.pick } />;
+                   pick={ this.props.pick }
+                   navigateToDraft={ this.props.navigateToDraft } />;
   }
 });
 

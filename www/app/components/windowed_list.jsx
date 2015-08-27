@@ -64,11 +64,13 @@ var WindowedList = React.createClass({
   },
 
   handleDirty: function() {
+    /*
     console.log('got a dirty notification!',
                 this.props.view._itemConstructor.name,
                 'offset:', this.props.view.offset, 'totalHeight:',
                 this.props.view.totalHeight, 'new serial',
                 this.props.view.serial);
+    */
     this.setState({
       serial: this.props.view.serial
     });

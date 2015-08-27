@@ -34,6 +34,6 @@ return function churnConversation(convInfo, messages/*, oldConvInfo */) {
     }
   }
 
-  convInfo.height = Math.max(2, tidbits.length + 1);
+  convInfo.height = tidbits.length + 1;
 };
 });

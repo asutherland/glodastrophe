@@ -62,6 +62,7 @@ var MediumEditor = React.createClass({
    */
   populateEditor: function(editorNode, value) {
     var lines = value.split('\n');
+    console.log('editor lines:', lines);
     var frag = document.createDocumentFragment();
     for (var i = 0, len = lines.length; i < len; i++) {
       if (i) {
@@ -90,13 +91,13 @@ var MediumEditor = React.createClass({
     var lastWasPara = false;
     for (var i = 0; i < len; i++) {
       var node = editorNode.childNodes[i];
-      if (node.nodeName === 'BR' &&
-          // Gecko's contenteditable implementation likes to create a
-          // synthetic trailing BR with type="_moz".  We do not like/need
-          // this synthetic BR, so we filter it out.  Check out
-          // nsTextEditRules::CreateTrailingBRIfNeeded to find out where it
-          // comes from.
-          node.getAttribute('type') !== '_moz') {
+      if (node.nodeName === 'BR' && node.getAttribute('type') === '_moz') {
+        // Gecko's contenteditable implementation likes to create a
+        // synthetic trailing BR with type="_moz".  We do not like/need
+        // this synthetic BR, so we filter it out.  Check out
+        // nsTextEditRules::CreateTrailingBRIfNeeded to find out where it
+        // comes from.
+      } else if (node.nodeName === 'BR') {
         content += '\n';
         lastWasPara = false;
       } else if (node.nodeName === 'P') {
