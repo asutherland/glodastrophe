@@ -1,6 +1,8 @@
 define(function(require) {
 
 return {
+  home: 'Home',
+
   // --- Account Home
   accountHomeShow3Pane: '3-Pane View',
   accountHomeShowFolders: 'Folders',

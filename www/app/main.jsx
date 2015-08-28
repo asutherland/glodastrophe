@@ -4,6 +4,7 @@ define(function (require) {
 var React = window.React = require('react');
 
 var IntlMixin = require('react-intl').IntlMixin;
+var FormattedMessage = require('react-intl').FormattedMessage;
 var localeMessages = require('locales/en-US');
 
 var RouterMixin = require('react-mini-router').RouterMixin;
@@ -115,6 +116,9 @@ var App = React.createClass({
   view3Pane: function(accountId, folderId, conversationId) {
     console.log('3pane', [accountId, folderId, conversationId]);
 
+    var navigateHome = function() {
+      navigate('/');
+    };
     var navigateToFolder = function(folder) {
       navigate('/view/3pane/' + accountId + '/' + folder.id + '/.');
     };
@@ -150,12 +154,18 @@ var App = React.createClass({
     return (
       <div>
         <SplitPane orientation="horizontal">
-          <FolderListPane
-            mailApi={ mailApi }
-            accountId={ accountId }
-            pick={ navigateToFolder }
-            selectedId={ folderId }
-            />
+          <div>
+            <div onClick={ navigateHome }>
+              <FormattedMessage
+                message={ this.getIntlMessage('home') } />
+            </div>
+            <FolderListPane
+              mailApi={ mailApi }
+              accountId={ accountId }
+              pick={ navigateToFolder }
+              selectedId={ folderId }
+              />
+          </div>
           <SplitPane orientation="horizontal">
             <ConversationListPane
               mailApi={ mailApi }
