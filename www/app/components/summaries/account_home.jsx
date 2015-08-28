@@ -11,26 +11,30 @@ var AccountHome = React.createClass({
   render: function() {
     return (
       <div className='account-home-summary'>
-        <div className='ahs-header'>Account: { this.props.item.name }</div>
-        <div className='ahs-contents'>
-          <div className='ahs-details'>
-            <a href={ '#!/view/3pane/' + this.props.item.id + '/./.' }>
-              <FormattedMessage
-                message={ this.getIntlMessage('accountHomeShow3Pane') }
-                />
-            </a>
-            <a href={ '#!/view/folders/' + this.props.item.id }>
-              <FormattedMessage
-                message={ this.getIntlMessage('accountHomeShowFolders') }
-                />
-            </a>
-          </div>
-          <div className='ahs-actions'>
-            <button onClick={ this.deleteAccount }>
-              <FormattedMessage
-                message={ this.getIntlMessage('deleteAccount') }
-                />
-            </button>
+        <div className='ahs-border'>
+          <div className='ahs-header'>Account: { this.props.item.name }</div>
+          <div className='ahs-contents'>
+            <div className='ahs-details'>
+              <a href={ '#!/view/3pane/' + this.props.item.id + '/./.' }
+                 className='ahs-detail'>
+                <FormattedMessage
+                  message={ this.getIntlMessage('accountHomeShow3Pane') }
+                  />
+              </a>
+              <a href={ '#!/view/folders/' + this.props.item.id }
+                 className='ahs-detail'>
+                <FormattedMessage
+                  message={ this.getIntlMessage('accountHomeShowFolders') }
+                  />
+              </a>
+            </div>
+            <div className='ahs-actions'>
+              <button onClick={ this.deleteAccount }>
+                <FormattedMessage
+                  message={ this.getIntlMessage('deleteAccount') }
+                  />
+              </button>
+            </div>
           </div>
         </div>
       </div>

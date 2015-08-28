@@ -72,9 +72,12 @@ h3, h4, h5, h6 {
 .account-home-summary {
   display: flex;
   flex-flow: column;
-  margin: 0.5em;
   padding: 0.5em;
+}
+
+.ahs-border {
   border: 1px solid gray;
+  padding: 0.5em;
 }
 
 .ahs-contents {
@@ -84,6 +87,10 @@ h3, h4, h5, h6 {
 
 .ahs-details {
   flex: 1;
+}
+
+.ahs-detail {
+  margin-right: 0.5em;
 }
 
 .ahs-actions {
