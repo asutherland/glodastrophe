@@ -29,13 +29,15 @@ var Taggy = React.createClass({
     );
   },
 
-  clickFolder: function() {
+  clickFolder: function(event) {
+    event.stopPropagation();
     if (this.props.pick) {
       this.props.pick(this.props.folder);
     }
   },
 
-  clickRemove: function() {
+  clickRemove: function(event) {
+    event.stopPropagation();
     if (this.props.labelOwner) {
       this.props.labelOwner.removeLabels([this.props.folder]);
     }

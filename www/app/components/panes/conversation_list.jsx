@@ -80,7 +80,7 @@ var ConversationListPane = React.createClass({
   render: function() {
     // Be empty when there's no folder selected.
     if (!this.props.folderId) {
-      return <div></div>
+      return <div></div>;
     }
 
     if (this.state.error) {
@@ -91,34 +91,40 @@ var ConversationListPane = React.createClass({
       return <div>LoadinG FoldeR: {this.props.folderId}...</div>;
     }
 
+    // TODO: The header likely wants to be a widget that varies based on what
+    // the source of the list is.
     return (
       <div className="conversation-list-pane">
-        <h1>{this.state.folder.name}</h1>
-        <div>
-          <button onClick={ this.syncRefresh }><FormattedMessage
-            message={ this.getIntlMessage('syncRefresh') }
-            />
-          </button>
-          <button onClick={ this.syncGrowFolder }><FormattedMessage
-            message={ this.getIntlMessage('syncGrow') }
-            />
-          </button>
-          <button onClick={ this.ensureSnippets }><FormattedMessage
-            message={ this.getIntlMessage('hackManualSnippets') }
-            />
-          </button>
-          <button onClick={ this.beginCompose }><FormattedMessage
-            message={ this.getIntlMessage('beginCompose') }
-            />
-          </button>
+        <div className="conversation-list-header">
+          <h1 className="conversation-list-name">{this.state.folder.name}</h1>
+          <div className="conversation-list-actions">
+            <button onClick={ this.syncRefresh }><FormattedMessage
+              message={ this.getIntlMessage('syncRefresh') }
+              />
+            </button>
+            <button onClick={ this.syncGrowFolder }><FormattedMessage
+              message={ this.getIntlMessage('syncGrow') }
+              />
+            </button>
+            <button onClick={ this.ensureSnippets }><FormattedMessage
+              message={ this.getIntlMessage('hackManualSnippets') }
+              />
+            </button>
+            <button onClick={ this.beginCompose }><FormattedMessage
+              message={ this.getIntlMessage('beginCompose') }
+              />
+            </button>
+          </div>
         </div>
-        <WindowedList
-          unitSize={ 40 }
-          view={ this.state.view }
-          widget={ ConversationSummary }
-          selectedId={ this.props.selectedId }
-          pick={ this.props.pick }
-          />
+        <div className="conversation-list-scroll-region">
+          <WindowedList
+            unitSize={ 40 }
+            view={ this.state.view }
+            widget={ ConversationSummary }
+            selectedId={ this.props.selectedId }
+            pick={ this.props.pick }
+            />
+        </div>
       </div>
     );
   },

@@ -23,7 +23,8 @@ var MessageReply = React.createClass({
     );
   },
 
-  clickReply: function() {
+  clickReply: function(event) {
+    event.stopPropagation();
     // Pass noComposer so that a MessageComposition is not automatically created
     // for us and instead
     this.props.item.replyToMessage('all', { noComposer: true });

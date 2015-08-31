@@ -129,22 +129,28 @@ var MessageListPane = React.createClass({
 
     return (
       <div className="message-list-pane">
-        <h1 className="conv-header-subject">{ conv.firstSubject }</h1>
-        <div className="conv-header-label-row">
-          { conv.labels.map(folder => <Taggy key={ folder.id }
-                                             labelOwner={ conv }
-                                             folder={ folder } />) }
-          <TagAdder key="adder"
-            conversation={ conv }
+        <div className="message-list-header">
+          <h1 className="conv-header-subject">{ conv.firstSubject }</h1>
+          <div className="conv-header-label-row">
+            { conv.labels.map(folder => <Taggy key={ folder.id }
+                                               labelOwner={ conv }
+                                               folder={ folder } />) }
+            <TagAdder key="adder"
+              conversation={ conv }
+              />
+          </div>
+          <div className="conv-header-actions">
+            <button onClick={ this.ensureSnippets }>EnsurE SnippetS</button>
+          </div>
+        </div>
+        <div className="message-list-scroll-region">
+          <WholeWindowedList
+            view={ this.state.view }
+            conditionalWidget={ this._pickMessageWidget }
+            pick={ this.props.pick }
+            navigateToDraft={ this.props.navigateToDraft }
             />
         </div>
-        <button onClick={ this.ensureSnippets }>EnsurE SnippetS</button>
-        <WholeWindowedList
-          view={ this.state.view }
-          conditionalWidget={ this._pickMessageWidget }
-          pick={ this.props.pick }
-          navigateToDraft={ this.props.navigateToDraft }
-          />
       </div>
     );
   },

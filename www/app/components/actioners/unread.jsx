@@ -28,7 +28,8 @@ var Unread = React.createClass({
     );
   },
 
-  clickToggle: function() {
+  clickToggle: function(event) {
+    event.stopPropagation();
     this.props.item.toggleRead();
   }
 });

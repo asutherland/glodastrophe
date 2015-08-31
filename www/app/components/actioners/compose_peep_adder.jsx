@@ -1,9 +1,9 @@
 define(function (require) {
+'use strict';
 
 var React = require('react');
 
 var IntlMixin = require('react-intl').IntlMixin;
-var FormattedMessage = require('react-intl').FormattedMessage;
 
 var Autosuggest = require('autosuggest');
 
@@ -85,6 +85,9 @@ var ComposePeepAdder = React.createClass({
         if (atStart) {
           this.props.composer.removeLastRecipient(this.props.bin);
         }
+        break;
+      default:
+        // everything else is valid input we don't meddle with.
         break;
     }
 
@@ -177,6 +180,10 @@ var ComposePeepAdder = React.createClass({
       this.props.bin,
       { name: peep.name, address: peep.address });
     this.inputNode.value = '';
+    // XXX clearly I have no idea why the former line is not working.  But only
+    // because I'm cutting corners here and failing to investigate.  I'm
+    // negligent, not incompetent.
+    setTimeout(() => { this.inputNode.value = ''; }, 0);
   }
 });
 

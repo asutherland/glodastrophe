@@ -1,10 +1,9 @@
 define(function (require) {
+'use strict';
 
 var React = require('react');
 
 var IntlMixin = require('react-intl').IntlMixin;
-var FormattedMessage = require('react-intl').FormattedMessage;
-var FormattedRelative = require('react-intl').FormattedRelative;
 
 var MessageAttachment = React.createClass({
   mixins: [IntlMixin],

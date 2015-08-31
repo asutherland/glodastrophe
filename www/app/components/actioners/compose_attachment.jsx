@@ -31,7 +31,8 @@ var ComposeAttachment = React.createClass({
     );
   },
 
-  clickRemove: function() {
+  clickRemove: function(event) {
+    event.stopPropagation();
     this.props.composer.removeAttachment(this.props.attachment);
   }
 });

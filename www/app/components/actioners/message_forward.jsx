@@ -23,7 +23,8 @@ var MessageForward = React.createClass({
     );
   },
 
-  clickForward: function() {
+  clickForward: function(event) {
+    event.stopPropagation();
     // Pass noComposer so that a MessageComposition is not automatically created
     // for us.  Because we
     this.props.item.forwardMessage('inline', { noComposer: true })
