@@ -1,4 +1,5 @@
 define(function (require) {
+'use strict';
 
 var React = require('react');
 
@@ -108,28 +109,25 @@ var AutoconfigSetup = React.createClass({
         emailAddress: this.state.emailAddress,
         password: this.state.password,
       },
-      null,
-      function(err, errDetails, account) {
-        // If there's an error, update state
-        if (err) {
-          this.setState({
-            autoconfigInProgress: false,
-            errorCode: err,
-            errorDetails: errDetails
-          });
-          return;
-        }
+      null)
+    .then(({ error, errorDetails, account }) => {
+      // If there's an error, update state
+      if (error) {
+        this.setState({
+          autoconfigInProgress: false,
+          errorCode: error,
+          errorDetails
+        });
+        return;
+      }
 
-        // Once we know about the inbox for the account, bring it up.  (This
-        // should be nearly immediate since we speculatively create the inbox
-        // prior to even running syncFolderList.)
-        console.log('waiting for inbox');
-        account.latestOnce('inbox', function(inboxFolder) {
-          console.log('got inbox!');
-          navigate('/view/folder/' + inboxFolder.id);
-        }.bind(this))
-      }.bind(this)
-    )
+      // Once we know about the inbox for the account, bring it up.
+      console.log('waiting for inbox');
+      account.latestOnce('inbox', (inboxFolder) => {
+        console.log('got inbox!');
+        navigate('/view/folder/' + inboxFolder.id);
+      });
+    });
   }
 });
 

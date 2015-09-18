@@ -14,9 +14,12 @@ var FolderSummary = React.createClass({
       classes += ' folder-item-selected';
     }
 
+    var folder = this.props.item;
+
     return (
       <div className={ classes } onClick={ this.clickFolder }>
-        { this.props.item.path }
+        <span>{ folder.path }</span>
+        <span> ({ folder.localUnreadConversations })</span>
       </div>
     );
   },

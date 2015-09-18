@@ -1,9 +1,11 @@
 define(function (require) {
+'use strict';
 
 var React = require('react');
 
 var IntlMixin = require('react-intl').IntlMixin;
 var FormattedMessage = require('react-intl').FormattedMessage;
+var FormattedRelative = require('react-intl').FormattedRelative;
 
 var WindowedList = require('jsx!../windowed_list');
 
@@ -91,12 +93,20 @@ var ConversationListPane = React.createClass({
       return <div>LoadinG FoldeR: {this.props.folderId}...</div>;
     }
 
+    // XXX The foldery things need to go into a sub-widget that explicitly
+    // listens on the folder for changes.
+    var folder = this.state.folder;
+
     // TODO: The header likely wants to be a widget that varies based on what
     // the source of the list is.
     return (
       <div className="conversation-list-pane">
         <div className="conversation-list-header">
-          <h1 className="conversation-list-name">{this.state.folder.name}</h1>
+          <h1 className="conversation-list-name">{ folder.name }</h1>
+          <div className="folder-last-sync-date">
+            LasT SynC: 
+            <FormattedRelative value={ folder.lastSuccessfulSyncAt } />
+          </div>
           <div className="conversation-list-actions">
             <button onClick={ this.syncRefresh }><FormattedMessage
               message={ this.getIntlMessage('syncRefresh') }
