@@ -19,6 +19,7 @@ var AutoconfigSetup = React.createClass({
       displayName: '',
       emailAddress: '',
       password: '',
+      learnedBlob: null,
     };
   },
 
@@ -36,9 +37,21 @@ var AutoconfigSetup = React.createClass({
         </div>
       );
     }
+
+    var learnbox;
+    if (this.state.learnedBlob) {
+      learnbox = (
+        <div>
+          <pre>{ JSON.stringify(this.state.learnedBlob, null, 2) }</pre>
+          <button onClick={ this.createUsingLearnedInfo }>Create using learned info</button>
+        </div>
+      );
+    }
+
     return (
-      <div>
+      <div className="add-account-page">
         <div>{ errorNodes }</div>
+        <div>{ learnbox }</div>
         <h1>
           <FormattedMessage
             message={ this.getIntlMessage('setupAutoconfigHeaderTitle') }
@@ -71,6 +84,8 @@ var AutoconfigSetup = React.createClass({
               message={this.getIntlMessage('setupAutoconfigTriggerAutoconfigButtonLabel')}
             />
           </button>
+          <button onClick={ this.learnAboutAccount }>LearN AbouT AccounT</button>
+
         </div>
       </div>
     );
@@ -89,7 +104,26 @@ var AutoconfigSetup = React.createClass({
     this.setState({ password: evt.target.value });
   },
 
+  learnAboutAccount: function() {
+    var mailApi = this.props.mailApi;
+    mailApi.learnAboutAccount(
+      {
+        emailAddress: this.state.emailAddress
+      })
+    .then((results) => {
+      this.setState({ learnedBlob: results });
+    });
+  },
+
+  createUsingLearnedInfo: function() {
+    this.doCreate(this.state.learnedBlob.configInfo);
+  },
+
   startAutoconfig: function() {
+    this.doCreate(null);
+  },
+
+  doCreate: function(domainInfo) {
     var mailApi = this.props.mailApi;
 
     // don't have multiple autoconfigs in flight at the same time
@@ -109,7 +143,7 @@ var AutoconfigSetup = React.createClass({
         emailAddress: this.state.emailAddress,
         password: this.state.password,
       },
-      null)
+      domainInfo)
     .then(({ error, errorDetails, account }) => {
       // If there's an error, update state
       if (error) {
@@ -122,10 +156,10 @@ var AutoconfigSetup = React.createClass({
       }
 
       // Once we know about the inbox for the account, bring it up.
-      console.log('waiting for inbox');
-      account.latestOnce('inbox', (inboxFolder) => {
+      console.log('waiting for inbox, cur inbox is:', account.folders.inbox);
+      account.folders.latestOnce('inbox', (inboxFolder) => {
         console.log('got inbox!');
-        navigate('/view/folder/' + inboxFolder.id);
+        navigate('/view/3pane/' + account.id + '/' + inboxFolder.id + '/.');
       });
     });
   }

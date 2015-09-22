@@ -104,6 +104,14 @@ h3, h4, h5, h6 {
   flex: none;
 }
 
+/* ===== Settings ===== */
+
+/* === Account: Add === */
+
+.add-account-page {
+  margin: 1em;
+}
+
 /* ===== Folder Pane ===== */
 
 .folder-pane {
