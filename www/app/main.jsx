@@ -151,9 +151,16 @@ var App = React.createClass({
       navigate('/view/3pane/' + accountId + '/' + folderId + '/.');
     };
 
+    let restore = name => localStorage.getItem(name);
+    let save = function(name) {
+      return (size) => { localStorage.setItem(name, size); };
+    };
+
     return (
       <div>
-        <SplitPane orientation="horizontal">
+        <SplitPane split="vertical"
+                   defaultSize={ restore('3pane:split1') }
+                   onChange={ save('3pane:split1') }>
           <div>
             <div onClick={ navigateHome }>
               <FormattedMessage
@@ -166,7 +173,9 @@ var App = React.createClass({
               selectedId={ folderId }
               />
           </div>
-          <SplitPane orientation="horizontal">
+          <SplitPane split="vertical"
+                     defaultSize={ restore('3pane:split2') }
+                     onChange={ save('3pane:split2') }>
             <ConversationListPane
               mailApi={ mailApi }
               folderId={ folderId }
@@ -199,5 +208,4 @@ React.render(
   <App locales={['en-US']} messages={ localeMessages } />,
   document.getElementById('content')
 );
-
 });
