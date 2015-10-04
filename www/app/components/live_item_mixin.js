@@ -9,7 +9,6 @@ define(function(require) {
 return {
   componentWillMount: function() {
     if (this.props.item) {
-      console.log('liveItem, binding change');
       this.props.item.on('change', this._changed);
       this.setState({ serial: this.props.serial });
     }
@@ -37,8 +36,6 @@ return {
   },
 
   _changed: function() {
-    console.log('liveItem, CHANGE! old serial', this.state.serial, 'new serial',
-                this.props.item.serial);
     this.setState({ serial: this.props.item.serial });
   },
 
