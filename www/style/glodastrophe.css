@@ -142,7 +142,7 @@ h3, h4, h5, h6 {
   border-bottom: 2px solid var(--sticky-header-border);
 }
 
-.conversation-list-name {
+.folder-header-name {
   margin: 0;
 }
 

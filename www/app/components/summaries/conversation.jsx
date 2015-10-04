@@ -1,4 +1,5 @@
 define(function (require) {
+'use strict';
 
 var React = require('react');
 
@@ -61,10 +62,10 @@ var ConversationSummary = React.createClass({
         </div>
         <div className="conv-summary-aggregates-row">
           <div className="conv-summary-message-count">
-            ({ conv.messageCount })
+            ({ conv.messageCount })&nbsp;
           </div>
           <div className="conv-summary-authors">
-            { authorNames.join(',') }
+            { authorNames.join(', ') }
           </div>
         </div>
         <div className="conv-summary-tidbits">{ tidbits }</div>

@@ -4,7 +4,7 @@ return {
   home: 'Home',
 
   // --- Account Home
-  accountHomeShow3Pane: '3-Pane View',
+  accountHomeShow3Col: '3-Column View',
   accountHomeShowFolders: 'Folders',
   /** Delete the account permanently */
   deleteAccount: 'Delete Account',
@@ -32,6 +32,9 @@ return {
   refreshFolderList: 'Refresh folder list',
 
   // -- conversation list / sync stuff
+  // The last sync label; I'm
+  folderLastSyncLabel: 'Last sync:',
+
   syncRefresh: 'Refresh',
   syncGrow: 'Grow',
 

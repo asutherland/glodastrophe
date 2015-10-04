@@ -9,6 +9,8 @@ var FormattedRelative = require('react-intl').FormattedRelative;
 
 var WindowedList = require('jsx!../windowed_list');
 
+// TODO: these should be parametrized
+var FolderHeader = require('jsx!../pane_headers/folder_header');
 var ConversationSummary = require('jsx!../summaries/conversation');
 
 var navigate = require('react-mini-router').navigate;
@@ -93,20 +95,18 @@ var ConversationListPane = React.createClass({
       return <div>LoadinG FoldeR: {this.props.folderId}...</div>;
     }
 
-    // XXX The foldery things need to go into a sub-widget that explicitly
-    // listens on the folder for changes.
     var folder = this.state.folder;
+    // XXX make the actual widget in use configurable, etc.
+
+    var headerWidget = <FolderHeader item={ folder } />;
+
 
     // TODO: The header likely wants to be a widget that varies based on what
     // the source of the list is.
     return (
       <div className="conversation-list-pane">
         <div className="conversation-list-header">
-          <h1 className="conversation-list-name">{ folder.name }</h1>
-          <div className="folder-last-sync-date">
-            LasT SynC: 
-            <FormattedRelative value={ folder.lastSuccessfulSyncAt } />
-          </div>
+          { headerWidget }
           <div className="conversation-list-actions">
             <button onClick={ this.syncRefresh }><FormattedMessage
               message={ this.getIntlMessage('syncRefresh') }

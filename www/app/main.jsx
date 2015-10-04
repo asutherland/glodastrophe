@@ -44,7 +44,7 @@ var App = React.createClass({
     '/view/conversation/:conversationId': 'viewConversation',
     '/view/message/:messageId': 'viewMessage',
     // - Composite views.
-    '/view/3pane/:accountId/:folderId/:conversationId': 'view3Pane'
+    '/view/3col/:accountId/:folderId/:conversationId': 'view3Col'
   },
 
   render: function() {
@@ -113,17 +113,17 @@ var App = React.createClass({
     );
   },
 
-  view3Pane: function(accountId, folderId, conversationId) {
-    console.log('3pane', [accountId, folderId, conversationId]);
+  view3Col: function(accountId, folderId, conversationId) {
+    console.log('3col', [accountId, folderId, conversationId]);
 
     var navigateHome = function() {
       navigate('/');
     };
     var navigateToFolder = function(folder) {
-      navigate('/view/3pane/' + accountId + '/' + folder.id + '/.');
+      navigate('/view/3col/' + accountId + '/' + folder.id + '/.');
     };
     var navigateToConv = function(conv) {
-      navigate('/view/3pane/' + accountId + '/' + folderId + '/' + conv.id);
+      navigate('/view/3col/' + accountId + '/' + folderId + '/' + conv.id);
     };
     var navigateToDraft = function(messageId) {
       var navAccountId = accountIdFromMessageId(messageId);
@@ -131,7 +131,7 @@ var App = React.createClass({
       // Find the localdrafts folder
       var account = mailApi.accounts.getAccountById(navAccountId);
       var folder = account.folders.getFirstFolderWithType('localdrafts');
-      navigate('/view/3pane/' + accountId + '/' + folder.id + '/' + convId);
+      navigate('/view/3col/' + accountId + '/' + folder.id + '/' + convId);
     };
 
     // The route doesn't match without placeholders, so normalize period as a
@@ -148,7 +148,7 @@ var App = React.createClass({
     // - select something else.
     // We currently pick selecting nothing.
     var conversationDeleted = () => {
-      navigate('/view/3pane/' + accountId + '/' + folderId + '/.');
+      navigate('/view/3col/' + accountId + '/' + folderId + '/.');
     };
 
     let restore = name => localStorage.getItem(name);
@@ -159,8 +159,8 @@ var App = React.createClass({
     return (
       <div>
         <SplitPane split="vertical"
-                   defaultSize={ restore('3pane:split1') }
-                   onChange={ save('3pane:split1') }>
+                   defaultSize={ restore('3col:split1') }
+                   onChange={ save('3col:split1') }>
           <div>
             <div onClick={ navigateHome }>
               <FormattedMessage
@@ -174,8 +174,8 @@ var App = React.createClass({
               />
           </div>
           <SplitPane split="vertical"
-                     defaultSize={ restore('3pane:split2') }
-                     onChange={ save('3pane:split2') }>
+                     defaultSize={ restore('3col:split2') }
+                     onChange={ save('3col:split2') }>
             <ConversationListPane
               mailApi={ mailApi }
               folderId={ folderId }

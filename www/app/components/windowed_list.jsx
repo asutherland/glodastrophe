@@ -78,9 +78,15 @@ var WindowedList = React.createClass({
 
   seek: function(offset, before, visible, after) {
     if (this.props.view) {
-      this.props.view.seekInCoordinateSpace(
-        offset, before, visible, after
-      );
+      // If we're at the top of the list, use seekToTop so that we latch to
+      // the top and so new conversations that come in
+      if (offset === 0) {
+        this.props.view.seekToTop(visible, after);
+      } else {
+        this.props.view.seekInCoordinateSpace(
+          offset, before, visible, after
+        );
+      }
     }
   },
 
