@@ -159,7 +159,7 @@ var AutoconfigSetup = React.createClass({
       console.log('waiting for inbox, cur inbox is:', account.folders.inbox);
       account.folders.latestOnce('inbox', (inboxFolder) => {
         console.log('got inbox!');
-        navigate('/view/3pane/' + account.id + '/' + inboxFolder.id + '/.');
+        navigate('/view/3col/' + account.id + '/' + inboxFolder.id + '/.');
       });
     });
   }
