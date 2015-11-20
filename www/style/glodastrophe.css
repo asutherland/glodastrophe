@@ -24,6 +24,9 @@
 
   --sticky-header-border: #aaaaaa;
 
+  --action-info-bar-background: #ddddff;
+  --action-info-bar-border: #aaaacc;
+
   --conversation-background: var(--scheme-lightest);
   --conversation-border: var(--scheme-dark);
 
@@ -369,6 +372,11 @@ h3, h4, h5, h6 {
   margin: 0 4px;
 }
 
+.message-download-embedded-images {
+  background-color: var(--action-info-bar-background);
+  padding: 4px;
+  border-bottom: 1px solid var(--action-info-bar-border);
+}
 
 /* The outer div, each body part lives inside one of the following: */
 .message-body-container {

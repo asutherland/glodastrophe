@@ -30,6 +30,11 @@ var AccountHome = React.createClass({
               </a>
             </div>
             <div className='ahs-actions'>
+              <button onClick={ this.recreateAccount }>
+                <FormattedMessage
+                  message={ this.getIntlMessage('recreateAccount') }
+                  />
+              </button>
               <button onClick={ this.deleteAccount }>
                 <FormattedMessage
                   message={ this.getIntlMessage('deleteAccount') }
@@ -40,6 +45,10 @@ var AccountHome = React.createClass({
         </div>
       </div>
     );
+  },
+
+  recreateAccount: function() {
+    this.props.item.recreateAccount();
   },
 
   deleteAccount: function() {

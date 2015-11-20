@@ -52,6 +52,7 @@ var MessageBody = React.createClass({
     }
 
     var contentNode = React.findDOMNode(this.refs.placeholder);
+    var embodyPromises = [];
 
     message.bodyReps.forEach(function(rep) {
       var node = document.createElement('div');
@@ -62,25 +63,53 @@ var MessageBody = React.createClass({
         embodyPlain(rep.contentBlob, node);
       } else if (rep.type === 'html') {
         node.setAttribute('class', 'message-text-html-container');
-        embodyHTML(rep.contentBlob, node);
+        let { loadedPromise } = embodyHTML(rep.contentBlob, node);
+        embodyPromises.push(loadedPromise);
       }
     });
 
-    message.removeListener('change', this._boundEmbody);
+    message.removeListener('change', this._embody);
     this.setState({
       embodied: true
     });
+
+    // If this message has embedded images...
+    if (message.embeddedImageCount) {
+      // (after the bodies are embodied)
+      Promise.all(embodyPromises).then(() => {
+        // ...and they're already downloaded, then show them.
+        if (message.embeddedImagesDownloaded) {
+          this._showEmbeddedImages();
+        } else {
+          // otherwise, listen for a change in case they get downloaded (for any
+          // reason.)
+          message.on('change', this._showEmbeddedImages);
+        }
+      });
+    }
+  },
+
+  _showEmbeddedImages: function() {
+    var message = this.props.message;
+    if (!message.embeddedImagesDownloaded) {
+      return;
+    }
+
+    var contentNode = React.findDOMNode(this.refs.placeholder);
+    Array.from(contentNode.querySelectorAll('iframe')).forEach((iframe) => {
+      message.showEmbeddedImages(iframe.contentDocument.body);
+    });
+
+    message.removeListener('change', this._showEmbeddedImages);
   },
 
   componentWillMount: function() {
-    this._boundEmbody = this._embody;
-
     // Trigger body part download if they aren't already downloaded.
     var message = this.props.message;
     if (!message.bodyRepsDownloaded) {
       message.downloadBodyReps();
       // every time we hear a change, maybe try and embody ourselves
-      message.on('change', this._boundEmbody);
+      message.on('change', this._embody);
     }
   },
 
@@ -91,7 +120,8 @@ var MessageBody = React.createClass({
   },
 
   componentWillUnmount: function() {
-    this.props.message.removeListener('change', this._boundEmbody);
+    this.props.message.removeListener('change', this._embody);
+    this.props.message.removeListener('change', this._showEmbeddedImages);
   },
 
   componentWillReceiveProps: function(nextProps) {
@@ -101,7 +131,7 @@ var MessageBody = React.createClass({
     }
   },
 
-  shouldComponentUpdate: function(nextProps, nextState) {
+  shouldComponentUpdate: function(/*nextProps, nextState*/) {
     // We handle everything internally for a single message.  We will never
     // receive new state because we require that our owner/parent be keyed so
     // that neither it nor its child bindings will be reused.

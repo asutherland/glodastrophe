@@ -6,6 +6,8 @@ return {
   // --- Account Home
   accountHomeShow3Col: '3-Column View',
   accountHomeShowFolders: 'Folders',
+  /** Delete the current account then create it again */
+  recreateAccount: 'Re-create Account',
   /** Delete the account permanently */
   deleteAccount: 'Delete Account',
 
@@ -46,6 +48,8 @@ return {
   convHasDrafts: 'Drafts',
 
   // --- Message Display
+
+  messageDownloadEmbeddedImages: 'Download embedded images',
 
   // -- Message actions
   messageReply: 'Reply',

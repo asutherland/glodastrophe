@@ -44,9 +44,23 @@ var MessageSummary = React.createClass({
       itemClassNames += ' message-item-expanded';
       envClassNames += ' message-envelope-expanded';
 
+      var maybeDownloadEmbeddedImages;
+      if (msg.embeddedImageCount &&
+          !msg.embeddedImagesDownloaded &&
+          !msg.isDownloadingEmbeddedImages) {
+        maybeDownloadEmbeddedImages = (
+          <div className='message-download-embedded-images'
+            onClick={ this.downloadEmbeddedImages } >
+            <FormattedMessage
+              message={ this.getIntlMessage('messageDownloadEmbeddedImages')} />
+          </div>
+        );
+      }
+
       bodyish = (
         <div className="message-expanded-region">
           <Attachments key="attachments" message={ msg } />
+          { maybeDownloadEmbeddedImages }
           <MessageBody key="body" message={ msg } />
         </div>
       );
@@ -84,6 +98,13 @@ var MessageSummary = React.createClass({
     this.setState({
       expanded: !this.state.expanded
     });
+  },
+
+  downloadEmbeddedImages: function() {
+    // Although this returns a Promise, the MessageBody is clever and listens
+    // to change events.  The download will result in a change notification,
+    // so it does't need us poking it and we don't need the promise.
+    this.props.item.downloadEmbeddedImages();
   }
 });
 

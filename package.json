@@ -5,14 +5,14 @@
     "dependencies": {
       "react-list": "github:orgsync/react-list/0.4.2",
       "react-intl.min": "github:yahoo/react-intl/v1.1.0#dist/react-intl.min.js",
-      "evt": "github:jrburke/evt/master",
+      "evt": "github:jrburke/evt/1.2.0",
       "require": "github:jrburke/requirejs/2.1.17",
       "autosuggest": "github:moroshko/react-autosuggest/v1.14.0#dist/standalone/autosuggest.js",
       "medium-editor": "github:yabwe/medium-editor/5.2.0"
     }
   },
   "dependencies": {
-    "eslint": "^1.2.1",
-    "eslint-plugin-react": "^3.3.0"
+    "eslint": "^1.8.0",
+    "eslint-plugin-react": "^3.7.1"
   }
 }
