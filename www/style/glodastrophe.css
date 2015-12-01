@@ -126,6 +126,34 @@ h3, h4, h5, h6 {
   color: var(--selected-fg-color);
 }
 
+.folder-selectable {
+  cursor: default;
+}
+
+.folder-unselectable {
+  color: gray;
+  cursor: not-allowed;
+}
+
+.folder-depth0 {
+  margin-left: 0em;
+}
+.folder-depth1 {
+  margin-left: 1em;
+}
+.folder-depth2 {
+  margin-left: 2em;
+}
+.folder-depth3: {
+  margin-left: 3em;
+}
+.folder-depth4: {
+  margin-left: 4em;
+}
+.folder-depth5: {
+  margin-left: 5em;
+}
+
 /* ===== Folder Summaries ====== */
 
 /* ===== Conversation List Pane ===== */

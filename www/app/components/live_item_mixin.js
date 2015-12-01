@@ -5,6 +5,15 @@ define(function(require) {
  * A mix-in for use on live items when this widget isn't directly held by a
  * list container that is directly manipulating our serial prop.  (In that case
  * you should probably be using the `SliceItemMixin`.)
+ *
+ * This can be the case for:
+ * - getItemAndTrackUpdates-based mechanisms like getConversation() and
+ *   getMessage
+ * - Sub-items that are not directly owned by their parent and updated when
+ *   their parents, namely MailPeep instances.
+ *
+ * In any other case you should not need this.  For example, MailAttachment
+ * display widgets should not need this.
  */
 return {
   componentWillMount: function() {

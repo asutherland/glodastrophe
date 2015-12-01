@@ -55,6 +55,18 @@ return {
   messageReply: 'Reply',
   messageForward: 'Forward',
 
+  // -- Attachments
+  /** The attachment is downloaded, try and view it. */
+  attachmentView: 'View',
+  /**
+   * The attachment is currently being downloaded.  Probably would rather be a
+   * spinner.
+   */
+  attachmentDownloading: 'Downloading',
+  /** The attachment is not downloaded but can be downloaded. */
+  attachmentDownload: 'Download',
+  attachmentNoDownload: 'Not downloadable.',
+
   // -- compose / drafts
   composeSend: 'Send',
   composeAttach: 'Attach',
