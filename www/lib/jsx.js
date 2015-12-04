@@ -40,10 +40,10 @@ define(['JSXTransformer', 'text'], function (JSXTransformer, text) {
           if (-1 === content.indexOf('@jsx React.DOM')) {
             content = "/** @jsx React.DOM */\n" + content;
           }
-console.log('transforming', name);
+//console.log('transforming', name);
           content = JSXTransformer.transform(content, transformOptions).code;
         } catch (err) {
-console.error('error while transforming', name, err)          
+//console.error('error while transforming', name, err)
           onLoadNative.error(err);
         }
 
@@ -56,15 +56,15 @@ console.error('error while transforming', name, err)
           */
           content += "\n//# sourceURL=" + name + fileExtension;
         }
-console.log('-- calling onLoadNative for', name + fileExtension);
+//console.log('-- calling onLoadNative for', name + fileExtension);
         onLoadNative.fromText(content);
       };
-console.log('++ calling text.load for', name + fileExtension);
+//console.log('++ calling text.load for', name + fileExtension);
       text.load(name + fileExtension, req, onLoad, config);
     },
 
     write: function (pluginName, moduleName, write) {
-console.log('ww writing', moduleName);
+//console.log('ww writing', moduleName);
       if (buildMap.hasOwnProperty(moduleName)) {
         var content = buildMap[moduleName];
         write.asModule(pluginName + "!" + moduleName, content);
