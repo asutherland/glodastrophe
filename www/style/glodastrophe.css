@@ -241,6 +241,7 @@ h3, h4, h5, h6 {
   flex: 1 1;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .conv-summary-tidbits {
@@ -265,11 +266,18 @@ h3, h4, h5, h6 {
 .conv-tidbit-author {
   display: inline-block;
   margin-right: 1em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .conv-tidbit-date {
   display: inline-block;
   margin-right: 1em;
+  width: 8em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .conv-tidbit-snippet {
