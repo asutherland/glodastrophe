@@ -5,6 +5,7 @@ var React = require('react');
 
 var IntlMixin = require('react-intl').IntlMixin;
 var FormattedMessage = require('react-intl').FormattedMessage;
+var FormattedRelative = require('react-intl').FormattedRelative;
 
 var WindowedList = require('jsx!../windowed_list');
 
@@ -18,13 +19,16 @@ var ConversationListPane = React.createClass({
     return {
       error: null,
       folder: null,
-      view: null
+      view: null,
+      newishCount: null
     };
   },
 
   _getConversationView: function(folderId) {
     if (this.state.view) {
       console.log('releasing view in _getConversationView');
+      this.state.view.removeListener('metaChange', this.onMetaChange);
+      this.state.view.removeListener('syncComplete', this.onSyncComplete);
       this.state.view.release();
     }
 
@@ -32,7 +36,8 @@ var ConversationListPane = React.createClass({
       this.setState({
         error: null,
         folder: null,
-        view: null
+        view: null,
+        newishCount: null
       });
       return;
     }
@@ -40,14 +45,18 @@ var ConversationListPane = React.createClass({
     // Make sure any already existing view is forgotten since the below lookup
     // is async and we want to forget the view in the same turn we release it.
     this.setState({
-      view: null
+      view: null,
+      newishCount: null
     });
     console.log('fetching view in _getConversationView');
     this.props.mailApi.eventuallyGetFolderById(folderId).then(
       function gotFolder(folder) {
+        let view = this.props.mailApi.viewFolderConversations(folder);
+        view.on('metaChange', this.onMetaChange);
+        view.on('syncComplete', this.onSyncComplete);
         this.setState({
           folder: folder,
-          view: this.props.mailApi.viewFolderConversations(folder),
+          view,
           error: false
         });
       }.bind(this),
@@ -78,6 +87,18 @@ var ConversationListPane = React.createClass({
     }
   },
 
+  onMetaChange: function() {
+    // NB: metaChange is smart enough to only trigger on deltas
+    // We don't do serial tracking on ourselves, so just trigger a forceUpdate.
+    this.forceUpdate();
+  },
+
+  onSyncComplete: function({ newishCount }) {
+    this.setState({
+      newishCount
+    });
+  },
+
   render: function() {
     // Be empty when there's no folder selected.
     if (!this.props.folderId) {
@@ -88,14 +109,60 @@ var ConversationListPane = React.createClass({
       return <div>No SucH FoldeR</div>;
     }
 
-    if (!this.state.folder) {
+    if (!this.state.folder || !this.state.view) {
       return <div>LoadinG FoldeR: {this.props.folderId}...</div>;
     }
 
     var folder = this.state.folder;
     // XXX make the actual widget in use configurable, etc.
 
+    // This now only provides the identifying string and same-row metadata
     var headerWidget = <FolderHeader item={ folder } />;
+
+    var view = this.state.view;
+    var tocMeta = view.tocMeta;
+    var maybeSyncStatus, maybeSyncBlocked;
+    if (tocMeta.syncStatus) {
+      maybeSyncStatus = (
+        <span key="syncstatus"> [{ tocMeta.syncStatus }]</span>
+      );
+    }
+    if (tocMeta.syncBlocked) {
+      maybeSyncBlocked = (
+        <span key="syncblocked"> [{ tocMeta.syncBlocked }]</span>
+      );
+    }
+    var viewWidget = (
+      <div className="folder-last-sync-date">
+        <FormattedMessage
+          message={ this.getIntlMessage('folderLastSyncLabel') }
+          /> <FormattedRelative value={ tocMeta.lastSuccessfulSyncAt || 0 } />
+        { maybeSyncStatus }
+        { maybeSyncBlocked }
+      </div>
+    );
+
+    var newishWidget = null;
+    if (this.state.newishCount) {
+      // XXX this is a hack testing feature.  But gaia mail's blue new mail bar
+      // is actually not bad UX, so it would be appropriate to clean this up
+      // and make it work the same.  (Specifically, there isn't really a need
+      // to show the bar if we're already at the top, only if we're not.  And
+      // clicking the bar should clear and seek to the top.)
+      newishWidget = (
+        <div className="conversation-list-newish-box">
+          <FormattedMessage
+            message={ this.getIntlMessage('newishCountDisplay') }
+            newishCount={ this.state.newishCount }
+            />
+          <button onClick={ this.clearNewishCount }>
+            <FormattedMessage
+              message={ this.getIntlMessage('clearNewishCount') }
+              />
+          </button>
+        </div>
+      );
+    }
 
 
     // TODO: The header likely wants to be a widget that varies based on what
@@ -104,6 +171,7 @@ var ConversationListPane = React.createClass({
       <div className="conversation-list-pane">
         <div className="conversation-list-header">
           { headerWidget }
+          { viewWidget }
           <div className="conversation-list-actions">
             <button onClick={ this.syncRefresh }><FormattedMessage
               message={ this.getIntlMessage('syncRefresh') }
@@ -122,11 +190,12 @@ var ConversationListPane = React.createClass({
               />
             </button>
           </div>
+          { newishWidget }
         </div>
         <div className="conversation-list-scroll-region">
           <WindowedList
             unitSize={ 40 }
-            view={ this.state.view }
+            view={ view }
             widget={ ConversationSummary }
             selectedId={ this.props.selectedId }
             pick={ this.props.pick }
@@ -134,6 +203,12 @@ var ConversationListPane = React.createClass({
         </div>
       </div>
     );
+  },
+
+  clearNewishCount: function() {
+    this.setState({
+      newishCount: null
+    });
   },
 
   syncRefresh: function() {

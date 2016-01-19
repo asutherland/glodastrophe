@@ -37,6 +37,11 @@ return {
   // The last sync label; I'm
   folderLastSyncLabel: 'Last sync:',
 
+  // XXX we don't care about this UX at all, but this should be a properly
+  // pluralized string.
+  newishCountDisplay: '{newishCount} newish conversation(s)!',
+  clearNewishCount: 'Clear',
+
   syncRefresh: 'Refresh',
   syncGrow: 'Grow',
 

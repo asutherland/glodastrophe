@@ -184,6 +184,12 @@ h3, h4, h5, h6 {
   padding: var(--pane-padding);
 }
 
+.conversation-list-newish-box {
+  background-color: #ddddff;
+  border-color: #aaaaff;
+  border-radius: 8px;
+}
+
 /* ===== Conversation Summaries ===== */
 
 .conv-summary {
