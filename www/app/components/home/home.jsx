@@ -35,6 +35,18 @@ var Home = React.createClass({
               />
           </a>
         </div>
+        <div>
+          <h2>
+            <FormattedMessage
+              message={ this.getIntlMessage('debugHomeHeader') }
+              />
+          </h2>
+          <a href="#!/debug/cronsync">
+            <FormattedMessage
+              message={ this.getIntlMessage('debugCronSync') }
+              />
+          </a>
+        </div>
       </div>
     );
   },

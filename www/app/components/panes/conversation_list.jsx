@@ -5,15 +5,12 @@ var React = require('react');
 
 var IntlMixin = require('react-intl').IntlMixin;
 var FormattedMessage = require('react-intl').FormattedMessage;
-var FormattedRelative = require('react-intl').FormattedRelative;
 
 var WindowedList = require('jsx!../windowed_list');
 
 // TODO: these should be parametrized
 var FolderHeader = require('jsx!../pane_headers/folder_header');
 var ConversationSummary = require('jsx!../summaries/conversation');
-
-var navigate = require('react-mini-router').navigate;
 
 var ConversationListPane = React.createClass({
   mixins: [IntlMixin, React.addons.PureRenderMixin],
@@ -64,7 +61,7 @@ var ConversationListPane = React.createClass({
     );
   },
 
-  componentWillMount: function() {
+  componentDidMount: function() {
     this._getConversationView(this.props.folderId);
   },
 

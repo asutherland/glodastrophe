@@ -23,6 +23,8 @@ var AutoconfigSetup = require('jsx!./components/accounts/autoconfig_setup');
 var FolderListPane = require('jsx!./components/panes/folder_list');
 var ConversationListPane = require('jsx!./components/panes/conversation_list');
 var MessageListPane = require('jsx!./components/panes/message_list');
+// - Debug Views
+var DebugCronsync = require('jsx!./components/debuggy/debug_cronsync');
 
 var SplitPane = require('react-split-pane');
 
@@ -44,7 +46,9 @@ var App = React.createClass({
     '/view/conversation/:conversationId': 'viewConversation',
     '/view/message/:messageId': 'viewMessage',
     // - Composite views.
-    '/view/3col/:accountId/:folderId/:conversationId': 'view3Col'
+    '/view/3col/:accountId/:folderId/:conversationId': 'view3Col',
+    // - Debuggy views
+    '/debug/cronsync': 'debugCronsync'
   },
 
   render: function() {
@@ -197,6 +201,16 @@ var App = React.createClass({
 
   viewMessage: function(messageId) {
     return <div>View message {messageId}</div>;
+  },
+
+  debugCronsync: function() {
+    return (
+      <div>
+        <DebugCronsync
+          mailApi={ mailApi }
+          />
+      </div>
+    );
   },
 
   notFound: function(path) {

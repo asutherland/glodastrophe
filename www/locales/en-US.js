@@ -78,7 +78,18 @@ return {
 
   composeLabelTo: 'To:',
   composeLabelCc: 'Cc:',
-  composeLabelBcc: 'Bcc:'
+  composeLabelBcc: 'Bcc:',
+
+  // --- Debug
+  // -- Home exposure
+  debugHomeHeader: 'Debug Stuff',
+  debugCronSync: 'Debug CronSync',
+
+  // -- Debug: Cronsync
+  forceCronSync: 'Force CronSync',
+  forceFlushNew: 'Flush New',
+  debugClearNewTracking: 'Clear New Tracking'
+
 };
 
 });
