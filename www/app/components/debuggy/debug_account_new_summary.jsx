@@ -41,7 +41,10 @@ var DebugAccountNewSummary = React.createClass({
   },
 
   clearNewTracking: function() {
-    this.props.mailApi.clearNewTrackingForAccount(this.props.accountId);
+    this.props.mailApi.clearNewTrackingForAccount({
+      accountId: this.props.accountId,
+      silent: false
+    });
   },
 
 });
