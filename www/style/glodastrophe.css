@@ -661,6 +661,19 @@ h3, h4, h5, h6 {
   margin: 2px;
 }
 
+/* ===== Undo ===== */
+
+.undoable {
+  .background-color: #ffffcc;
+  border: 1px solid gray;
+  border-radius: 4px;
+  margin: 4px;
+  padding: 4px;
+}
+
+.undo-button {
+  margin-left: 6px;
+}
 
 /* ===== Autosuggest ===== */
 /* derived  from the compiled example .less styling from react-autosuggest */

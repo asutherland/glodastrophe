@@ -85,6 +85,28 @@ return {
   composeLabelCc: 'Cc:',
   composeLabelBcc: 'Bcc:',
 
+  // -- Undo
+
+  undoable_message_read: '{count} messages marked read',
+  undoable_message_unread: '{count} messages marked unread',
+  undoable_message_star: '{count} messages starred',
+  undoable_message_unstar: '{count} messages un-starred',
+  undoable_message_modifytags: '{count} messages had their tags changed',
+  undoable_message_move: '{count} messages moved',
+  undoable_message_copy: '{count} messages copied',
+  undoable_message_delete: '{count} mesages trashed',
+
+  undoable_conversation_read: '{count} conversations marked read',
+  undoable_conversation_unread: '{count} conversations marked unread',
+  undoable_conversation_star: '{count} conversations starred',
+  undoable_conversation_unstar: '{count} conversations un-starred',
+  undoable_conversation_modifytags: '{count} conversations had their tags changed',
+  undoable_conversation_move: '{count} conversations moved',
+  undoable_conversation_copy: '{count} conversations copied',
+  undoable_conversation_delete: '{count} mesages trashed',
+
+  undoButton: 'Undo',
+
   // --- Debug
   // -- Home exposure
   debugHomeHeader: 'Debug Stuff',
@@ -93,8 +115,10 @@ return {
   // -- Debug: Cronsync
   forceCronSync: 'Force CronSync',
   forceFlushNew: 'Flush New',
-  debugClearNewTracking: 'Clear New Tracking'
+  debugClearNewTracking: 'Clear New Tracking',
 
+  // -- Debug: Undoable tracker
+  debugUndoTrackerHeader: 'Recent Undoables:',
 };
 
 });

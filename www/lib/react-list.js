@@ -401,7 +401,6 @@
         if (event && event.type === 'scroll' && this._lastScroll && Math.abs(scroll - this._lastScroll) < this.props.seekThreshold) {
           return;
         }
-        console.log('event.type', event && event.type, '_lastScroll', this._lastScroll, 'new scroll', scroll);
         this._lastScroll = scroll;
 
         var top = Math.max(0, scroll - threshold);

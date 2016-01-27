@@ -25,6 +25,8 @@ var ConversationListPane = require('jsx!./components/panes/conversation_list');
 var MessageListPane = require('jsx!./components/panes/message_list');
 // - Debug Views
 var DebugCronsync = require('jsx!./components/debuggy/debug_cronsync');
+var DebugUndoableTracker =
+  require('jsx!./components/debuggy/debug_undoable_tracker');
 
 var SplitPane = require('react-split-pane');
 
@@ -175,6 +177,9 @@ var App = React.createClass({
               accountId={ accountId }
               pick={ navigateToFolder }
               selectedId={ folderId }
+              />
+            <DebugUndoableTracker
+              mailApi={ mailApi }
               />
           </div>
           <SplitPane split="vertical"

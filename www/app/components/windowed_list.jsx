@@ -107,6 +107,11 @@ var WindowedList = React.createClass({
     // - selectedId: When the selection changes the list needs to be re-rendered
     //   so the impacted items can update.  Only those whose selection states
     //   have changed will actually update/re-render.
+    //
+    // NB: There are currently some performance problems coming from the fact
+    // that ReactList is applying its transform on the outer containing div.
+    // It should instead be applying transforms on each of the items in order
+    // to avoid reflowing all of the items.
     return (
       <ReactList
         seek={ this.boundSeek }
@@ -122,7 +127,7 @@ var WindowedList = React.createClass({
     );
   },
 
-  renderItem: function(item, relIndex, unitSize) {
+  renderItem: function(item, relIndex/*, unitSize*/) {
     // Note: The react-widget seems to be making the assumption that we'll use
     // the relIndex as our key, although it doesn't actually depend on this.
     var conditionalWidget = this.props.conditionalWidget;
@@ -138,7 +143,7 @@ var WindowedList = React.createClass({
     }
     return <Widget key={ item.id } item={ item } serial={ item.serial }
                    selected={ this.props.selectedId === item.id }
-                   pick={ this.props.pick } />
+                   pick={ this.props.pick } />;
   }
 });
 
