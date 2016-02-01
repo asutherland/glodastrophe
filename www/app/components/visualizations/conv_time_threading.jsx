@@ -3,8 +3,6 @@ define(function (require) {
 
 var React = require('react');
 
-var SliceItemMixin = require('../slice_item_mixin');
-
 var d3_scale = require('d3-scale');
 var d3_hierarchy = require('d3-hierarchy');
 
@@ -38,8 +36,6 @@ function deriveConvHierarchy(tidbits) {
 }
 
 var ConvTimeThreading = React.createClass({
-  mixins: [SliceItemMixin],
-
   render: function() {
     let conv = this.props.conv;
 
