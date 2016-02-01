@@ -1,7 +1,8 @@
-var ReactDOM = require('react-dom');
+define(function(require) {
+var ReactDOM = require('react');
 var elementResizeEvent = require('element-resize-event');
 
-module.exports = {
+return {
   getInitialState: function() {
     if (this.props.initialComponentWidth !== undefined && this.props.initialComponentWidth !== null) {
       return {
@@ -30,3 +31,4 @@ module.exports = {
     });
   }
 };
+});

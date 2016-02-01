@@ -1,4 +1,5 @@
-module.exports = function(element, fn) {
+define(function(require) {
+return function(element, fn) {
   var window = this;
   var document = window.document;
 
@@ -68,3 +69,4 @@ module.exports = function(element, fn) {
   }
   element.__resizeListeners__.push(fn);
 };
+});

@@ -6,6 +6,8 @@ var IntlMixin = require('react-intl').IntlMixin;
 
 var ReactList = require('react-list').QuantizedHeightList;
 
+var ComponentWidthMixin = require('react-component-width-mixin');
+
 /**
  * Bind a WindowedListView to a ReactList.  Our mapping is currently extremely
  * simple.  We just trigger a re-render whenever we are hinted that anything
@@ -30,11 +32,11 @@ var ReactList = require('react-list').QuantizedHeightList;
  * and the new props.
  */
 var WindowedList = React.createClass({
-  mixins: [IntlMixin, React.addons.PureRenderMixin],
+  mixins: [IntlMixin, ComponentWidthMixin, React.addons.PureRenderMixin],
 
   getInitialState: function() {
     return {
-      serial: this.props.view.serial,
+      serial: this.props.view.serial
     };
   },
 
@@ -64,13 +66,6 @@ var WindowedList = React.createClass({
   },
 
   handleDirty: function() {
-    /*
-    console.log('got a dirty notification!',
-                this.props.view._itemConstructor.name,
-                'offset:', this.props.view.offset, 'totalHeight:',
-                this.props.view.totalHeight, 'new serial',
-                this.props.view.serial);
-    */
     this.setState({
       serial: this.props.view.serial
     });
@@ -143,7 +138,8 @@ var WindowedList = React.createClass({
     }
     return <Widget key={ item.id } item={ item } serial={ item.serial }
                    selected={ this.props.selectedId === item.id }
-                   pick={ this.props.pick } />;
+                   pick={ this.props.pick }
+                   widthBudget={ this.state.componentWidth } />;
   }
 });
 

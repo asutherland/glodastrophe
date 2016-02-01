@@ -15,6 +15,7 @@ var Star = require('jsx!../actioners/star');
 var Unread = require('jsx!../actioners/unread');
 var Drafts = require('jsx!../actioners/drafts');
 
+var ConvTimeThreadingVis = require('jsx!../visualizations/conv_time_threading');
 
 var ConversationSummary = React.createClass({
   mixins: [IntlMixin, SliceItemMixin],
@@ -22,19 +23,6 @@ var ConversationSummary = React.createClass({
   render: function() {
     var conv = this.props.item;
 
-    var tidbits = conv.messageTidbits.map(function(tidbit, iTidbit) {
-      return (
-        <div className="conv-tidbit" key={ iTidbit }>
-          <div className="conv-tidbit-envelope-row">
-            <div className="conv-tidbit-date">
-              <FormattedRelative value={tidbit.date} />
-            </div>
-            <div className="conv-tidbit-author">{ tidbit.author.name || tidbit.author.address }</div>
-          </div>
-          <div className="conv-tidbit-snippet">{ tidbit.snippet }</div>
-        </div>
-      );
-    });
     var height = 40 * conv.height;
     var inlineStyle = {
       height: height,
@@ -45,6 +33,23 @@ var ConversationSummary = React.createClass({
     var rootClasses = 'conv-summary';
     if (this.props.selected) {
       rootClasses += ' conv-summary-selected';
+    }
+
+    // How many horizontal pixels does our styling eat?  Right now I think this
+    // is actually me effectively hardcoding the size of my scrollbar which is
+    // very bad and very dumb and it raises questions about what the outer
+    // sizing widget is actually measuring.
+    var WIDTH_WASTE = 15;
+
+    var maybeVis;
+    if (conv.messageTidbits.length > 1) {
+      maybeVis = (
+        <ConvTimeThreadingVis
+          key="vis"
+          conv={conv}
+          widthBudget={ this.props.widthBudget - WIDTH_WASTE }
+          />
+      );
     }
 
     return (
@@ -68,7 +73,7 @@ var ConversationSummary = React.createClass({
             { authorNames.join(', ') }
           </div>
         </div>
-        <div className="conv-summary-tidbits">{ tidbits }</div>
+        { maybeVis }
       </div>
     );
   },

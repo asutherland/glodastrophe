@@ -18,12 +18,12 @@ return function decorateConversation(mailConversation, wireRep, firstTime) {
 
   mailConversation.messageTidbits = wireRep.app.tidbits.map((tidbit) => {
     return {
+      id: tidbit.id,
       date: new Date(tidbit.date),
       isRead: tidbit.isRead,
       isStarred: tidbit.isStarred,
-      hasAttachments: tidbit.hasAttachments,
       author: ContactCache.resolvePeep(tidbit.author),
-      snippet: tidbit.snippet
+      parentIndex: tidbit.parent
     };
   });
 };

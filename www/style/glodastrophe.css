@@ -181,7 +181,6 @@ h3, h4, h5, h6 {
 }
 
 .conversation-list-scroll-region {
-  padding: var(--pane-padding);
 }
 
 .conversation-list-newish-box {
@@ -193,11 +192,7 @@ h3, h4, h5, h6 {
 /* ===== Conversation Summaries ===== */
 
 .conv-summary {
-  border: 1px solid var(--conversation-border);
-  border-radius: 4px;
-  padding: 2px;
-  margin-bottom: 2px;
-
+  border-top: 1px solid white;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -205,15 +200,17 @@ h3, h4, h5, h6 {
 }
 
 .conv-summary-selected {
-  border-width: 2px;
+  border-top: 1px solid var(--conversation-border);
 }
 
 .conv-summary-envelope-row {
+  border-top: 1px solid var(--conversation-border);
+  background-color: var(--conversation-background);
   display: flex;
   flex-direction: row;
   overflow: hidden;
   box-sizing: border-box;
-  height: 20px;
+  height: 19px;
 }
 
 .conv-summary-date {
@@ -234,12 +231,13 @@ h3, h4, h5, h6 {
   display: flex;
   flex-direction: row;
   box-sizing: border-box;
-  height: 20px;
+  height: 19px;
 }
 
 .conv-summary-message-count {
   color: gray;
   flex: 0 0 content;
+  margin-left: 4px;
 }
 
 .conv-summary-authors {
@@ -250,6 +248,27 @@ h3, h4, h5, h6 {
   white-space: nowrap;
 }
 
+.conv-sumary-vis {
+
+}
+
+.conv-time-threading-link {
+  stroke: rgba(0, 0, 0, 0.2);
+}
+.conv-time-threading-node-g {
+
+}
+.conv-time-threading-starred {
+  fill: yellow;
+}
+.conv-time-threading-read {
+  fill: rgba(0, 0, 0, 0.4);
+}
+.conv-time-threading-unread {
+  fill: rgba(0, 0, 128, 0.5);
+}
+
+/* deprecated tidbits */
 .conv-summary-tidbits {
   display: flex;
   flex-direction: column;
@@ -533,7 +552,7 @@ h3, h4, h5, h6 {
 }
 
 .star-widget-unstarred {
-  color: gray;
+  color: white;
 }
 
 /* === Unread === */
@@ -541,6 +560,8 @@ h3, h4, h5, h6 {
 .unread-widget {
   cursor: default;
   width: 1em;
+  margin-left: 2px;
+  margin-top: 1px;
 }
 
 .unread-widget-unread {
