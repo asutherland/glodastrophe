@@ -30,8 +30,6 @@ function deriveConvHierarchy(tidbits) {
     }
   }
 
-  console.log('root for', tidbits.length, hierObjs[0], 'from', tidbits);
-
   return hierObjs[0];
 }
 

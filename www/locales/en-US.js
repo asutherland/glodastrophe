@@ -49,6 +49,12 @@ return {
 
   beginCompose: 'Compose',
 
+  filter_text_placeholder: 'Filter these messages…',
+  filter_sender: 'Sender',
+  filter_recipients: 'Recipients',
+  filter_subject: 'Subject',
+  filter_body: 'Body',
+
   // --- Conversation Summary Display
   convHasDrafts: 'Drafts',
 

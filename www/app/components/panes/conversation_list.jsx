@@ -9,8 +9,11 @@ var FormattedRelative = require('react-intl').FormattedRelative;
 
 var WindowedList = require('jsx!../windowed_list');
 
+var ConvFilterBar = require('jsx!../filter_bar/conv_filter_bar');
+
 // TODO: these should be parametrized
 var FolderHeader = require('jsx!../pane_headers/folder_header');
+
 var ConversationSummary = require('jsx!../summaries/conversation');
 
 var ConversationListPane = React.createClass({
@@ -20,11 +23,12 @@ var ConversationListPane = React.createClass({
       error: null,
       folder: null,
       view: null,
-      newishCount: null
+      newishCount: null,
+      filter: null
     };
   },
 
-  _getConversationView: function(folderId) {
+  _getConversationView: function(folderId, filter) {
     if (this.state.view) {
       console.log('releasing view in _getConversationView');
       this.state.view.removeListener('metaChange', this.onMetaChange);
@@ -51,11 +55,19 @@ var ConversationListPane = React.createClass({
     console.log('fetching view in _getConversationView');
     this.props.mailApi.eventuallyGetFolderById(folderId).then(
       function gotFolder(folder) {
-        let view = this.props.mailApi.viewFolderConversations(folder);
+        let view;
+        if (!filter) {
+          view = this.props.mailApi.viewFolderConversations(folder);
+        } else {
+          view = this.props.mailApi.searchFolderConversations({
+            folder,
+            filter
+          });
+        }
         view.on('metaChange', this.onMetaChange);
         view.on('syncComplete', this.onSyncComplete);
         this.setState({
-          folder: folder,
+          folder,
           view,
           error: false
         });
@@ -71,12 +83,15 @@ var ConversationListPane = React.createClass({
   },
 
   componentDidMount: function() {
-    this._getConversationView(this.props.folderId);
+    this._getConversationView(this.props.folderId, null);
   },
 
-  componentWillReceiveProps: function(nextProps) {
-    if (this.props.folderId !== nextProps.folderId) {
-      this._getConversationView(nextProps.folderId);
+  componentWillUpdate: function(nextProps, nextState) {
+    if (this.props.folderId !== nextProps.folderId ||
+        this.state.filter !== nextState.filter) {
+      console.log('regenerating because', this.props.folderId !== nextProps.folderId,
+      this.state.filter !== nextState.filter);
+      this._getConversationView(nextProps.folderId, nextState.filter);
     }
   },
 
@@ -85,6 +100,13 @@ var ConversationListPane = React.createClass({
       console.log('releasing view in unmount');
       this.state.view.release();
     }
+  },
+
+  applyFilter: function(filter) {
+    console.log('applyFilter invoked!');
+    this.setState({
+      filter
+    });
   },
 
   onMetaChange: function() {
@@ -150,7 +172,7 @@ var ConversationListPane = React.createClass({
       // to show the bar if we're already at the top, only if we're not.  And
       // clicking the bar should clear and seek to the top.)
       newishWidget = (
-        <div className="conversation-list-newish-box">
+        <div key="newish" className="conversation-list-newish-box">
           <FormattedMessage
             message={ this.getIntlMessage('newishCountDisplay') }
             newishCount={ this.state.newishCount }
@@ -163,7 +185,6 @@ var ConversationListPane = React.createClass({
         </div>
       );
     }
-
 
     // TODO: The header likely wants to be a widget that varies based on what
     // the source of the list is.
@@ -190,6 +211,10 @@ var ConversationListPane = React.createClass({
               />
             </button>
           </div>
+          <ConvFilterBar key="cfb"
+            initialFilter={ this.state.filter }
+            applyFilter={ this.applyFilter }
+            />
           { newishWidget }
         </div>
         <div className="conversation-list-scroll-region">
