@@ -28,7 +28,7 @@ var ConversationSummary = React.createClass({
       height: height,
     };
 
-    var authorNames = conv.authors.slice(0, 3).map(x => (x.name || x.address));
+    var authorNames = conv.authors.slice(0, 6).map(x => (x.name || x.address));
 
     var rootClasses = 'conv-summary';
     if (this.props.selected) {

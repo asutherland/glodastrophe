@@ -89,9 +89,11 @@ var ConversationListPane = React.createClass({
   componentWillUpdate: function(nextProps, nextState) {
     if (this.props.folderId !== nextProps.folderId ||
         this.state.filter !== nextState.filter) {
-      console.log('regenerating because', this.props.folderId !== nextProps.folderId,
-      this.state.filter !== nextState.filter);
-      this._getConversationView(nextProps.folderId, nextState.filter);
+      // XXX this calls setState so this is the worst.  We need to address the
+      // state management badly now.  Same in message_list.
+      window.setTimeout(() => {
+        this._getConversationView(nextProps.folderId, nextState.filter);
+      }, 0);
     }
   },
 
@@ -103,7 +105,6 @@ var ConversationListPane = React.createClass({
   },
 
   applyFilter: function(filter) {
-    console.log('applyFilter invoked!');
     this.setState({
       filter
     });

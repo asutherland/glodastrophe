@@ -6,6 +6,30 @@ var React = require('react');
 var IntlMixin = require('react-intl').IntlMixin;
 var FormattedMessage = require('react-intl').FormattedMessage;
 
+/**
+ * Very hacky initial implementation of filtering UI.  Our owning panes have a
+ * state life-cycle that involves us being destroyed whenever we pass a change
+ * up to them.  Our very awkward contract with them is that we communicate in
+ * the MailAPI-form filter spec representation.  The state for us to consume
+ * on instantiation is in the `initialFilter` prop and our mechanism for
+ * updating the effective filter is to invoke the passed-in `applyFilter` prop.
+ * We use setState with our `serial` idiom and abuse componentWillUpdate in
+ * order to know when to call `applyFilter`.
+ *
+ * This is all horrible and seems like a textbook example of where something
+ * like redux is almost certainly appropriate.  (Also, I made the wrong call
+ * when deciding we'd deal in the spec-filter rep.  We should be using a
+ * UI-centric representation and having the pane convert when it calls search*.)
+ *
+ * The plan for now is to leave this a gross mess until after I do a first pass
+ * at the faceted UI.  Since we want the faceting and what not to live in the
+ * back-end since it allows us to potentially farm things out to a server
+ * backend (and keep the main thread responsive), it's possible that the answer
+ * will be to indeed create our filtering abstraction as part of the back-end
+ * (although pieces may live in the front-end).  This would be consistent with
+ * the discussion we had for gaia mail of creating a BrowserContext to replace
+ * pieces of the model/header_cursor/list_cursor implementation.
+ */
 var ConvFilterBar = React.createClass({
   mixins: [IntlMixin],
 

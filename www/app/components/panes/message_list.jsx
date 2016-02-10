@@ -4,17 +4,16 @@ define(function (require) {
 var React = require('react');
 
 var IntlMixin = require('react-intl').IntlMixin;
-var FormattedMessage = require('react-intl').FormattedMessage;
 
 var WholeWindowedList = require('jsx!../whole_windowed_list');
+
+var ConvFilterBar = require('jsx!../filter_bar/conv_filter_bar');
 
 var MessageSummary = require('jsx!../summaries/message');
 var DraftSummary = require('jsx!../summaries/draft');
 
 var Taggy = require('jsx!../actioners/taggy');
 var TagAdder = require('jsx!../actioners/tag_adder');
-
-var navigate = require('react-mini-router').navigate;
 
 
 /**
@@ -28,11 +27,12 @@ var MessageListPane = React.createClass({
     return {
       error: null,
       conversation: null,
-      view: null
+      view: null,
+      filter: null
     };
   },
 
-  _getMessagesView: function(conversationId, why) {
+  _getMessagesView: function(conversationId, filter, why) {
     if (this.state.conversation) {
       this.state.conversation.release();
     }
@@ -71,9 +71,18 @@ var MessageListPane = React.createClass({
       // prop.
       conversation.on('change', this.forceUpdate.bind(this, null));
       conversation.on('remove', this.props.conversationDeleted);
+      let view;
+      if (!filter) {
+        view = this.props.mailApi.viewConversationMessages(conversationId);
+      } else {
+        view = this.props.mailApi.searchConversationMessages({
+          conversation,
+          filter
+        });
+      }
       this.setState({
-        conversation: conversation,
-        view: this.props.mailApi.viewConversationMessages(conversationId)
+        conversation,
+        view
       });
     }, (err) => {
       console.error('got a rejection getting the conversation?', err);
@@ -83,15 +92,22 @@ var MessageListPane = React.createClass({
     });
   },
 
-  componentWillMount: function() {
+  componentDidMount: function() {
     // XXX there needs to be some feedback path for viewConversationHeaders to
     // generate an error state because the conversation does not exist.
-    this._getMessagesView(this.props.conversationId, 'mount');
+    this._getMessagesView(
+      this.props.conversationId, null, 'mount');
   },
 
-  componentWillReceiveProps: function(nextProps) {
-    if (this.props.conversationId !== nextProps.conversationId) {
-      this._getMessagesView(nextProps.conversationId, 'propchange');
+  componentWillUpdate: function(nextProps, nextState) {
+    if (this.props.conversationId !== nextProps.conversationId ||
+        this.state.filter !== nextState.filter) {
+      // XXX this calls setState so this is the worst.  We need to address the
+      // state management badly now.  Same in conversation_list.
+      window.setTimeout(() => {
+        this._getMessagesView(
+          nextProps.conversationId, nextState.filter, 'update');
+      }, 0);
     }
   },
 
@@ -102,6 +118,12 @@ var MessageListPane = React.createClass({
     if (this.state.view) {
       this.state.view.release();
     }
+  },
+
+  applyFilter: function(filter) {
+    this.setState({
+      filter
+    });
   },
 
   _pickMessageWidget: function(item) {
@@ -142,6 +164,10 @@ var MessageListPane = React.createClass({
           <div className="conv-header-actions">
             <button onClick={ this.ensureSnippets }>EnsurE SnippetS</button>
           </div>
+          <ConvFilterBar key="cfb"
+            initialFilter={ this.state.filter }
+            applyFilter={ this.applyFilter }
+            />
         </div>
         <div className="message-list-scroll-region">
           <WholeWindowedList
