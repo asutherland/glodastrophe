@@ -2,8 +2,10 @@ define(function (require) {
 'use strict';
 
 var React = window.React = require('react');
+var ReactDOM = window.ReactDOM = require('react-dom');
 
-var IntlMixin = require('react-intl').IntlMixin;
+const { IntlProvider } = require('react-intl');
+
 var FormattedMessage = require('react-intl').FormattedMessage;
 var localeMessages = require('locales/en-US');
 
@@ -16,17 +18,17 @@ var navigate = require('react-mini-router').navigate;
 var mailApi = window.mailApi = require('gelam/main-frame-setup');
 
 // -- Pages
-var Home = require('jsx!./components/home/home');
+var Home = require('./components/home/home');
 
-var AutoconfigSetup = require('jsx!./components/accounts/autoconfig_setup');
+var AutoconfigSetup = require('./components/accounts/autoconfig_setup');
 // - Views
-var FolderListPane = require('jsx!./components/panes/folder_list');
-var ConversationListPane = require('jsx!./components/panes/conversation_list');
-var MessageListPane = require('jsx!./components/panes/message_list');
+var FolderListPane = require('./components/panes/folder_list');
+var ConversationListPane = require('./components/panes/conversation_list');
+var MessageListPane = require('./components/panes/message_list');
 // - Debug Views
-var DebugCronsync = require('jsx!./components/debuggy/debug_cronsync');
+var DebugCronsync = require('./components/debuggy/debug_cronsync');
 var DebugUndoableTracker =
-  require('jsx!./components/debuggy/debug_undoable_tracker');
+  require('./components/debuggy/debug_undoable_tracker');
 
 var SplitPane = require('react-split-pane');
 
@@ -34,7 +36,7 @@ var { accountIdFromMessageId, convIdFromMessageId } =
   require('gelam/id_conversions');
 
 var App = React.createClass({
-  mixins: [RouterMixin, IntlMixin],
+  mixins: [RouterMixin],
 
   routes: {
     '/': 'home',
@@ -223,8 +225,12 @@ var App = React.createClass({
   }
 });
 
-React.render(
-  <App locales={['en-US']} messages={ localeMessages } />,
-  document.getElementById('content')
-);
+window.addEventListener('load', () => {
+  ReactDOM.render(
+    <IntlProvider locale='en' messages={ localeMessages }>
+      <App />
+    </IntlProvider>,
+    document.getElementById('content')
+  );
+});
 });

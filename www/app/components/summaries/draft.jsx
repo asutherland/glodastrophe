@@ -2,18 +2,17 @@ define(function (require) {
 'use strict';
 
 var React = require('react');
+var PureRenderMixin = require('react-addons-pure-render-mixin');
 
-var IntlMixin = require('react-intl').IntlMixin;
 var FormattedMessage = require('react-intl').FormattedMessage;
-var FormattedRelative = require('react-intl').FormattedRelative;
 
-var ComposePeep = require('jsx!../actioners/compose_peep');
-var ComposePeepAdder = require('jsx!../actioners/compose_peep_adder');
-var ComposeAttachment = require('jsx!../actioners/compose_attachment');
+var ComposePeep = require('../actioners/compose_peep');
+var ComposePeepAdder = require('../actioners/compose_peep_adder');
+var ComposeAttachment = require('../actioners/compose_attachment');
 
 var embodyHTML = require('gelam/clientapi/bodies/embody_html');
 
-var MediumEditor = require('jsx!../medium_editor');
+var MediumEditor = require('../medium_editor');
 
 const draftScopedStyle = `
 p:first-child { margin-block-start: 0; }
@@ -32,7 +31,7 @@ p:last-child { margin-block-end: 0; }
  * composer and instead just forceUpdate.
  */
 var DraftSummary = React.createClass({
-  mixins: [IntlMixin, React.addons.PureRenderMixin],
+  mixins: [PureRenderMixin],
 
   getInitialState: function() {
     return {
@@ -96,7 +95,7 @@ var DraftSummary = React.createClass({
       return (
         <div className="draft-recip-row">
           <span className="draft-recip-bin-label">
-            <FormattedMessage message={ this.getIntlMessage(l10nId) } />
+            <FormattedMessage id={ l10nId } />
           </span>
           { composePeeps }
           <ComposePeepAdder
@@ -156,7 +155,7 @@ var DraftSummary = React.createClass({
         <div className="draft-buttons">
           <button onClick={ this.sendMessage }>
             <FormattedMessage
-              message={ this.getIntlMessage('composeSend') } />
+              id='composeSend' />
           </button>
           <input ref="file"
                  type="file"
@@ -164,19 +163,19 @@ var DraftSummary = React.createClass({
                  onChange={ this.attachFile }></input>
           <button onClick={ this.triggerAttach }>
             <FormattedMessage
-              message={ this.getIntlMessage('composeAttach') } />
+              id='composeAttach' />
           </button>
           <button onClick={ this.saveDraft }>
             <FormattedMessage
-              message={ this.getIntlMessage('composeSave') } />
+              id='composeSave' />
           </button>
           <span>
             <FormattedMessage
-              message={ this.getIntlMessage(dirtyMessage) } />
+              id='dirtyMessage' />
           </span>
           <button onClick={ this.deleteDraft }>
             <FormattedMessage
-              message={ this.getIntlMessage('composeDiscard') } />
+              id='composeDiscard' />
           </button>
         </div>
       </div>

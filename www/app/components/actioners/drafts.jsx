@@ -3,7 +3,6 @@ define(function (require) {
 
 var React = require('react');
 
-var IntlMixin = require('react-intl').IntlMixin;
 var FormattedMessage = require('react-intl').FormattedMessage;
 
 /**
@@ -11,8 +10,6 @@ var FormattedMessage = require('react-intl').FormattedMessage;
  * will also (someday) jump to the draft when clicked.
  */
 var drafts = React.createClass({
-  mixins: [IntlMixin],
-
   render: function() {
     var item = this.props.item;
     var classes = 'drafts-widget ' +
@@ -21,7 +18,7 @@ var drafts = React.createClass({
     return (
       <span className={ classes } onClick={ this.jumpToFirstDraft }>
         <FormattedMessage
-          message={ this.getIntlMessage('convHasDrafts') } />
+          id='convHasDrafts' />
       </span>
     );
   },

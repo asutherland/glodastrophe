@@ -3,9 +3,6 @@ define(function (require) {
 
 var React = require('react');
 
-var IntlMixin = require('react-intl').IntlMixin;
-var FormattedMessage = require('react-intl').FormattedMessage;
-
 /**
  * Render a tag/label thing with an 'x' button-ish thing to be able to remove
  * the tag/label.  Maybe it'll also eventually be able to do other stuff like
@@ -13,8 +10,6 @@ var FormattedMessage = require('react-intl').FormattedMessage;
  * small 'x'.
  */
 var Taggy = React.createClass({
-  mixins: [IntlMixin],
-
   render: function() {
     var classes = 'taggy-item';
     var folder = this.props.folder;

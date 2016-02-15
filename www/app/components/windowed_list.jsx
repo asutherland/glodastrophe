@@ -2,7 +2,7 @@ define(function (require) {
 'use strict';
 
 var React = require('react');
-var IntlMixin = require('react-intl').IntlMixin;
+var PureRenderMixin = require('react-addons-pure-render-mixin');
 
 var ReactList = require('react-list').QuantizedHeightList;
 
@@ -32,7 +32,7 @@ var ComponentWidthMixin = require('react-component-width-mixin');
  * and the new props.
  */
 var WindowedList = React.createClass({
-  mixins: [IntlMixin, ComponentWidthMixin, React.addons.PureRenderMixin],
+  mixins: [ComponentWidthMixin, PureRenderMixin],
 
   getInitialState: function() {
     return {

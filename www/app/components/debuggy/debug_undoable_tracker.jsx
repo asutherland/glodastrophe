@@ -3,12 +3,11 @@ define(function (require) {
 
 var React = require('react');
 
-var IntlMixin = require('react-intl').IntlMixin;
 var FormattedMessage = require('react-intl').FormattedMessage;
 
 // The undoable widget itself is eventually intended to be a reusable popup-ish
 // thing.
-var Undoable = require('jsx!../summaries/undoable');
+var Undoable = require('../summaries/undoable');
 
 const MAX_KEPT_UNDO_OPS = 10;
 
@@ -19,8 +18,6 @@ const MAX_KEPT_UNDO_OPS = 10;
  * UndoableOperations and add them to our (capped) list.
  */
 var DebugUndoableTracker = React.createClass({
-  mixins: [IntlMixin],
-
   getInitialState: function() {
     return {
       undoableOps: [],
@@ -72,7 +69,7 @@ var DebugUndoableTracker = React.createClass({
       <div>
         <h3 key='head'>
           <FormattedMessage
-            message={ this.getIntlMessage('debugUndoTrackerHeader')} />
+            id='debugUndoTrackerHeader' />
         </h3>
         { opWidgets }
       </div>

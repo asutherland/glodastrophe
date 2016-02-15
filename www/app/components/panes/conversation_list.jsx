@@ -3,21 +3,22 @@ define(function (require) {
 
 var React = require('react');
 
-var IntlMixin = require('react-intl').IntlMixin;
 var FormattedMessage = require('react-intl').FormattedMessage;
 var FormattedRelative = require('react-intl').FormattedRelative;
 
-var WindowedList = require('jsx!../windowed_list');
+var WindowedList = require('../windowed_list');
 
-var ConvFilterBar = require('jsx!../filter_bar/conv_filter_bar');
+var ConvFilterBar = require('../filter_bar/conv_filter_bar');
 
 // TODO: these should be parametrized
-var FolderHeader = require('jsx!../pane_headers/folder_header');
+var FolderHeader = require('../pane_headers/folder_header');
 
-var ConversationSummary = require('jsx!../summaries/conversation');
+var ConversationSummary = require('../summaries/conversation');
+
+var PureRenderMixin = require('react-addons-pure-render-mixin');
 
 var ConversationListPane = React.createClass({
-  mixins: [IntlMixin, React.addons.PureRenderMixin],
+  mixins: [PureRenderMixin],
   getInitialState: function() {
     return {
       error: null,
@@ -158,7 +159,7 @@ var ConversationListPane = React.createClass({
     var viewWidget = (
       <div className="folder-last-sync-date">
         <FormattedMessage
-          message={ this.getIntlMessage('folderLastSyncLabel') }
+          id='folderLastSyncLabel'
           /> <FormattedRelative value={ tocMeta.lastSuccessfulSyncAt || 0 } />
         { maybeSyncStatus }
         { maybeSyncBlocked }
@@ -175,12 +176,12 @@ var ConversationListPane = React.createClass({
       newishWidget = (
         <div key="newish" className="conversation-list-newish-box">
           <FormattedMessage
-            message={ this.getIntlMessage('newishCountDisplay') }
-            newishCount={ this.state.newishCount }
+            id='newishCountDisplay'
+            values={ { newishCount: this.state.newishCount } }
             />
           <button onClick={ this.clearNewishCount }>
             <FormattedMessage
-              message={ this.getIntlMessage('clearNewishCount') }
+              id='clearNewishCount'
               />
           </button>
         </div>
@@ -196,19 +197,19 @@ var ConversationListPane = React.createClass({
           { viewWidget }
           <div className="conversation-list-actions">
             <button onClick={ this.syncRefresh }><FormattedMessage
-              message={ this.getIntlMessage('syncRefresh') }
+              id='syncRefresh'
               />
             </button>
             <button onClick={ this.syncGrowFolder }><FormattedMessage
-              message={ this.getIntlMessage('syncGrow') }
+              id='syncGrow'
               />
             </button>
             <button onClick={ this.ensureSnippets }><FormattedMessage
-              message={ this.getIntlMessage('hackManualSnippets') }
+              id='hackManualSnippets'
               />
             </button>
             <button onClick={ this.beginCompose }><FormattedMessage
-              message={ this.getIntlMessage('beginCompose') }
+              id='beginCompose'
               />
             </button>
           </div>

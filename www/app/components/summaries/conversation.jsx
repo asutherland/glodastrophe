@@ -3,22 +3,18 @@ define(function (require) {
 
 var React = require('react');
 
-var IntlMixin = require('react-intl').IntlMixin;
-var FormattedMessage = require('react-intl').FormattedMessage;
 var FormattedRelative = require('react-intl').FormattedRelative;
-
-var navigate = require('react-mini-router').navigate;
 
 var SliceItemMixin = require('../slice_item_mixin');
 
-var Star = require('jsx!../actioners/star');
-var Unread = require('jsx!../actioners/unread');
-var Drafts = require('jsx!../actioners/drafts');
+var Star = require('../actioners/star');
+var Unread = require('../actioners/unread');
+var Drafts = require('../actioners/drafts');
 
-var ConvTimeThreadingVis = require('jsx!../visualizations/conv_time_threading');
+//var ConvTimeThreadingVis = require('../visualizations/conv_time_threading');
 
 var ConversationSummary = React.createClass({
-  mixins: [IntlMixin, SliceItemMixin],
+  mixins: [SliceItemMixin],
 
   render: function() {
     var conv = this.props.item;
@@ -43,6 +39,7 @@ var ConversationSummary = React.createClass({
 
     var maybeVis;
     if (conv.messageTidbits.length > 1) {
+      /*
       maybeVis = (
         <ConvTimeThreadingVis
           key="vis"
@@ -50,6 +47,7 @@ var ConversationSummary = React.createClass({
           widthBudget={ this.props.widthBudget - WIDTH_WASTE }
           />
       );
+      */
     }
 
     return (

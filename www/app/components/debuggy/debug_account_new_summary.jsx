@@ -3,7 +3,6 @@ define(function (require) {
 
 var React = require('react');
 
-var IntlMixin = require('react-intl').IntlMixin;
 var FormattedMessage = require('react-intl').FormattedMessage;
 
 /**
@@ -22,8 +21,6 @@ var FormattedMessage = require('react-intl').FormattedMessage;
  *   cleared
  */
 var DebugAccountNewSummary = React.createClass({
-  mixins: [IntlMixin],
-
   render: function() {
     return (
       <div className="debug-cronsync-account-data">
@@ -33,7 +30,7 @@ var DebugAccountNewSummary = React.createClass({
         </div>
         <button onClick={ this.clearNewTracking }>
           <FormattedMessage
-            message={ this.getIntlMessage('debugClearNewTracking') }
+            id='debugClearNewTracking'
             />
         </button>
       </div>

@@ -3,8 +3,7 @@ define(function (require) {
 
 var React = require('react');
 
-var IntlMixin = require('react-intl').IntlMixin;
-var FormattedMessage = require('react-intl').FormattedMessage;
+const { FormattedMessage, injectIntl } = require('react-intl');
 
 /**
  * Very hacky initial implementation of filtering UI.  Our owning panes have a
@@ -31,8 +30,6 @@ var FormattedMessage = require('react-intl').FormattedMessage;
  * pieces of the model/header_cursor/list_cursor implementation.
  */
 var ConvFilterBar = React.createClass({
-  mixins: [IntlMixin],
-
   getInitialState: function() {
     this.timer = null;
     this.dirty = false;
@@ -91,35 +88,35 @@ var ConvFilterBar = React.createClass({
         <input type="text"
           value={ this.state.filterText }
           onChange={ this.onFilterTextChange }
-          placeholder={ this.getIntlMessage('filter_text_placeholder') }
+          placeholder={ this.props.intl.formatMessage({ id: 'filter_text_placeholder' }) }
           />
         <label>
           <input type="checkbox"
             checked={ this.state.filterSender }
             onChange={ this.onSenderChange } />
           <FormattedMessage
-            message={ this.getIntlMessage('filter_sender') } />
+            id='filter_sender' />
         </label>
         <label>
           <input type="checkbox"
             checked={ this.state.filterRecipients }
             onChange={ this.onRecipientsChange } />
           <FormattedMessage
-            message={ this.getIntlMessage('filter_recipients') } />
+            id='filter_recipients' />
         </label>
         <label>
           <input type="checkbox"
             checked={ this.state.filterSubject }
             onChange={ this.onSubjectChange } />
           <FormattedMessage
-            message={ this.getIntlMessage('filter_subject') } />
+            id='filter_subject' />
         </label>
         <label>
           <input type="checkbox"
             checked={ this.state.filterBody }
             onChange={ this.onBodyChange }/>
           <FormattedMessage
-            message={ this.getIntlMessage('filter_body') } />
+            id='filter_body' />
         </label>
       </div>
     );
@@ -161,5 +158,5 @@ var ConvFilterBar = React.createClass({
   },
 });
 
-return ConvFilterBar;
+return injectIntl(ConvFilterBar);
 });

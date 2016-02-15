@@ -1,7 +1,7 @@
 define(function() {
 'use strict';
 
-const { oldToNewConversationMessageComparator } = require('db/comparators');
+const { oldToNewConversationMessageComparator } = require('gelam/db/comparators');
 
 /**
  * Churn up our application-specific summary stuff:

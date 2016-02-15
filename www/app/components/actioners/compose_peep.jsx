@@ -1,9 +1,7 @@
 define(function (require) {
+'use strict';
 
 var React = require('react');
-
-var IntlMixin = require('react-intl').IntlMixin;
-var FormattedMessage = require('react-intl').FormattedMessage;
 
 /**
  * Render a message recipient with an 'x' button to be able to remove them in
@@ -11,8 +9,6 @@ var FormattedMessage = require('react-intl').FormattedMessage;
  * reading context.
  */
 var ComposePeep = React.createClass({
-  mixins: [IntlMixin],
-
   render: function() {
     var classes = 'compose-peep';
     var peep = this.props.peep;

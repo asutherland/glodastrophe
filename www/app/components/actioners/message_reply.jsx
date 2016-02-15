@@ -3,7 +3,6 @@ define(function (require) {
 
 var React = require('react');
 
-var IntlMixin = require('react-intl').IntlMixin;
 var FormattedMessage = require('react-intl').FormattedMessage;
 
 /**
@@ -11,14 +10,12 @@ var FormattedMessage = require('react-intl').FormattedMessage;
  * expanding support for reply all/reply list/forward/etc./etc.
  */
 var MessageReply = React.createClass({
-  mixins: [IntlMixin],
-
   render: function() {
     return (
       <button className="message-action-reply"
               onClick={ this.clickReply }>
         <FormattedMessage
-          message={ this.getIntlMessage('messageReply') } />
+          id='messageReply' />
       </button>
     );
   },

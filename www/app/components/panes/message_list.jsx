@@ -2,18 +2,17 @@ define(function (require) {
 'use strict';
 
 var React = require('react');
+var PureRenderMixin = require('react-addons-pure-render-mixin');
 
-var IntlMixin = require('react-intl').IntlMixin;
+var WholeWindowedList = require('../whole_windowed_list');
 
-var WholeWindowedList = require('jsx!../whole_windowed_list');
+var ConvFilterBar = require('../filter_bar/conv_filter_bar');
 
-var ConvFilterBar = require('jsx!../filter_bar/conv_filter_bar');
+var MessageSummary = require('../summaries/message');
+var DraftSummary = require('../summaries/draft');
 
-var MessageSummary = require('jsx!../summaries/message');
-var DraftSummary = require('jsx!../summaries/draft');
-
-var Taggy = require('jsx!../actioners/taggy');
-var TagAdder = require('jsx!../actioners/tag_adder');
+var Taggy = require('../actioners/taggy');
+var TagAdder = require('../actioners/tag_adder');
 
 
 /**
@@ -22,7 +21,7 @@ var TagAdder = require('jsx!../actioners/tag_adder');
  * instantiated list.
  */
 var MessageListPane = React.createClass({
-  mixins: [IntlMixin, React.addons.PureRenderMixin],
+  mixins: [PureRenderMixin],
   getInitialState: function() {
     return {
       error: null,

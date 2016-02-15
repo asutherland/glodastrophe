@@ -3,19 +3,15 @@ define(function (require) {
 
 var React = require('react');
 
-var IntlMixin = require('react-intl').IntlMixin;
-
 var Autosuggest = require('autosuggest');
 
-var ComposePeepSuggestion = require('jsx!./compose_peep_suggestion');
+var ComposePeepSuggestion = require('./compose_peep_suggestion');
 
 /**
  * Input area for adding peeps to a mail with some very limited autocompletion
  * support.
  */
 var ComposePeepAdder = React.createClass({
-  mixins: [IntlMixin],
-
   componentDidMount: function() {
     var inputNode = this.inputNode =
       React.findDOMNode(this.refs.autosuggest.refs.input);

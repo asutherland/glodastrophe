@@ -3,10 +3,9 @@ define(function (require) {
 
 var React = require('react');
 
-var IntlMixin = require('react-intl').IntlMixin;
 var FormattedMessage = require('react-intl').FormattedMessage;
 
-var DebugAccountNewSummary = require('jsx!./debug_account_new_summary');
+var DebugAccountNewSummary = require('./debug_account_new_summary');
 
 /**
  * Cronsync-centered debug view.
@@ -24,8 +23,6 @@ var DebugAccountNewSummary = require('jsx!./debug_account_new_summary');
  *   cleared
  */
 var DebugCronsync = React.createClass({
-  mixins: [IntlMixin],
-
   getInitialState: function() {
     return {
       newAggr: null
@@ -67,11 +64,11 @@ var DebugCronsync = React.createClass({
       <div className="debug-cronsync-pane">
         <div className="debug-cronsync-actions">
           <button onClick={ this.forceCronSync }><FormattedMessage
-            message={ this.getIntlMessage('forceCronSync') }
+            id='forceCronSync'
             />
           </button>
           <button onClick={ this.forceFlushNew }><FormattedMessage
-            message={ this.getIntlMessage('forceFlushNew') }
+            id='forceFlushNew'
             />
           </button>
         </div>

@@ -2,7 +2,7 @@ define(function (require) {
 'use strict';
 
 var React = require('react');
-var IntlMixin = require('react-intl').IntlMixin;
+var PureRenderMixin = require('react-addons-pure-render-mixin');
 
 /**
  * Display the entirety of a WindowedListView by rendering *ALL* of it into
@@ -13,7 +13,7 @@ var IntlMixin = require('react-intl').IntlMixin;
  * a top-capped seek with an absurd number of requested items.)
  */
 var WholeWindowedList = React.createClass({
-  mixins: [IntlMixin, React.addons.PureRenderMixin],
+  mixins: [PureRenderMixin],
 
   getInitialState: function() {
     return {

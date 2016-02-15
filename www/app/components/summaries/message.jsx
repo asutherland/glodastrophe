@@ -1,26 +1,24 @@
 define(function (require) {
+'use strict';
 
 var React = require('react');
 
-var IntlMixin = require('react-intl').IntlMixin;
 var FormattedMessage = require('react-intl').FormattedMessage;
 var FormattedRelative = require('react-intl').FormattedRelative;
 
-var navigate = require('react-mini-router').navigate;
-
 var SliceItemMixin = require('../slice_item_mixin');
 
-var Star = require('jsx!../actioners/star');
-var Unread = require('jsx!../actioners/unread');
+var Star = require('../actioners/star');
+var Unread = require('../actioners/unread');
 
-var MessageReply = require('jsx!../actioners/message_reply');
-var MessageForward = require('jsx!../actioners/message_forward');
+var MessageReply = require('../actioners/message_reply');
+var MessageForward = require('../actioners/message_forward');
 
-var Attachments = require('jsx!./message_attachments');
-var MessageBody = require('jsx!./message_body');
+var Attachments = require('./message_attachments');
+var MessageBody = require('./message_body');
 
 var MessageSummary = React.createClass({
-  mixins: [IntlMixin, SliceItemMixin],
+  mixins: [SliceItemMixin],
 
   getInitialState: function() {
     var message = this.props.item;
@@ -52,7 +50,7 @@ var MessageSummary = React.createClass({
           <div className='message-download-embedded-images'
             onClick={ this.downloadEmbeddedImages } >
             <FormattedMessage
-              message={ this.getIntlMessage('messageDownloadEmbeddedImages')} />
+              id='messageDownloadEmbeddedImages' />
           </div>
         );
       }

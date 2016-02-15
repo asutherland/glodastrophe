@@ -3,13 +3,9 @@ define(function (require) {
 
 var React = require('react');
 
-var IntlMixin = require('react-intl').IntlMixin;
-
-var Attachment = require('jsx!./message_attachment');
+var Attachment = require('./message_attachment');
 
 var MessageAttachments = React.createClass({
-  mixins: [IntlMixin],
-
   render: function() {
     var msg = this.props.message;
 

@@ -2,9 +2,10 @@ define(function (require) {
 'use strict';
 
 var React = require('react');
-var IntlMixin = require('react-intl').IntlMixin;
 
 var ReactList = require('react-list').UniformList;
+
+var PureRenderMixin = require('react-addons-pure-render-mixin');
 
 /**
  * Bind a EntireListview to a ReactList.  Our mapping is currently extremely
@@ -30,7 +31,7 @@ var ReactList = require('react-list').UniformList;
  * and the new props.
  */
 var EntireList = React.createClass({
-  mixins: [IntlMixin, React.addons.PureRenderMixin],
+  mixins: [PureRenderMixin],
 
   defaultProps: {
     itemHeight: 0

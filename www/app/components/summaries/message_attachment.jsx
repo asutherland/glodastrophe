@@ -3,12 +3,9 @@ define(function (require) {
 
 var React = require('react');
 
-var IntlMixin = require('react-intl').IntlMixin;
 var FormattedMessage = require('react-intl').FormattedMessage;
 
 var MessageAttachment = React.createClass({
-  mixins: [IntlMixin],
-
   render: function() {
     var attachment = this.props.attachment;
 
@@ -17,25 +14,25 @@ var MessageAttachment = React.createClass({
       maybeDownload = <div>
         <button onClick={ this.viewAttachment }>
           <FormattedMessage
-            message={ this.getIntlMessage('attachmentView')} />
+            id='attachmentView' />
         </button>
       </div>;
     } else if (attachment.isDownloading) {
       maybeDownload = <div>
         <FormattedMessage
-          message={ this.getIntlMessage('attachmentDownloading')} />
+          id='attachmentDownloading' />
       </div>;
     } else if (attachment.isDownloadable) {
       maybeDownload = <div>
         <button onClick={ this.download }>
           <FormattedMessage
-            message={ this.getIntlMessage('attachmentDownload')} />
+            id='attachmentDownload' />
         </button>
       </div>;
     } else {
       maybeDownload = <div className="message-attachment-no-download">
         <FormattedMessage
-          message={ this.getIntlMessage('attachmentNoDownload')} />
+          id='attachmentNoDownload' />
       </div>;
     }
 

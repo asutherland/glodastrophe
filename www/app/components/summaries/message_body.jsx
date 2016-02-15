@@ -1,12 +1,7 @@
 define(function(require) {
+'use strict';
 
 var React = require('react');
-
-var IntlMixin = require('react-intl').IntlMixin;
-var FormattedMessage = require('react-intl').FormattedMessage;
-var FormattedRelative = require('react-intl').FormattedRelative;
-
-var navigate = require('react-mini-router').navigate;
 
 var embodyPlain = require('gelam/clientapi/bodies/embody_plain');
 var embodyHTML = require('gelam/clientapi/bodies/embody_html');
@@ -26,8 +21,6 @@ var embodyHTML = require('gelam/clientapi/bodies/embody_html');
  * This is a single-use binding and parents should key us appropriately!
  */
 var MessageBody = React.createClass({
-  mixins: [IntlMixin],
-
   defaultProps: {
   },
 

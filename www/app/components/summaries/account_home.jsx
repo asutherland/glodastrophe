@@ -1,14 +1,11 @@
 define(function (require) {
 'use strict';
 
-var React = require('react');
+const React = require('react');
 
-var IntlMixin = require('react-intl').IntlMixin;
-var FormattedMessage = require('react-intl').FormattedMessage;
+const { FormattedMessage } = require('react-intl');
 
 var AccountHome = React.createClass({
-  mixins: [IntlMixin],
-
   render: function() {
     return (
       <div className='account-home-summary'>
@@ -19,25 +16,25 @@ var AccountHome = React.createClass({
               <a href={ '#!/view/3col/' + this.props.item.id + '/./.' }
                  className='ahs-detail'>
                 <FormattedMessage
-                  message={ this.getIntlMessage('accountHomeShow3Col') }
+                  id='accountHomeShow3Col'
                   />
               </a>
               <a href={ '#!/view/folders/' + this.props.item.id }
                  className='ahs-detail'>
                 <FormattedMessage
-                  message={ this.getIntlMessage('accountHomeShowFolders') }
+                  id='accountHomeShowFolders'
                   />
               </a>
             </div>
             <div className='ahs-actions'>
               <button onClick={ this.recreateAccount }>
                 <FormattedMessage
-                  message={ this.getIntlMessage('recreateAccount') }
+                  id='recreateAccount'
                   />
               </button>
               <button onClick={ this.deleteAccount }>
                 <FormattedMessage
-                  message={ this.getIntlMessage('deleteAccount') }
+                  id='deleteAccount'
                   />
               </button>
             </div>

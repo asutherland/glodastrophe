@@ -1,18 +1,18 @@
 define(function (require) {
+'use strict';
 
 var React = require('react');
 
-var IntlMixin = require('react-intl').IntlMixin;
 var FormattedMessage = require('react-intl').FormattedMessage;
 
-var EntireList = require('jsx!../entire_list');
+var EntireList = require('../entire_list');
 
-var FolderSummary = require('jsx!../summaries/folder');
+var FolderSummary = require('../summaries/folder');
 
-var navigate = require('react-mini-router').navigate;
+var PureRenderMixin = require('react-addons-pure-render-mixin');
 
 var FolderListPane = React.createClass({
-  mixins: [IntlMixin, React.addons.PureRenderMixin],
+  mixins: [PureRenderMixin],
 
   getInitialState: function() {
     return {
@@ -57,7 +57,7 @@ var FolderListPane = React.createClass({
 
   render: function() {
     if (!this.props.accountId) {
-      return <div></div>
+      return <div></div>;
     }
 
     if (this.state.error) {
@@ -78,7 +78,7 @@ var FolderListPane = React.createClass({
           />
         <button onClick={ this.syncFolderList }>
           <FormattedMessage
-            message={ this.getIntlMessage('refreshFolderList') }
+            id='refreshFolderList'
             />
         </button>
       </div>

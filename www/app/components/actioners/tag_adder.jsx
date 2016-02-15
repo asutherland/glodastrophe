@@ -3,9 +3,6 @@ define(function (require) {
 
 var React = require('react');
 
-var IntlMixin = require('react-intl').IntlMixin;
-var FormattedMessage = require('react-intl').FormattedMessage;
-
 var Autosuggest = require('autosuggest');
 
 /**
@@ -14,8 +11,6 @@ var Autosuggest = require('autosuggest');
  * doesn't match up with gmail semantics.  Flags should likely be used for that.
  */
 var TagAdder = React.createClass({
-  mixins: [IntlMixin],
-
   /**
    * Filter the list of known labels.
    *

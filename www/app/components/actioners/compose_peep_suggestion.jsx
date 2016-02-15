@@ -1,16 +1,12 @@
 define(function (require) {
+'use strict';
 
 var React = require('react');
-
-var IntlMixin = require('react-intl').IntlMixin;
-var FormattedMessage = require('react-intl').FormattedMessage;
 
 /**
  * Widget rendered for matching MailPeep instances in autocomplete results.
  */
 var ComposePeepSuggestion = React.createClass({
-  mixins: [IntlMixin],
-
   render: function() {
     var classes = 'compose-peep-suggestion';
     var peep = this.props.peep;

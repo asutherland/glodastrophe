@@ -2,12 +2,11 @@ define(function (require) {
 
 var React = require('react');
 
-var IntlMixin = require('react-intl').IntlMixin;
 var FormattedMessage = require('react-intl').FormattedMessage;
 
-var EntireList = require('jsx!../entire_list');
+var EntireList = require('../entire_list');
 
-var AccountHome = require('jsx!../summaries/account_home');
+var AccountHome = require('../summaries/account_home');
 
 /**
  * The "home" view currently shows a list of summaries of accounts.  I created
@@ -20,7 +19,6 @@ var AccountHome = require('jsx!../summaries/account_home');
  * nothingness and evolve the summaries into something useful.
  */
 var Home = React.createClass({
-  mixins: [IntlMixin],
   render: function() {
     return (
       <div>
@@ -31,19 +29,19 @@ var Home = React.createClass({
         <div>
           <a href="#!/settings/accounts/add">
             <FormattedMessage
-              message={ this.getIntlMessage('settingsAccountAddLink') }
+              id='settingsAccountAddLink'
               />
           </a>
         </div>
         <div>
           <h2>
             <FormattedMessage
-              message={ this.getIntlMessage('debugHomeHeader') }
+              id='debugHomeHeader'
               />
           </h2>
           <a href="#!/debug/cronsync">
             <FormattedMessage
-              message={ this.getIntlMessage('debugCronSync') }
+              id='debugCronSync'
               />
           </a>
         </div>

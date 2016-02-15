@@ -3,13 +3,11 @@ define(function (require) {
 
 var React = require('react');
 
-var IntlMixin = require('react-intl').IntlMixin;
 var FormattedMessage = require('react-intl').FormattedMessage;
 
 var navigate = require('react-mini-router').navigate;
 
 var AutoconfigSetup = React.createClass({
-  mixins: [IntlMixin],
   getInitialState: function() {
     return {
       // future work: show a spinner overlay and disable the inputs while pending
@@ -54,7 +52,7 @@ var AutoconfigSetup = React.createClass({
         <div>{ learnbox }</div>
         <h1>
           <FormattedMessage
-            message={ this.getIntlMessage('setupAutoconfigHeaderTitle') }
+            id='setupAutoconfigHeaderTitle'
             />
         </h1>
         <div>
@@ -81,7 +79,7 @@ var AutoconfigSetup = React.createClass({
         <div>
           <button onClick={ this.startAutoconfig }>
             <FormattedMessage
-              message={this.getIntlMessage('setupAutoconfigTriggerAutoconfigButtonLabel')}
+              id='setupAutoconfigTriggerAutoconfigButtonLabel'
             />
           </button>
           <button onClick={ this.learnAboutAccount }>LearN AbouT AccounT</button>

@@ -3,16 +3,12 @@ define(function (require) {
 
 var React = require('react');
 
-var IntlMixin = require('react-intl').IntlMixin;
-
 /**
  * Render a message recipient with an 'x' button to be able to remove them in
  * a composition/write context.  Differs from `ReaderPeep` which exists in a
  * reading context.
  */
 var ComposeAttachment = React.createClass({
-  mixins: [IntlMixin],
-
   render: function() {
     var attachment = this.props.attachment;
 

@@ -201,7 +201,10 @@
 
   exports.List = List;
 
-  List.prototype.shouldComponentUpdate = _React.addons.PureRenderMixin.shouldComponentUpdate;
+  // asuth-hack: this is where the pure render mixin canonically lives now;
+  // this whole file should be rebuilt/updated/whatever, but this works for now.
+  List.prototype.shouldComponentUpdate =
+    require('react-addons-pure-render-mixin').shouldComponentUpdate;
 
   var UniformList = (function (_List) {
     function UniformList() {
