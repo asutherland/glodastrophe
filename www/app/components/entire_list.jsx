@@ -85,17 +85,18 @@ var EntireList = React.createClass({
     );
   },
 
-  renderItem: function(absIndex, relIndex) {
+  renderItem: function(absIndex/*, relIndex*/) {
     // Note: The react-widget seems to be making the assumption that we'll use
     // the relIndex as our key, although it doesn't actually depend on this.
     var conditionalWidget = this.props.conditionalWidget;
     var Widget;
+
+    var item = this.props.view.items[absIndex];
     if (conditionalWidget) {
       Widget = conditionalWidget(item);
     } else {
       Widget = this.props.widget;
     }
-    var item = this.props.view.items[absIndex];
     if (!item) {
       // if not yet loaded and to allow some DOM stability, key off the absolute
       // index.
@@ -103,7 +104,7 @@ var EntireList = React.createClass({
     }
     return <Widget key={ item.id } item={ item } serial={ item.serial }
                    selected={ this.props.selectedId === item.id }
-                   pick={ this.props.pick }/>
+                   pick={ this.props.pick }/>;
   }
 });
 

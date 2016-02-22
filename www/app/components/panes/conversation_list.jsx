@@ -17,98 +17,46 @@ var ConversationSummary = require('../summaries/conversation');
 
 var PureRenderMixin = require('react-addons-pure-render-mixin');
 
+/**
+ * Display the list of conversations in a folder/whatever with a summary at the
+ * top.
+ */
 var ConversationListPane = React.createClass({
   mixins: [PureRenderMixin],
-  getInitialState: function() {
-    return {
-      error: null,
-      folder: null,
-      view: null,
-      newishCount: null,
-      filter: null
-    };
-  },
-
-  _getConversationView: function(folderId, filter) {
-    if (this.state.view) {
-      console.log('releasing view in _getConversationView');
-      this.state.view.removeListener('metaChange', this.onMetaChange);
-      this.state.view.removeListener('syncComplete', this.onSyncComplete);
-      this.state.view.release();
-    }
-
-    if (!folderId) {
-      this.setState({
-        error: null,
-        folder: null,
-        view: null,
-        newishCount: null
-      });
-      return;
-    }
-
-    // Make sure any already existing view is forgotten since the below lookup
-    // is async and we want to forget the view in the same turn we release it.
-    this.setState({
-      view: null,
-      newishCount: null
-    });
-    console.log('fetching view in _getConversationView');
-    this.props.mailApi.eventuallyGetFolderById(folderId).then(
-      function gotFolder(folder) {
-        let view;
-        if (!filter) {
-          view = this.props.mailApi.viewFolderConversations(folder);
-        } else {
-          view = this.props.mailApi.searchFolderConversations({
-            folder,
-            filter
-          });
-        }
-        view.on('metaChange', this.onMetaChange);
-        view.on('syncComplete', this.onSyncComplete);
-        this.setState({
-          folder,
-          view,
-          error: false
-        });
-      }.bind(this),
-      function noSuchFolder() {
-        this.setState({
-          folder: null,
-          view: null,
-          error: true
-        });
-      }.bind(this)
-    );
-  },
 
   componentDidMount: function() {
-    this._getConversationView(this.props.folderId, null);
+    const view = this.props.view;
+    if (view) {
+      view.on('metaChange', this.onMetaChange);
+      view.on('syncComplete', this.onSyncComplete);
+    }
   },
 
-  componentWillUpdate: function(nextProps, nextState) {
-    if (this.props.folderId !== nextProps.folderId ||
-        this.state.filter !== nextState.filter) {
-      // XXX this calls setState so this is the worst.  We need to address the
-      // state management badly now.  Same in message_list.
-      window.setTimeout(() => {
-        this._getConversationView(nextProps.folderId, nextState.filter);
-      }, 0);
+  componentWillUpdate: function(nextProps/*, nextState*/) {
+    // We use this instead of componentWillReceiveProps because this only gets
+    // called if shouldComponentUpdate returned true which means we're slightly
+    // more debounced.
+    const oldView = this.props.view;
+    const newView = nextProps.view;
+    if (oldView !== newView) {
+      if (oldView) {
+        oldView.removeListener('metaChange', this.onMetaChange);
+        oldView.removeListener('syncComplete', this.onSyncCompleted);
+      }
+
+      if (newView) {
+        newView.on('metaChange', this.onMetaChange);
+        newView.on('syncComplete', this.onSyncComplete);
+      }
     }
   },
 
   componentWillUnmount: function() {
-    if (this.state.view) {
-      console.log('releasing view in unmount');
-      this.state.view.release();
+    const view = this.props.view;
+    if (view) {
+      view.removeListener('metaChange', this.onMetaChange);
+      view.removeListener('syncComplete', this.onSyncCompleted);
     }
-  },
-
-  applyFilter: function(filter) {
-    this.setState({
-      filter
-    });
   },
 
   onMetaChange: function() {
@@ -117,34 +65,31 @@ var ConversationListPane = React.createClass({
     this.forceUpdate();
   },
 
-  onSyncComplete: function({ newishCount }) {
-    this.setState({
-      newishCount
-    });
+  onSyncComplete: function(/*{ newishCount }*/) {
+    // I'm leaving this stub here as a reminder we have this functionality in
+    // case we want to put back a feature that helps indicate that new messages
+    // have shown up at the top of the list view.  It might be more appropriate
+    // to have something in our redux infra that instead generates an action
+    // that updates this state or to have the view automatically track this as
+    // a flag that's automatically tracked based on scroll position and instead
+    // we just know to update when it changes state like we do for a meta
+    // change.
   },
 
   render: function() {
-    // Be empty when there's no folder selected.
-    if (!this.props.folderId) {
+    const view = this.props.view;
+
+    // Be empty if there's no view.
+    if (!view) {
       return <div></div>;
     }
 
-    if (this.state.error) {
-      return <div>No SucH FoldeR</div>;
-    }
-
-    if (!this.state.folder || !this.state.view) {
-      return <div>LoadinG FoldeR: {this.props.folderId}...</div>;
-    }
-
-    var folder = this.state.folder;
+    const folder = this.props.folder;
     // XXX make the actual widget in use configurable, etc.
-
     // This now only provides the identifying string and same-row metadata
-    var headerWidget = <FolderHeader item={ folder } />;
+    const headerWidget = <FolderHeader item={ folder } />;
 
-    var view = this.state.view;
-    var tocMeta = view.tocMeta;
+    const tocMeta = view.tocMeta;
     var maybeSyncStatus, maybeSyncBlocked;
     if (tocMeta.syncStatus) {
       maybeSyncStatus = (
@@ -166,30 +111,6 @@ var ConversationListPane = React.createClass({
       </div>
     );
 
-    var newishWidget = null;
-    if (this.state.newishCount) {
-      // XXX this is a hack testing feature.  But gaia mail's blue new mail bar
-      // is actually not bad UX, so it would be appropriate to clean this up
-      // and make it work the same.  (Specifically, there isn't really a need
-      // to show the bar if we're already at the top, only if we're not.  And
-      // clicking the bar should clear and seek to the top.)
-      newishWidget = (
-        <div key="newish" className="conversation-list-newish-box">
-          <FormattedMessage
-            id='newishCountDisplay'
-            values={ { newishCount: this.state.newishCount } }
-            />
-          <button onClick={ this.clearNewishCount }>
-            <FormattedMessage
-              id='clearNewishCount'
-              />
-          </button>
-        </div>
-      );
-    }
-
-    // TODO: The header likely wants to be a widget that varies based on what
-    // the source of the list is.
     return (
       <div className="conversation-list-pane">
         <div className="conversation-list-header">
@@ -239,21 +160,16 @@ var ConversationListPane = React.createClass({
   },
 
   syncRefresh: function() {
-    if (this.state.view) {
-      this.state.view.refresh();
-    }
+    this.props.view.refresh();
   },
 
   syncGrowFolder: function() {
-    if (this.state.view) {
-      this.state.view.grow();
-    }
+    this.props.view.grow();
   },
 
   ensureSnippets: function() {
-    if (this.state.view) {
-      this.state.view.ensureSnippets();
-    }
+    // XXX this was brought into existence
+    this.props.view.ensureSnippets();
   },
 
   /**
