@@ -4,10 +4,11 @@ define(function (require) {
 const React = require('react');
 
 const ListItem = require('material-ui/lib/lists/list-item');
+const FontIcon = require('material-ui/lib/font-icon');
 
 const DEFAULT_FOLDER_ICON = 'folder open';
 const FOLDER_TYPE_TO_ICON_TYPE = new Map([
-  ['nomail', 'navigate next'], // really sketchy
+  ['nomail', 'navigate_next'], // really sketchy
   ['inbox', 'inbox'],
   ['drafts', 'drafts'],
   ['localdrafts', 'drafts'],
@@ -15,13 +16,21 @@ const FOLDER_TYPE_TO_ICON_TYPE = new Map([
   ['trash', 'delete'],
   ['archive', 'archive'],
   ['junk', 'report'],
-  ['starred', 'star border'],
-  ['important', 'label outline'],
+  ['starred', 'star_border'],
+  ['important', 'label_outline'],
   ['normal', DEFAULT_FOLDER_ICON]
 ]);
 
-
+/**
+ * Folder items in the SidebarMenu to display folder overview info and allow
+ * them to be selected.  Likely to be overhauled somewhat to allow for a
+ * collapsible tree hierarchy.  See consumers for more info.
+ */
 const FolderListItem = React.createClass({
+  propTypes: {
+    item: React.PropTypes.object.isRequired
+  },
+
   render: function() {
     const folder = this.props.item;
     const iconType = FOLDER_TYPE_TO_ICON_TYPE.get(folder.type) ||

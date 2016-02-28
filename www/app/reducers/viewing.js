@@ -46,6 +46,37 @@ function buildFilterSpec(filtering) {
   return filter;
 }
 
+const DEFAULT_STATE = {
+  selections: {
+    accountId: null,
+    folderId: null,
+    conversationId: null,
+    messageId: null
+  },
+  filtering: {
+    textFilter: {
+      filterText: '',
+      filterSender: true,
+      filterRecipients: true,
+      filterSubject: true,
+      filterBody: false
+    },
+    otherFilters: []
+  },
+  live: {
+    account: null,
+    folder: null,
+    conversationsView: null,
+    conversation: null,
+    messagesView: null
+  },
+  visualizations: {
+    conversationsOverview: [],
+    conversationsSidebar: [],
+    conversationSummary: null,
+    conversationOverview: []
+  }
+};
 
 /**
  * Manages the "viewing" state of the account/folder/conversation/message the
@@ -60,7 +91,7 @@ function buildFilterSpec(filtering) {
  * and whether the redux strategy seems cleaner.  (Once I get the hang of redux,
  * that is.  I am unlikely to get this right the first try.)
  */
-return function reduceViewing(oldState, action) {
+return function reduceViewing(oldState = DEFAULT_STATE, action) {
   // Bail if this action doesn't affect us.
   if (ACTIONS_WE_CARE_ABOUT.indexOf(action.type) === -1) {
     return oldState;

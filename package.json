@@ -5,7 +5,7 @@
     "dependencies": {
       "react-list": "github:orgsync/react-list/0.4.2",
       "react-intl.min": "github:yahoo/react-intl/v1.1.0#dist/react-intl.min.js",
-      "evt": "github:jrburke/evt/1.2.0",
+      "evt": "github:jrburke/evt/1.2.1",
       "require": "github:jrburke/requirejs/2.1.17",
       "autosuggest": "github:moroshko/react-autosuggest/v1.14.0#dist/standalone/autosuggest.js",
       "medium-editor": "github:yabwe/medium-editor/5.2.0"

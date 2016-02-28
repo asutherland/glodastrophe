@@ -91,10 +91,11 @@ and respond better to history.
     * folder: MailFolder or null.
     * conversationsView
     * conversation: MailConversations or null.
+    * messagesView
   * visualizations: See VisDef definition below.
     * conversationsOverview: Array of VisDef.
     * conversationsSidebar: Array of VisDef
-    * conversationSummary: VisDef
+    * conversationSummary: VisDef or null
     * conversationOverview: Array of VisDef
 
 Our made-up VisDef is TBD.  It will either just be a Vega definition or a

@@ -3,45 +3,59 @@ define(function (require) {
 
 const React = require('react');
 
-const { FormattedMessage } = require('react-intl');
+const { injectIntl } = require('react-intl');
+
+const Card = require('material-ui/lib/card/card');
+const CardActions = require('material-ui/lib/card/card-actions');
+const CardHeader = require('material-ui/lib/card/card-header');
+const FlatButton = require('material-ui/lib/flat-button');
+
+const { selectAccountId } = require('../../actions/viewing');
 
 var AccountHome = React.createClass({
+  propTypes: {
+    item: React.PropTypes.object.isRequired
+  },
+
+  contextTypes: {
+    store: React.PropTypes.object,
+    router: React.PropTypes.object
+  },
+
   render: function() {
+    const account = this.props.item;
+    const { formatMessage } = this.props.intl;
     return (
-      <div className='account-home-summary'>
-        <div className='ahs-border'>
-          <div className='ahs-header'>Account: { this.props.item.name }</div>
-          <div className='ahs-contents'>
-            <div className='ahs-details'>
-              <a href={ '#!/view/3col/' + this.props.item.id + '/./.' }
-                 className='ahs-detail'>
-                <FormattedMessage
-                  id='accountHomeShow3Col'
-                  />
-              </a>
-              <a href={ '#!/view/folders/' + this.props.item.id }
-                 className='ahs-detail'>
-                <FormattedMessage
-                  id='accountHomeShowFolders'
-                  />
-              </a>
-            </div>
-            <div className='ahs-actions'>
-              <button onClick={ this.recreateAccount }>
-                <FormattedMessage
-                  id='recreateAccount'
-                  />
-              </button>
-              <button onClick={ this.deleteAccount }>
-                <FormattedMessage
-                  id='deleteAccount'
-                  />
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
+      <Card>
+        <CardHeader
+          title={ account.name }
+          subtitle={ account.type }
+          actAsExpander={ true }
+          showExpandableButton={ true }
+          />
+        <CardActions expandable={ true } >
+          <FlatButton
+            label={ formatMessage({ id: 'show_account_contents' }) }
+            onTouchTap={ this.showAccount }
+            />
+          <FlatButton
+            label={ formatMessage({ id: 'recreateAccount' }) }
+            onTouchTap={ this.recreateAccount }
+            />
+          <FlatButton
+            label={ formatMessage({ id: 'deleteAccount' }) }
+            onTouchTap={ this.deleteAccount }
+            />
+        </CardActions>
+      </Card>
     );
+  },
+
+  showAccount: function() {
+    console.log('got show account click!');
+    const account = this.props.item;
+    this.context.store.dispatch(selectAccountId(account.id));
+    this.context.router.push('/view/3col');
   },
 
   recreateAccount: function() {
@@ -53,5 +67,5 @@ var AccountHome = React.createClass({
   }
 });
 
-return AccountHome;
+return injectIntl(AccountHome);
 });

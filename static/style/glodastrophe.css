@@ -55,25 +55,8 @@
 body {
   background-color: var(--background-color);
   margin: 0;
-  font-size: 13px;
+  font-family: Roboto, sans-serif;
 }
-
-h1 {
-  font-size: 24px;
-  font-family: sans-serif;
-}
-
-h2 {
-  font-size: 20px;
-  font-family: sans-serif;
-}
-
-h3, h4, h5, h6 {
-  font-size: 15px;
-  font-family: sans-serif;
-}
-
-
 
 /* ===== Account Home */
 
@@ -163,14 +146,6 @@ h3, h4, h5, h6 {
 }
 
 .conversation-list-header {
-  top: 0;
-  background: var(--background-color);
-  position: sticky;
-  /* The original implementing bug says we should be getting our own stacking
-     context anyways.  I don't understand why we're not, so force the issue. */
-  z-index: 1;
-  padding: var(--pane-padding);
-  border-bottom: 2px solid var(--sticky-header-border);
 }
 
 .folder-header-name {
@@ -221,7 +196,6 @@ h3, h4, h5, h6 {
 
 .conv-summary-subject {
   flex: 1 10 auto;
-  font-weight: bold;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

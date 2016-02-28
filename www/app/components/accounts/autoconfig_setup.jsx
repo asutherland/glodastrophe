@@ -1,13 +1,21 @@
 define(function (require) {
 'use strict';
 
-var React = require('react');
+const React = require('react');
 
-var FormattedMessage = require('react-intl').FormattedMessage;
+const { FormattedMessage, injectIntl } = require('react-intl');
 
-var navigate = require('react-mini-router').navigate;
+/**
+ * Largely pre-redux autoconfig widget.  Wrapped into minimal redux integration
+ * via `WrappedAutoconfigSetup` widget.  Definitely consider reduxifying
+ * further.
+ */
+const AutoconfigSetup = React.createClass({
+  propTypes: {
+    mailApi: React.PropTypes.object.isRequired,
+    onAccountCreated: React.PropTypes.func.isRequired
+  },
 
-var AutoconfigSetup = React.createClass({
   getInitialState: function() {
     return {
       // future work: show a spinner overlay and disable the inputs while pending
@@ -46,6 +54,8 @@ var AutoconfigSetup = React.createClass({
       );
     }
 
+    const { formatMessage } = this.props.intl;
+
     return (
       <div className="add-account-page">
         <div>{ errorNodes }</div>
@@ -59,21 +69,21 @@ var AutoconfigSetup = React.createClass({
           <input type="text"
             value={this.state.displayName}
             onChange={this.handleNameChange}
-            placeholder={this.getIntlMessage('setupAutoconfigDisplayNamePlaceholder')}
+            placeholder={ formatMessage({ id: 'setupAutoconfigDisplayNamePlaceholder' }) }
             />
         </div>
         <div>
           <input type="email"
             value={this.state.emailAddress}
             onChange={this.handleEmailChange}
-            placeholder={this.getIntlMessage('setupAutoconfigEmailAddressPlaceholder')}
+            placeholder={ formatMessage({ id: 'setupAutoconfigEmailAddressPlaceholder' }) }
             />
         </div>
         <div>
           <input type="password"
             value={this.state.password}
             onChange={this.handlePasswordChange}
-            placeholder={this.getIntlMessage('setupAutoconfigPasswordPlaceholder')}
+            placeholder={ formatMessage({ id: 'setupAutoconfigPasswordPlaceholder' }) }
             />
         </div>
         <div>
@@ -153,15 +163,10 @@ var AutoconfigSetup = React.createClass({
         return;
       }
 
-      // Once we know about the inbox for the account, bring it up.
-      console.log('waiting for inbox, cur inbox is:', account.folders.inbox);
-      account.folders.latestOnce('inbox', (inboxFolder) => {
-        console.log('got inbox!');
-        navigate('/view/3col/' + account.id + '/' + inboxFolder.id + '/.');
-      });
+      this.props.onAccountCreated(account.id);
     });
   }
 });
 
-return AutoconfigSetup;
+return injectIntl(AutoconfigSetup);
 });

@@ -6,6 +6,8 @@ var React = require('react');
 const { FormattedMessage, injectIntl } = require('react-intl');
 
 /**
+ * XXX needs redux overhaul
+ *
  * Very hacky initial implementation of filtering UI.  Our owning panes have a
  * state life-cycle that involves us being destroyed whenever we pass a change
  * up to them.  Our very awkward contract with them is that we communicate in
@@ -73,11 +75,11 @@ var ConvFilterBar = React.createClass({
         }
         // we use a timer to give the input time to stabilize.
         this.timer = window.setTimeout(() => {
-          this.props.applyFilter(filter);
+          this.props.applyTextFilter(filter);
           this.timer = null;
         }, 500);
       } else {
-        this.props.applyFilter(null);
+        this.props.applyTextFilter(null);
       }
     }
   },

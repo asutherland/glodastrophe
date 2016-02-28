@@ -24,6 +24,25 @@ return {
   },
 
   /**
+   * Select the default account and its inbox.
+   *
+   * Currently it's assumed this is invoked after the `accountsLoaded` event
+   * has been emitted by the MailAPI, but we can change this so this method
+   * internally does that waiting itself.
+   */
+  selectDefaultAccount() {
+    if (mailApi.accounts.length === 0) {
+      return null;
+    }
+    const account = mailApi.accounts.defaultAccount;
+    return {
+      type: SELECT_ACCOUNT,
+      accountId: account.id,
+      folderType: 'inbox'
+    };
+  },
+
+  /**
    * Select a specific folder and the account that contains it for display.
    * This will cause us to change the conversationsView to this folder with
    * whatever the active filter is.

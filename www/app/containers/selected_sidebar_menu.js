@@ -5,7 +5,6 @@ const SidebarMenu = require('../components/pages/sidebar_menu');
 
 const { connect } = require('react-redux');
 
-const { toggleSidebar } = require('../actions/sidebar');
 const { selectAccountId, selectFolderId } = require('../actions/viewing');
 
 const mapStateToProps = (state) => {
@@ -16,16 +15,20 @@ const mapStateToProps = (state) => {
     accountsView: state.mailApi.accounts,
     selectedAccountId: state.viewing.selections.accountId,
     // folders list
-    accountFoldersView: state.viewing.live.account.folders,
+    accountFoldersView: state.viewing.live.account &&
+                          state.viewing.live.account.folders,
     selectedFolderId: state.viewing.selections.folderId
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onToggleSidebar: () => {
-      dispatch(toggleSidebar);
+    onSelectAccountId: (accountId) => {
+      dispatch(selectAccountId(accountId));
     },
+    onSelectFolderId: (folderId) => {
+      dispatch(selectFolderId(folderId));
+    }
   };
 };
 

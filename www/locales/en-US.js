@@ -1,11 +1,16 @@
 define(function(require) {
 
 return {
-  home: 'Home',
+  sidebar_home: 'Home',
+  sidebar_accounts_label: 'Accounts',
+  sidebar_folders_label: 'Folders',
 
   // --- Account Home
   accountHomeShow3Col: '3-Column View',
   accountHomeShowFolders: 'Folders',
+
+  show_account_contents: 'Show',
+
   /** Delete the current account then create it again */
   recreateAccount: 'Re-create Account',
   /** Delete the account permanently */
@@ -37,17 +42,10 @@ return {
   // The last sync label; I'm
   folderLastSyncLabel: 'Last sync:',
 
-  // XXX we don't care about this UX at all, but this should be a properly
-  // pluralized string.
-  newishCountDisplay: '{newishCount} newish conversation(s)!',
-  clearNewishCount: 'Clear',
-
-  syncRefresh: 'Refresh',
-  syncGrow: 'Grow',
-
-  hackManualSnippets: 'Sn1pp37s',
-
-  beginCompose: 'Compose',
+  toggle_sidebar: 'Menu',
+  conversations_compose_menu_item: 'Compose',
+  conversations_refresh_view_menu_item: 'Refresh',
+  conversations_grow_view_menu_item: 'Fetch more conversations',
 
   filter_text_placeholder: 'Filter these messages…',
   filter_sender: 'Sender',

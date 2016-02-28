@@ -3,7 +3,11 @@ define(function(require) {
 
 const { TOGGLE_SIDEBAR } = require('../actions/actionTypes');
 
-return function reduceSidebar(oldState, action) {
+const DEFAULT_STATE = {
+  open: false
+};
+
+return function reduceSidebar(oldState = DEFAULT_STATE, action) {
   switch (action.type) {
     case TOGGLE_SIDEBAR: {
       return {

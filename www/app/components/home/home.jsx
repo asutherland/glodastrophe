@@ -1,13 +1,21 @@
 define(function (require) {
 'use strict';
 
-var React = require('react');
+const React = require('react');
 
-var FormattedMessage = require('react-intl').FormattedMessage;
+const { FormattedMessage } = require('react-intl');
+const { Link } = require('react-router');
 
-var EntireList = require('../entire_list');
+const EntireList = require('../entire_list');
 
-var AccountHome = require('../summaries/account_home');
+// XXX connect() this widget into redux-space so we can stop doing this.
+const mailApi = require('gelam/main-frame-setup');
+
+const AccountHome = require('../summaries/account_home');
+
+const containerStyle = {
+  margin: '10px'
+};
 
 /**
  * The "home" view currently shows a list of summaries of accounts.  I created
@@ -19,20 +27,20 @@ var AccountHome = require('../summaries/account_home');
  * There is no intent to provide a useful UX here.  Ideally evolve this into
  * nothingness and evolve the summaries into something useful.
  */
-var Home = React.createClass({
+const Home = React.createClass({
   render: function() {
     return (
-      <div>
+      <div style={ containerStyle }>
         <EntireList
-          view={this.props.mailApi.accounts}
-          widget={AccountHome}
+          view={ mailApi.accounts }
+          widget={ AccountHome }
           />
         <div>
-          <a href="#!/settings/accounts/add">
+          <Link to="/settings/accounts/add">
             <FormattedMessage
               id='settingsAccountAddLink'
               />
-          </a>
+          </Link>
         </div>
         <div>
           <h2>
@@ -40,11 +48,11 @@ var Home = React.createClass({
               id='debugHomeHeader'
               />
           </h2>
-          <a href="#!/debug/cronsync">
+          <Link to="/debug/cronsync">
             <FormattedMessage
               id='debugCronSync'
               />
-          </a>
+          </Link>
         </div>
       </div>
     );

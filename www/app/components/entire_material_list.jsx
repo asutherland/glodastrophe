@@ -6,7 +6,7 @@ const React = require('react');
 const PureRenderMixin = require('react-addons-pure-render-mixin');
 
 const List = require('material-ui/lib/lists/list');
-const SelectableContainerEnhance =
+const { SelectableContainerEnhance } =
   require('material-ui/lib/hoc/selectable-enhance');
 
 const SelectableList = SelectableContainerEnhance(List);
@@ -23,6 +23,14 @@ const SelectableList = SelectableContainerEnhance(List);
  */
 var EntireMaterialList = React.createClass({
   mixins: [PureRenderMixin],
+
+  propTypes: {
+    pick: React.PropTypes.func.isRequired,
+    selectedId: React.PropTypes.string,
+    subheader: React.PropTypes.string.isRequired,
+    view: React.PropTypes.object.isRequired,
+    widget: React.PropTypes.func.isRequired
+  },
 
   defaultProps: {
     itemHeight: 0
@@ -69,7 +77,7 @@ var EntireMaterialList = React.createClass({
 
     const children = this.props.view.items.map((item) => {
       return (
-        <Widget key={item.id} value={ item.id } serial={ item.serial } />
+        <Widget key={ item.id } item={ item } serial={ item.serial } />
       );
     });
 

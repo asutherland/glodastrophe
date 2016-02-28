@@ -7,33 +7,27 @@ const ConversationListHeader =
 const { connect } = require('react-redux');
 
 const { toggleSidebar } = require('../actions/sidebar');
-const { selectAccountId, selectFolderId } = require('../actions/viewing');
+const { navigateToDraft } = require('../actions/viewing');
 
 const mapStateToProps = (state) => {
   return {
-    // sidebar control
-    open: state.sidebar.open,
-    // accounts list
-    accountsView: state.mailApi.accounts,
-    selectedAccountId: state.viewing.selections.accountId,
-    // folders list
-    accountFoldersView: state.viewing.live.account.folders,
-    selectedFolderId: state.viewing.selections.folderId
+    mailApi: state.mailApi,
+    view: state.viewing.live.conversationsView,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    onSelectAccountId: (accountId) => {
-      dispatch(selectAccountId(accountId));
+    onNavigateToDraft: (draftMessageId) => {
+      dispatch(navigateToDraft(draftMessageId));
     },
-    onSelectFolderId: (folderId) => {
-      dispatch(selectFolderId(folderId));
-    }
+    onToggleSidebar: () => {
+      dispatch(toggleSidebar());
+    },
   };
 };
 
-const SelectedConversationListHeader= connect(
+const SelectedConversationListHeader = connect(
   mapStateToProps,
   mapDispatchToProps
 )(ConversationListHeader);

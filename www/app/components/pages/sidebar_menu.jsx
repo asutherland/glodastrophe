@@ -5,6 +5,8 @@ const React = require('react');
 
 const { injectIntl } = require('react-intl');
 
+const FontIcon = require('material-ui/lib/font-icon');
+
 const LeftNav = require('material-ui/lib/left-nav');
 const List = require('material-ui/lib/lists/list');
 const ListItem = require('material-ui/lib/lists/list-item');
@@ -14,6 +16,7 @@ const EntireMaterialList = require('../entire_material_list');
 
 const AccountListItem = require('../list_items/account_list_item');
 const FolderListItem = require('../list_items/folder_list_item');
+
 
 /**
  * The "home" view currently shows a list of summaries of accounts.  I created
@@ -26,10 +29,19 @@ const FolderListItem = require('../list_items/folder_list_item');
  * nothingness and evolve the summaries into something useful.
  */
 var SidebarMenu = React.createClass({
+  propTypes: {
+    open: React.PropTypes.bool.isRequired,
+    accountsView: React.PropTypes.object.isRequired,
+    selectedAccountId: React.PropTypes.string,
+    accountFoldersView: React.PropTypes.object,
+    selectedFolderId: React.PropTypes.string,
+    onSelectAccountId: React.PropTypes.func.isRequired,
+    onSelectFolderId: React.PropTypes.func.isRequired
+  },
+
   render: function() {
     return (
       <LeftNav open={ this.props.open }>
-        // - Top level navigation: Home Button.
         <List>
           <ListItem
             primaryText={ this.props.intl.formatMessage({ id: 'sidebar_home' }) }
@@ -38,7 +50,6 @@ var SidebarMenu = React.createClass({
             />
         </List>
         <Divider />
-        // - Account List
         <EntireMaterialList
           subheader={ this.props.intl.formatMessage({ id: 'sidebar_accounts_label' }) }
           view={ this.props.accountsView }
@@ -47,7 +58,6 @@ var SidebarMenu = React.createClass({
           widget={ AccountListItem }
           />
         <Divider />
-        // - Selected Account's Folders
         <EntireMaterialList
           subheader={ this.props.intl.formatMessage({ id: 'sidebar_folders_label' }) }
           view={ this.props.accountFoldersView }

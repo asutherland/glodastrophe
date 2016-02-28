@@ -1,9 +1,17 @@
 {
-  "extends": "../../deps/gelam/.eslintrc",
+  "extends": [
+    "../../deps/gelam/.eslintrc",
+    "plugin:react/recommended"
+  ],
   "plugins": [
     "react"
   ],
-  "ecmaFeatures": {
-    "jsx": true
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
+  "rules": {
+    "react/prop-types": [2, { ignore: ["intl"] }]
+  }
 }

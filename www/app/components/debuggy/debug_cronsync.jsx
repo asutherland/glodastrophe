@@ -1,11 +1,14 @@
 define(function (require) {
 'use strict';
 
-var React = require('react');
+const React = require('react');
 
-var FormattedMessage = require('react-intl').FormattedMessage;
+const { FormattedMessage } = require('react-intl');
 
-var DebugAccountNewSummary = require('./debug_account_new_summary');
+const DebugAccountNewSummary = require('./debug_account_new_summary');
+
+const mailApi = require('gelam/main-frame-setup');
+
 
 /**
  * Cronsync-centered debug view.
@@ -30,14 +33,11 @@ var DebugCronsync = React.createClass({
   },
 
   componentDidMount: function() {
-    const mailApi = this.props.mailApi;
     mailApi.on('newMessagesUpdate', this.onNewMessagesUpdate);
-
     mailApi.flushNewAggregates();
   },
 
   componentWillUnmount: function() {
-    const mailApi = this.props.mailApi;
     mailApi.removeListener('newMessagesUpdate', this.onNewMessagesUpdate);
   },
 
@@ -52,7 +52,8 @@ var DebugCronsync = React.createClass({
       for (let [accountId, perAccountData] of newAggr) {
         perAccountDivs.push(
           <DebugAccountNewSummary
-            mailApi = { this.props.mailApi }
+            key={ accountId }
+            mailApi = { mailApi }
             accountId={ accountId }
             newData={ perAccountData }
             />
@@ -80,11 +81,11 @@ var DebugCronsync = React.createClass({
   },
 
   forceCronSync: function() {
-    this.props.mailApi.debugForceCronSync({});
+    mailApi.debugForceCronSync({});
   },
 
   forceFlushNew: function() {
-    this.props.mailApi.flushNewAggregates();
+    mailApi.flushNewAggregates();
   }
 });
 

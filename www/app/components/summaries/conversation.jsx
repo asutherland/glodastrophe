@@ -78,7 +78,7 @@ var ConversationSummary = React.createClass({
 
   clickConversation: function() {
     if (this.props.pick) {
-      this.props.pick(this.props.item);
+      this.props.pick(this.props.item.id);
     }
   }
 });

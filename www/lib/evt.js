@@ -1,5 +1,5 @@
 /*
- * evt, an event lib. Version 1.2.0.
+ * evt, an event lib. Version 1.2.1.
  * Copyright 2013-2015, Mozilla Foundation
  *
  * Notable features:
@@ -43,8 +43,17 @@
   // (Function, undefined) -> (undefined, Function)
   function objFnPair(obj, fn) {
     if (!fn) {
-      fn = obj,
+      fn = obj;
       obj = undefined;
+    }
+
+    var type = typeof fn;
+    if (type === 'string') {
+      if (typeof obj[fn] !== 'function') {
+        throw new Error('Not a method name: ' + fn);
+      }
+    } else if (type !== 'function') {
+      throw new Error('fn is not a string or function: ' + fn);
     }
     return [obj, fn];
   }
