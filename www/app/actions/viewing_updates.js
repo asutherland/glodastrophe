@@ -23,10 +23,16 @@ define(function(require) {
  **/
 
 // For circular dependency/horrible hack reasons, start out without dispatch and
-// grab it from our debugging global.
-let dispatch = () => {};
+// grab it from our debugging global.  Although I had a dumb bug elsewhere, so
+// maybe this can be eliminated.  But in general I'd like to better understand
+// how webpack handles ciruclar dependencies and think through our usage a
+// little more before fixing.
+let store = {
+  dispatch: function() {
+  }
+};
 setTimeout(() => {
-  dispatch = window.REDUX_STORE.dispatch;
+  store = window.REDUX_STORE;
 }, 0);
 
 
@@ -35,19 +41,19 @@ const { UPDATE_CONVERSATIONS_VIEW_SERIALS, UPDATE_CONVERSATION_SERIAL,
 
 return {
   dispatchConversationsViewSerialUpdate: function(view) {
-    dispatch({
+    store.dispatch({
       type: UPDATE_CONVERSATIONS_VIEW_SERIALS,
       view
     });
   },
   dispatchConversationSerialUpdate: function(conv) {
-    dispatch({
+    store.dispatch({
       type: UPDATE_CONVERSATION_SERIAL,
       conv
     });
   },
   dispatchMessagesViewSerialUpdate: function(view) {
-    dispatch({
+    store.dispatch({
       type: UPDATE_MESSAGES_VIEW_SERIALS,
       view
     });

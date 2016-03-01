@@ -34,9 +34,20 @@ var ComponentWidthMixin = require('react-component-width-mixin');
 var WindowedList = React.createClass({
   mixins: [ComponentWidthMixin, PureRenderMixin],
 
+  propTypes: {
+    selectedId: React.PropTypes.string,
+    view: React.PropTypes.object.isRequired,
+    conditionalWidget: React.PropTypes.func,
+    widget: React.PropTypes.func,
+    unitSize: React.PropTypes.number.isRequired,
+    pick: React.PropTypes.func.isRequired,
+  },
+
   getInitialState: function() {
     return {
-      serial: this.props.view.serial
+      // We haven't actually rendered anything at this point, don't latch the
+      // current serial.
+      serial: null
     };
   },
 
@@ -56,11 +67,17 @@ var WindowedList = React.createClass({
   },
 
   componentWillReceiveProps: function(nextProps) {
+    // TODO: consider whether we really want ourselves to morph like this.
+    // I've already had to `key` the ReactList to insure that we get it to
+    // generate a seek request against us.  That's sort of a weird regression
+    // that might get cleaned up when we clean up our splitter and virtual list
+    // implementations, but there isn't a clear reason to justify having this
+    // component know how to morph.
     if (this.props.view) {
       this.props.view.removeListener('seeked', this.boundDirtyHandler);
     }
     if (nextProps.view) {
-      this.setState({ serial: nextProps.view.serial });
+      this.setState({ serial: null });
       nextProps.view.on('seeked', this.boundDirtyHandler);
     }
   },
@@ -109,8 +126,10 @@ var WindowedList = React.createClass({
     // to avoid reflowing all of the items.
     return (
       <ReactList
+        key={ this.props.view.handle }
         seek={ this.boundSeek }
         totalHeight={ this.props.view.totalHeight }
+        initialIndex={ 0 }
         itemRenderer={ this.boundRenderer }
         seekedOffset={ this.props.view.heightOffset }
         seekedData={ this.props.view.items }

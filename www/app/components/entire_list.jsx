@@ -3,7 +3,7 @@ define(function (require) {
 
 var React = require('react');
 
-var ReactList = require('react-list').UniformList;
+var ReactList = require('react-list').List;
 
 var PureRenderMixin = require('react-addons-pure-render-mixin');
 

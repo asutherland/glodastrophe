@@ -29,7 +29,13 @@ var EntireMaterialList = React.createClass({
     selectedId: React.PropTypes.string,
     subheader: React.PropTypes.string.isRequired,
     view: React.PropTypes.object.isRequired,
-    widget: React.PropTypes.func.isRequired
+    /**
+     * We have to use a factory instead of a widget because the
+     * SelectableContainerEnhance depends on being able to introspect the
+     * immediate children and have them be ListItems.  Happily, there isn't
+     * really any difference.
+     */
+    listItemFactory: React.PropTypes.func.isRequired
   },
 
   defaultProps: {
@@ -73,17 +79,13 @@ var EntireMaterialList = React.createClass({
   },
 
   render: function() {
-    const Widget = this.props.widget;
+    const listItemFactory = this.props.listItemFactory;
 
-    const children = this.props.view.items.map((item) => {
-      return (
-        <Widget key={ item.id } item={ item } serial={ item.serial } />
-      );
-    });
+    const children = this.props.view.items.map(listItemFactory);
 
     const valueLink = {
       value: this.props.selectedId,
-      requestChange: this.props.pick
+      requestChange: this.onChangeSelection
     };
 
     return (
@@ -94,6 +96,10 @@ var EntireMaterialList = React.createClass({
         { children }
       </SelectableList>
     );
+  },
+
+  onChangeSelection: function(evt, value) {
+    this.props.pick(value);
   }
 });
 

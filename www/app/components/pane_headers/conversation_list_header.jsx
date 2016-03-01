@@ -50,7 +50,7 @@ const ConversationListHeader = React.createClass({
     if (oldView !== newView) {
       if (oldView) {
         oldView.removeListener('metaChange', this.onMetaChange);
-        oldView.removeListener('syncComplete', this.onSyncCompleted);
+        oldView.removeListener('syncComplete', this.onSyncComplete);
       }
 
       if (newView) {
@@ -64,7 +64,7 @@ const ConversationListHeader = React.createClass({
     const view = this.props.view;
     if (view) {
       view.removeListener('metaChange', this.onMetaChange);
-      view.removeListener('syncComplete', this.onSyncCompleted);
+      view.removeListener('syncComplete', this.onSyncComplete);
     }
   },
 

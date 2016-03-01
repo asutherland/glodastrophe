@@ -26,25 +26,18 @@ const FOLDER_TYPE_TO_ICON_TYPE = new Map([
  * them to be selected.  Likely to be overhauled somewhat to allow for a
  * collapsible tree hierarchy.  See consumers for more info.
  */
-const FolderListItem = React.createClass({
-  propTypes: {
-    item: React.PropTypes.object.isRequired
-  },
-
-  render: function() {
-    const folder = this.props.item;
-    const iconType = FOLDER_TYPE_TO_ICON_TYPE.get(folder.type) ||
-      DEFAULT_FOLDER_ICON;
-    const icon = <FontIcon className="material-icons">{ iconType }</FontIcon>;
-    return (
-      <ListItem
-        primaryText={ folder.name }
-        leftIcon={ icon }
-        nestedLevel={ folder.depth }
-        />
-    );
-  },
-});
-
-return FolderListItem;
+return function makeFolderListItem(folder) {
+  const iconType = FOLDER_TYPE_TO_ICON_TYPE.get(folder.type) ||
+    DEFAULT_FOLDER_ICON;
+  const icon = <FontIcon className="material-icons">{ iconType }</FontIcon>;
+  return (
+    <ListItem
+      key={ folder.id }
+      value={ folder.id }
+      primaryText={ folder.name }
+      leftIcon={ icon }
+      nestedLevel={ folder.depth }
+      />
+  );
+};
 });

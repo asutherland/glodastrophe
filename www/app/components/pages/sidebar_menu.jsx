@@ -14,8 +14,8 @@ const Divider = require('material-ui/lib/divider');
 
 const EntireMaterialList = require('../entire_material_list');
 
-const AccountListItem = require('../list_items/account_list_item');
-const FolderListItem = require('../list_items/folder_list_item');
+const makeAccountListItem = require('../list_item_factories/account_list_item');
+const makeFolderListItem = require('../list_item_factories/folder_list_item');
 
 
 /**
@@ -39,6 +39,10 @@ var SidebarMenu = React.createClass({
     onSelectFolderId: React.PropTypes.func.isRequired
   },
 
+  contextTypes: {
+    router: React.PropTypes.object.isRequired,
+  },
+
   render: function() {
     return (
       <LeftNav open={ this.props.open }>
@@ -55,7 +59,7 @@ var SidebarMenu = React.createClass({
           view={ this.props.accountsView }
           selectedId={ this.props.selectedAccountId }
           pick={ this.props.onSelectAccountId }
-          widget={ AccountListItem }
+          listItemFactory={ makeAccountListItem }
           />
         <Divider />
         <EntireMaterialList
@@ -63,7 +67,7 @@ var SidebarMenu = React.createClass({
           view={ this.props.accountFoldersView }
           selectedId={ this.props.selectedFolderId }
           pick={ this.props.onSelectFolderId }
-          widget={ FolderListItem }
+          listItemFactory={ makeFolderListItem }
           />
       </LeftNav>
     );
