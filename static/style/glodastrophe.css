@@ -141,29 +141,6 @@ body {
 
 /* ===== Conversation List Pane ===== */
 
-.conversation-list-pane {
-
-}
-
-.conversation-list-header {
-}
-
-.folder-header-name {
-  margin: 0;
-}
-
-.conversation-list-actions {
-}
-
-.conversation-list-scroll-region {
-}
-
-.conversation-list-newish-box {
-  background-color: #ddddff;
-  border-color: #aaaaff;
-  border-radius: 8px;
-}
-
 /* ===== Conversation Summaries ===== */
 
 .conv-summary {

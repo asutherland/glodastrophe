@@ -13,6 +13,7 @@ const mapStateToProps = (state) => {
   return {
     mailApi: state.mailApi,
     view: state.viewing.live.conversationsView,
+    viewTocMetaSerial: state.viewing.serials.viewTocMetaSerial
   };
 };
 

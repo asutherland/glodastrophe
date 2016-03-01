@@ -1,20 +1,26 @@
 define(function (require) {
 'use strict';
 
-var React = require('react');
+const React = require('react');
 
-var FormattedRelative = require('react-intl').FormattedRelative;
+const { FormattedRelative } = require('react-intl');
 
-var SliceItemMixin = require('../slice_item_mixin');
+const PureRenderMixin = require('react-addons-pure-render-mixin');
 
-var Star = require('../actioners/star');
-var Unread = require('../actioners/unread');
-var Drafts = require('../actioners/drafts');
+const Star = require('../actioners/star');
+const Unread = require('../actioners/unread');
+const Drafts = require('../actioners/drafts');
 
 //var ConvTimeThreadingVis = require('../visualizations/conv_time_threading');
 
 var ConversationSummary = React.createClass({
-  mixins: [SliceItemMixin],
+  mixins: [PureRenderMixin],
+
+  propTypes: {
+    item: React.PropTypes.object.isRequired,
+    pick: React.PropTypes.func.isRequired,
+    selected: React.PropTypes.bool.isRequired
+  },
 
   render: function() {
     var conv = this.props.item;

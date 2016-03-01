@@ -7,9 +7,15 @@ const { accountIdFromFolderId, accountIdFromConvId } =
 
 const { SELECT_ACCOUNT, SELECT_FOLDER, SELECT_CONVERSATION, SELECT_MESSAGE,
         NAVIGATE_TO_DRAFT,
+        UPDATE_CONVERSATIONS_VIEW_SERIALS, UPDATE_CONVERSATION_SERIAL,
+        UPDATE_MESSAGES_VIEW_SERIALS,
         MODIFY_TEXT_FILTER, MODIFY_FILTER,
         ADD_VIS, MODIFY_VIS, REMOVE_VIS } =
   require('../actions/actionTypes');
+
+const { dispatchConversationsViewSerialUpdate, dispatchConversationSerialUpdate,
+        dispatchMessagesViewSerialUpdate } =
+  require('../actions/viewing_updates');
 
 const MIN_TEXTFILTER_LEN = 3;
 
@@ -68,7 +74,14 @@ const DEFAULT_STATE = {
     folder: null,
     conversationsView: null,
     conversation: null,
-    messagesView: null
+    messagesView: null,
+  },
+  serials: {
+    conversationsViewSerial: null,
+    conversationsViewTocMetaSerial: null,
+    conversationSerial: null,
+    messagesViewSerial: null,
+    messagesViewTocMetaSerial: null
   },
   visualizations: {
     conversationsOverview: [],
@@ -77,6 +90,18 @@ const DEFAULT_STATE = {
     conversationOverview: []
   }
 };
+
+function onConversationsViewSeeked(view) {
+  dispatchConversationsViewSerialUpdate(view);
+}
+
+function onConversationChange(conv) {
+  dispatchConversationSerialUpdate(conv);
+}
+
+function onMessagesViewSeeked(view) {
+  dispatchMessagesViewSerialUpdate(view);
+}
 
 /**
  * Manages the "viewing" state of the account/folder/conversation/message the
@@ -97,6 +122,8 @@ return function reduceViewing(oldState = DEFAULT_STATE, action) {
     return oldState;
   }
 
+  console.log('dispatching', action.type);
+
   // Do a shallow duplication of our state.  The actions below will clobber
   // these top-level fields as needed.  We do not mutate oldState and we will
   // not mutate newState once we return.  Idiomatically, this isn't the best.
@@ -115,6 +142,8 @@ return function reduceViewing(oldState = DEFAULT_STATE, action) {
           oldState.filtering === newState.filtering ) {
         return oldState.live.conversationsView;
       }
+      oldState.live.conversationsView.removeListener(
+        'seeked', onConversationsViewSeeked);
       // nope, kill off the old view.
       oldState.live.conversationsView.release();
     }
@@ -122,16 +151,20 @@ return function reduceViewing(oldState = DEFAULT_STATE, action) {
     if (!newState.live.folder) {
       return null;
     }
+
+    let view;
     // Need a new view.
     if (newState.filtering.textFilter.filterText.length >= MIN_TEXTFILTER_LEN ||
         newState.filtering.otherFilters.size) {
-      return mailApi.searchFolderConversations({
+      view = mailApi.searchFolderConversations({
         folder: newState.live.folder,
         filter: buildFilterSpec(newState.filtering)
       });
     } else {
-      return mailApi.viewFolderConversations(newState.live.folder);
+      view = mailApi.viewFolderConversations(newState.live.folder);
     }
+    view.on('seeked', onConversationsViewSeeked);
+    return view;
   };
 
   /**
@@ -148,6 +181,8 @@ return function reduceViewing(oldState = DEFAULT_STATE, action) {
         return oldState.live.messagesView;
       }
       // nope, kill off the old view
+      oldState.live.messagesView.removeListener(
+        'seeked', onMessagesViewSeeked);
       oldState.live.messagesView.release();
     }
     // No view if no conversation.
@@ -155,17 +190,21 @@ return function reduceViewing(oldState = DEFAULT_STATE, action) {
       return null;
     }
     // Need a new view.
+    let view;
     if (newState.filtering.textFilter.filterText.length >= MIN_TEXTFILTER_LEN ||
         newState.filtering.otherFilters.size) {
-      return mailApi.searchConversationMessages({
+      view = mailApi.searchConversationMessages({
         conversation: newState.live.conversation,
         filter: buildFilterSpec(newState.filtering)
       });
     } else {
-      return mailApi.viewConversationMessages(newState.live.conversation);
+      view = mailApi.viewConversationMessages(newState.live.conversation);
     }
+    view.on('seeked', onMessagesViewSeeked);
+    return view;
   };
 
+  let dirtySerials = false;
   switch (action.type) {
     case SELECT_ACCOUNT: {
       let account = mailApi.accounts.getAccountById(action.accountId);
@@ -260,6 +299,27 @@ return function reduceViewing(oldState = DEFAULT_STATE, action) {
       break;
     }
 
+    case UPDATE_CONVERSATIONS_VIEW_SERIALS: {
+      if (action.view === newState.live.conversationsView) {
+        dirtySerials = true;
+      }
+      break;
+    }
+
+    case UPDATE_CONVERSATION_SERIAL: {
+      if (action.conv === newState.live.conversation) {
+        dirtySerials = true;
+      }
+      break;
+    }
+
+    case UPDATE_MESSAGES_VIEW_SERIALS: {
+      if (action.view === newState.live.messagesView) {
+        dirtySerials = true;
+      }
+      break;
+    }
+
     case MODIFY_TEXT_FILTER: {
       newState.filtering = {
         textFilter: action.textFilterSpec,
@@ -307,16 +367,39 @@ return function reduceViewing(oldState = DEFAULT_STATE, action) {
   // objects that use object initialization syntax.  That obviously does not
   // work.  Ideas/patches appreciated for how to make this all less ugly.
   if (newState.live !== oldState.live) {
+    dirtySerials = true;
     // TODO: consider how to deal with conversation deletion.  The best solution
     // probably involves the proxy in the back-end maintaining the selection
     // position regardless of the current scroll position.  Which could very
     // possibly be an argument for BrowseContext.
-    if (oldState.live.conversation &&
-        oldState.live.conversation !== newState.live.conversation) {
-      oldState.live.conversation.release();
+    if (oldState.live.conversation !== newState.live.conversation) {
+      if (oldState.live.conversation) {
+        oldState.live.conversation.removeListener(
+          'change', onConversationChange);
+        oldState.live.conversation.release();
+      }
+      if (newState.live.conversation) {
+        newState.live.conversation.on('change', onConversationChange);
+      }
     }
     newState.live.conversationsView = ensureConversationsView();
     newState.live.messagesView = ensureMessagesView();
+  }
+
+  if (dirtySerials) {
+    const live = newState.live;
+    newState.serials = {
+      conversationsViewSerial:
+        live.conversationsView && live.conversationsView.serial,
+      conversationsViewTocMetaSerial:
+        live.conversationsView && live.conversationsView.tocMetaSerial,
+      conversationSerial:
+        live.conversation && live.conversation.serial,
+      messagesViewSerial:
+        live.messagesView && live.messagesView.serial,
+      messagesViewTocMetaSerial:
+        live.messagesView && live.messagesView.tocMetaSerial
+    };
   }
 
   return newState;

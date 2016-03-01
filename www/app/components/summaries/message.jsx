@@ -1,38 +1,39 @@
 define(function (require) {
 'use strict';
 
-var React = require('react');
+const React = require('react');
+const PureRenderMixin = require('react-addons-pure-render-mixin');
 
-var FormattedMessage = require('react-intl').FormattedMessage;
-var FormattedRelative = require('react-intl').FormattedRelative;
+const { FormattedMessage, FormattedRelative } = require('react-intl');
 
-var SliceItemMixin = require('../slice_item_mixin');
+const Star = require('../actioners/star');
+const Unread = require('../actioners/unread');
 
-var Star = require('../actioners/star');
-var Unread = require('../actioners/unread');
+const MessageReply = require('../actioners/message_reply');
+const MessageForward = require('../actioners/message_forward');
 
-var MessageReply = require('../actioners/message_reply');
-var MessageForward = require('../actioners/message_forward');
+const Attachments = require('./message_attachments');
+const MessageBody = require('./message_body');
 
-var Attachments = require('./message_attachments');
-var MessageBody = require('./message_body');
+const MessageSummary = React.createClass({
+  mixins: [PureRenderMixin],
 
-var MessageSummary = React.createClass({
-  mixins: [SliceItemMixin],
+  propTypes: {
+    item: React.PropTypes.object.isRequired,
+    pick: React.PropTypes.func.isRequired,
+    selected: React.PropTypes.bool.isRequired
+  },
 
   getInitialState: function() {
-    var message = this.props.item;
+    const message = this.props.item;
     return {
       // expand all messages that are unread or starred
       expanded: !message.isRead || message.isStarred
     };
   },
 
-  defaultProps: {
-  },
-
   render: function() {
-    var msg = this.props.item;
+    const msg = this.props.item;
 
     var itemClassNames = 'message-item';
     var envClassNames = 'message-envelope-container';

@@ -13,8 +13,6 @@ const IconButton = require('material-ui/lib/icon-button');
 const FontIcon = require('material-ui/lib/font-icon');
 */
 
-const LiveItemMixin = require('../live_item_mixin');
-
 const Taggy = require('../actioners/taggy');
 const TagAdder = require('../actioners/tag_adder');
 
@@ -22,11 +20,9 @@ const TagAdder = require('../actioners/tag_adder');
  * The header and interface for a list of messages.
  */
 const MessageListHeader = React.createClass({
-  mixins: [LiveItemMixin],
-
   propTypes: {
     conversation: React.PropTypes.object,
-    view: React.PropTypes.object,
+    conversationSerial: React.PropTypes.number,
   },
 
   getInitialState: function() {
@@ -35,9 +31,8 @@ const MessageListHeader = React.createClass({
 
   render: function() {
     const conv = this.props.conversation;
-    const view = this.props.view;
 
-    if (!view) {
+    if (!conv) {
       return <div></div>;
     }
 

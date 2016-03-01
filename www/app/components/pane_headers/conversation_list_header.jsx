@@ -2,6 +2,7 @@ define(function (require) {
 'use strict';
 
 const React = require('react');
+const PureRenderMixin = require('react-addons-pure-render-mixin');
 
 const { injectIntl } = require('react-intl');
 
@@ -11,8 +12,6 @@ const IconButton = require('material-ui/lib/icon-button');
 const IconMenu = require('material-ui/lib/menus/icon-menu');
 const MenuItem = require('material-ui/lib/menus/menu-item');
 
-const LiveItemMixin = require('../live_item_mixin');
-
 //const ConvFilterBar = require('../filter_bar/conv_filter_bar');
 
 
@@ -20,11 +19,12 @@ const LiveItemMixin = require('../live_item_mixin');
  * The header and interface for a list of conversations.
  */
 const ConversationListHeader = React.createClass({
-  mixins: [LiveItemMixin],
+  mixins: [PureRenderMixin],
 
   propTypes: {
     mailApi: React.PropTypes.object.isRequired,
     view: React.PropTypes.object,
+    viewTocMetaSerial: React.PropTypes.number,
     onNavigateToDraft: React.PropTypes.func.isRequired,
     onToggleSidebar: React.PropTypes.func.isRequired,
   },

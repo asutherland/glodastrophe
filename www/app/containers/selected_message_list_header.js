@@ -9,7 +9,7 @@ const { connect } = require('react-redux');
 const mapStateToProps = (state) => {
   return {
     conversation: state.viewing.live.conversation,
-    view: state.viewing.live.messagesView
+    conversationSerial: state.viewing.serials.conversationSerial
   };
 };
 

@@ -39,14 +39,14 @@ var MessageListPane = React.createClass({
     const view = this.props.view;
 
     // If there is no view, just be empty.
-    if (!this.props.view) {
+    if (!view) {
       return <div></div>;
     }
 
     return (
       <div className="message-list-scroll-region">
         <WholeWindowedList
-          view={ this.state.view }
+          view={ view }
           conditionalWidget={ this._pickMessageWidget }
           pick={ this.props.onSelectMessageId }
           navigateToDraft={ this.props.onNavigateToDraft }

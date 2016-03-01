@@ -32,6 +32,27 @@ const splitSave = function(name) {
 };
 
 /**
+ * The conversation pane wants to be a flex-box header at the top that uses its
+ * native size and whose second child takes the remainder and which wants to
+ * be its own containing block for height sizing purposes.  The heigh need is
+ * driven by SplitPane's needs at this time.  We can change it in the future.
+ */
+const CONVERSATION_PANE_CONTAINER = {
+};
+
+const CONVERSATION_PANE_HEADER = {
+  height: '64px'
+};
+
+const CONVERSATION_PANE_SCROLL_REGION = {
+  height: 'calc(100% - 64px)',
+  width: '100%',
+  position: 'absolute',
+  top: '64px',
+  left: '0'
+};
+
+/**
  * Three column view where the columns are facets, conversation list, message
  * list.  The traditional three-pane column containing the folder list has been
  * exiled into the hamburger-menu-triggered sidebar (which we also create).
@@ -50,22 +71,24 @@ const splitSave = function(name) {
 var ThreeCol = React.createClass({
   render: function() {
     return (
-      <div>
+      <div style={ { height: '100%' } }>
         <SelectedSidebarMenu />
         <SplitPane split="vertical"
                    defaultSize={ splitRestore('3col:split1') }
                    onChange={ splitSave('3col:split1') }>
-          <div className="conversation-list-pane">
-            <div className="conversation-list-header">
+          <div style={ CONVERSATION_PANE_CONTAINER }>
+            <div style={ CONVERSATION_PANE_HEADER }>
               <SelectedConversationListHeader />
               <SelectedOverviewFacetsPane />
             </div>
-            <SplitPane split="vertical"
-                       defaultSize={ splitRestore('3col:split2') }
-                       onChange={ splitSave('3col:split2') }>
-              <SelectedSidebarFacetsPane />
-              <SelectedConversationListPane />
-            </SplitPane>
+            <div style={ CONVERSATION_PANE_SCROLL_REGION }>
+              <SplitPane split="vertical"
+                         defaultSize={ splitRestore('3col:split2') }
+                         onChange={ splitSave('3col:split2') }>
+                <SelectedSidebarFacetsPane />
+                <SelectedConversationListPane />
+              </SplitPane>
+            </div>
           </div>
           <div className="message-list-pane">
             <SelectedMessageListHeader />

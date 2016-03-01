@@ -9,9 +9,9 @@ const injectTapEventPlugin = require('react-tap-event-plugin');
 
 const { IntlProvider } = require('react-intl');
 const { Router, Route, IndexRoute, hashHistory } = require('react-router');
-const { createStore, applyMiddleware } = require('redux');
 const { Provider } = require('react-redux');
-const thunk = require('redux-thunk');
+
+const store = require('./store');
 
 const localeMessages = require('locales/en-US');
 
@@ -31,7 +31,6 @@ const { selectDefaultAccount } = require('./actions/viewing');
 // - Debug Views
 const DebugCronsync = require('./components/debuggy/debug_cronsync');
 
-const rootReducer = require('./reducers/index');
 
 var App = React.createClass({
   propTypes: {
@@ -46,9 +45,9 @@ var App = React.createClass({
 injectTapEventPlugin();
 
 /*
- * Only create the store and bring up the UI once the backend has loaded.  This
- * simplifies things in terms of us being able to start out with a list of all
- * the accounts and their folders immediately available.
+ * Only create bring up the UI once the backend has loaded.  This simplifies
+ * things in terms of us being able to start out with a list of all the accounts
+ * and their folders immediately available.
  *
  * The immediate motivation for this is that it reduces the permutation space
  * as I overhaul the UI.  In practice, really all we need to delay is the
@@ -56,10 +55,6 @@ injectTapEventPlugin();
  * async stuff internally since we're using the thunk middleware.
  */
 mailApi.latestOnce('accountsLoaded', () => {
-  const store = window.REDUX_STORE = createStore(
-    rootReducer,
-    applyMiddleware(thunk)
-  );
   store.dispatch(selectDefaultAccount());
 
   /* Original route plans:
