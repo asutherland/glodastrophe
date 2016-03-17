@@ -8,7 +8,7 @@ const { connect } = require('react-redux');
 
 const mapStateToProps = (state) => {
   return {
-    views: state.live.conversationsSidebarViews
+    views: state.viewing.live.conversationsSidebarViews
   };
 };
 

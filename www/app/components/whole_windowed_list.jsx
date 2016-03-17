@@ -15,6 +15,15 @@ var PureRenderMixin = require('react-addons-pure-render-mixin');
 var WholeWindowedList = React.createClass({
   mixins: [PureRenderMixin],
 
+  propTypes: {
+    conditionalWidget: React.PropTypes.func,
+    passProps: React.PropTypes.object,
+    pick: React.PropTypes.func,
+    selectedId: React.PropTypes.string,
+    view: React.PropTypes.object.isRequired,
+    widget: React.PropTypes.func,
+  },
+
   getInitialState: function() {
     return {
       serial: this.props.view.serial,
@@ -70,6 +79,7 @@ var WholeWindowedList = React.createClass({
     // Note: The react-widget seems to be making the assumption that we'll use
     // the relIndex as our key, although it doesn't actually depend on this.
     var conditionalWidget = this.props.conditionalWidget;
+    var passProps = this.props.passProps;
     var Widget;
     // - Placeholder (needs to happen before calling conditionalWidget)
     if (!item) {
@@ -81,10 +91,16 @@ var WholeWindowedList = React.createClass({
     } else {
       Widget = this.props.widget;
     }
-    return <Widget key={ item.id } item={ item } serial={ item.serial }
-                   selected={ this.props.selectedId === item.id }
-                   pick={ this.props.pick }
-                   navigateToDraft={ this.props.navigateToDraft } />;
+    return (
+      <Widget
+        {...passProps}
+        key={ item.id }
+        item={ item }
+        serial={ item.serial }
+        selected={ this.props.selectedId === item.id }
+        pick={ this.props.pick }
+        />
+    );
   }
 });
 

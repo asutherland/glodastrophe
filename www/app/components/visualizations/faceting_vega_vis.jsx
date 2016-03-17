@@ -4,29 +4,25 @@ define(function (require) {
 const React = require('react');
 const PureRenderMixin = require('react-addons-pure-render-mixin');
 
-// We're fine pulling in all of Vega in the front-end.
 const vega = require('vega');
 
-/**
- *
- */
-const VegaVis = React.createClass({
+const FacetingVegaVis = React.createClass({
   mixins: [PureRenderMixin],
 
   propTypes: {
+    //chart: React.PropTypes.func.isRequired,
     item: React.PropTypes.object.isRequired,
     serial: React.PropTypes.number.isRequired,
+    view: React.PropTypes.object.isRequired,
     viewDef: React.PropTypes.object.isRequired
   },
 
   getInitialState: function() {
-    return {
-      vis: null
-    };
+    return { vis: null };
   },
 
   componentDidMount: function() {
-    const { viewDef, item } = this.props;
+    const { item, viewDef } = this.props;
     vega.parse.spec(viewDef.frontend.spec, (chart) => {
       const vis = chart({
         el: this.refs.visContainer,
@@ -39,6 +35,7 @@ const VegaVis = React.createClass({
       const useData = item.data[viewDef.frontend.dataFrom];
       vis.data(viewDef.frontend.injectDataInto).insert(useData);
 
+      // XXX state management trainwreck here.
       this.setState({ vis });
 
       vis.update();
@@ -47,7 +44,24 @@ const VegaVis = React.createClass({
 
   componentDidUpdate: function() {
     const { vis } = this.state;
-    const { viewDef, item } = this.props;
+    const { view, viewDef, item } = this.props;
+
+    //
+    if (viewDef.frontend.tocMetaData) {
+      const tocMeta = view.tocMeta;
+      for (let { table, sourceField, targetField, otherValues } of
+             viewDef.frontend.tocMetaData) {
+        // remove anything in there already
+        let stream = vis.data(table).remove(() => true);
+        let values = (otherValues || []).map((value) => {
+          return { [targetField]: value };
+        });
+        values.push({
+          [targetField]: tocMeta[sourceField]
+        });
+        stream.insert(values);
+      }
+    }
 
     // The data is currently super-duper opaque to us so remove it all and
     // add our current data.  If the back-end generating the data is being smart
@@ -68,11 +82,17 @@ const VegaVis = React.createClass({
   },
 
   render: function() {
+    const { viewDef, item } = this.props;
+    const label = item.data[viewDef.frontend.labelFrom];
+
     return (
-      <div ref='visContainer' />
+      <div>
+        <div>{ label }</div>
+        <div ref='visContainer' />
+      </div>
     );
   }
 });
 
-return VegaVis;
+return FacetingVegaVis;
 });

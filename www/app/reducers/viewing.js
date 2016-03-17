@@ -149,7 +149,10 @@ return function reduceViewing(oldState = DEFAULT_STATE, action) {
       // folder and the filter state is the same.
       if (oldState.selections.folderId === newState.selections.folderId &&
           oldState.filtering === newState.filtering ) {
-        return oldState.live.conversationsView;
+        return {
+          root: oldState.live.conversationsView,
+          sidebarViews: oldState.live.conversationsSidebarViews
+        };
       }
       oldState.live.conversationsView.removeListener(
         'seeked', onConversationsViewSeeked);
@@ -182,7 +185,8 @@ return function reduceViewing(oldState = DEFAULT_STATE, action) {
       });
     } else {
       results = {
-        root: mailApi.viewFolderConversations(newState.live.folder)
+        root: mailApi.viewFolderConversations(newState.live.folder),
+        sidebarViews: []
       };
     }
     results.root.on('seeked', onConversationsViewSeeked);

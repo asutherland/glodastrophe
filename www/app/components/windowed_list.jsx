@@ -35,12 +35,13 @@ var WindowedList = React.createClass({
   mixins: [ComponentWidthMixin, PureRenderMixin],
 
   propTypes: {
-    selectedId: React.PropTypes.string,
-    view: React.PropTypes.object.isRequired,
     conditionalWidget: React.PropTypes.func,
-    widget: React.PropTypes.func,
-    unitSize: React.PropTypes.number.isRequired,
+    passProps: React.PropTypes.object,
     pick: React.PropTypes.func.isRequired,
+    selectedId: React.PropTypes.string,
+    unitSize: React.PropTypes.number.isRequired,
+    view: React.PropTypes.object.isRequired,
+    widget: React.PropTypes.func,
   },
 
   getInitialState: function() {
@@ -145,6 +146,7 @@ var WindowedList = React.createClass({
     // Note: The react-widget seems to be making the assumption that we'll use
     // the relIndex as our key, although it doesn't actually depend on this.
     var conditionalWidget = this.props.conditionalWidget;
+    var passProps = this.props.passProps;
     var Widget;
     if (conditionalWidget) {
       Widget = conditionalWidget(item);
@@ -155,10 +157,16 @@ var WindowedList = React.createClass({
       // XXX come up with a better placeholder in the future.
       return <div key={ 'rel' + relIndex }>LoadinG</div>;
     }
-    return <Widget key={ item.id } item={ item } serial={ item.serial }
-                   selected={ this.props.selectedId === item.id }
-                   pick={ this.props.pick }
-                   widthBudget={ this.state.componentWidth } />;
+    return (
+      <Widget
+        {...passProps}
+        key={ item.id }
+        item={ item }
+        serial={ item.serial }
+        selected={ this.props.selectedId === item.id }
+        pick={ this.props.pick }
+        />
+    );
   }
 });
 

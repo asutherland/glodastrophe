@@ -43,13 +43,17 @@ var MessageListPane = React.createClass({
       return <div></div>;
     }
 
+    const passProps = {
+      navigateToDraft: this.props.onNavigateToDraft
+    };
+
     return (
       <div className="message-list-scroll-region">
         <WholeWindowedList
           view={ view }
           conditionalWidget={ this._pickMessageWidget }
+          passProps={ passProps }
           pick={ this.props.onSelectMessageId }
-          navigateToDraft={ this.props.onNavigateToDraft }
           selectedId={ this.props.selectedMessageId }
           />
       </div>

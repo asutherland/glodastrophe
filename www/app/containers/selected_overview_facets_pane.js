@@ -8,6 +8,7 @@ const { connect } = require('react-redux');
 
 const mapStateToProps = (state) => {
   return {
+    views: []
   };
 };
 
