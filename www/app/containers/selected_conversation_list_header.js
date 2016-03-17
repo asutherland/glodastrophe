@@ -7,18 +7,24 @@ const ConversationListHeader =
 const { connect } = require('react-redux');
 
 const { toggleSidebar } = require('../actions/sidebar');
-const { navigateToDraft } = require('../actions/viewing');
+const { navigateToDraft, addVisualization } = require('../actions/viewing');
 
 const mapStateToProps = (state) => {
   return {
+    // XXX serial should be reflected through too based on usage.
+    conversationSidebarDefsView:
+      state.viewing.visualizationDefs.conversationSidebarDefsView,
     mailApi: state.mailApi,
     view: state.viewing.live.conversationsView,
-    viewTocMetaSerial: state.viewing.serials.viewTocMetaSerial
+    viewTocMetaSerial: state.viewing.serials.viewTocMetaSerial,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    onAddSidebarVis: (visDef) => {
+      dispatch(addVisualization('sidebar', visDef));
+    },
     onNavigateToDraft: (draftMessageId) => {
       dispatch(navigateToDraft(draftMessageId));
     },

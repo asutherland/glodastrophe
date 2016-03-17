@@ -35,7 +35,7 @@ const Home = React.createClass({
           view={ mailApi.accounts }
           widget={ AccountHome }
           />
-        <div>
+        <div style={ { paddingTop: '1em '} }>
           <Link to="/settings/accounts/add">
             <FormattedMessage
               id='settingsAccountAddLink'

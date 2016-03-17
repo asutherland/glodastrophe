@@ -7,6 +7,7 @@ const PureRenderMixin = require('react-addons-pure-render-mixin');
 const { injectIntl } = require('react-intl');
 
 const AppBar = require('material-ui/lib/app-bar');
+const Divider = require('material-ui/lib/divider');
 const FontIcon = require('material-ui/lib/font-icon');
 const IconButton = require('material-ui/lib/icon-button');
 const IconMenu = require('material-ui/lib/menus/icon-menu');
@@ -22,9 +23,11 @@ const ConversationListHeader = React.createClass({
   mixins: [PureRenderMixin],
 
   propTypes: {
+    conversationSidebarDefsView: React.PropTypes.object,
     mailApi: React.PropTypes.object.isRequired,
     view: React.PropTypes.object,
     viewTocMetaSerial: React.PropTypes.number,
+    onAddSidebarVis: React.PropTypes.func.isRequired,
     onNavigateToDraft: React.PropTypes.func.isRequired,
     onToggleSidebar: React.PropTypes.func.isRequired,
   },
@@ -85,7 +88,6 @@ const ConversationListHeader = React.createClass({
     // change.
   },
 
-
   render: function() {
     const view = this.props.view;
 
@@ -110,6 +112,11 @@ const ConversationListHeader = React.createClass({
     // connectivity, etc. rather than having an omnipresent distraction that
     // requires user attention to interpret.
 
+    // NB: The MenuItem nesting idiom using props like this is a little awkward.
+    // I'm flattening things because I've had trouble with the linter not
+    // seeming to handle JSX inside prop values and because it's really weird
+    // non-idiomatic stuff that does bad indentation things.
+
     const menuButton = (
       <IconButton
         tooltip={ this.props.intl.formatMessage({ id: 'toggle_sidebar' }) }
@@ -117,6 +124,26 @@ const ConversationListHeader = React.createClass({
         <FontIcon className="material-icons">menu</FontIcon>
       </IconButton>
     );
+
+    const sidebarAddMenuItems =
+      this.props.conversationSidebarDefsView.items.map((viewDef) => {
+        const addVis = () => {
+          this.props.onAddSidebarVis(viewDef);
+        };
+        return (
+          <MenuItem
+            primaryText={ viewDef.name }
+            onTouchTap={ addVis }
+            />
+        );
+      });
+
+    const visualizationMenuItems = [
+      <MenuItem
+        primaryText={ this.props.intl.formatMessage({ id: 'visualizations_sidebar_menu_add_root'}) }
+        menuItems={ sidebarAddMenuItems }
+        />
+    ];
 
     const actionMenuButton =
       <IconButton>
@@ -133,6 +160,10 @@ const ConversationListHeader = React.createClass({
         <MenuItem
           primaryText={ this.props.intl.formatMessage({ id: 'conversations_grow_view_menu_item' }) }
           onTouchTap={ this.onGrowView } />
+        <Divider />
+        <MenuItem
+          primaryText={ this.props.intl.formatMessage({ id: 'visualizations_adding_menu_root' }) }
+          menuItems={ visualizationMenuItems } />
       </IconMenu>
     );
 

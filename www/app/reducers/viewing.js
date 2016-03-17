@@ -48,7 +48,7 @@ function buildFilterSpec(filtering) {
       filter.body = textFilter.filterText;
     }
   }
-  for (let [filterKey, filterValue] of filtering.otherFilters.items()) {
+  for (let [filterKey, filterValue] of filtering.otherFilters) {
     filter[filterKey] = filterValue;
   }
   return filter;
@@ -69,12 +69,13 @@ const DEFAULT_STATE = {
       filterSubject: true,
       filterBody: false
     },
-    otherFilters: []
+    otherFilters: new Map()
   },
   live: {
     account: null,
     folder: null,
     conversationsView: null,
+    conversationsSidebarViews: [],
     conversation: null,
     messagesView: null,
   },
@@ -87,9 +88,15 @@ const DEFAULT_STATE = {
   },
   visualizations: {
     conversationsOverview: [],
-    conversationsSidebar: [],
+    conversationsSidebar: [
+      // TEMPORARY DEFAULT HACK!
+      require('gelam/extras/vis_facet/schemas/facet_activity_sparkline')
+    ],
     conversationSummary: null,
     conversationOverview: []
+  },
+  visualizationDefs: {
+    conversationSidebarDefsView: mailApi.viewRawList('vis_facet', 'faceters')
   }
 };
 
@@ -154,19 +161,32 @@ return function reduceViewing(oldState = DEFAULT_STATE, action) {
       return null;
     }
 
-    let view;
-    // Need a new view.
-    if (newState.filtering.textFilter.filterText.length >= MIN_TEXTFILTER_LEN ||
-        newState.filtering.otherFilters.size) {
-      view = mailApi.searchFolderConversations({
+    const { filtering, visualizations } = newState;
+
+    // - Need a new view.
+    const needFilter =
+      filtering.textFilter.filterText.length >= MIN_TEXTFILTER_LEN ||
+      filtering.otherFilters.size;
+    const haveVisFacets =
+      visualizations.conversationsOverview.length > 0 ||
+      visualizations.conversationsSidebar.length > 0;
+
+    let results;
+    if (needFilter || haveVisFacets) {
+      results = mailApi.searchFolderConversations({
         folder: newState.live.folder,
-        filter: buildFilterSpec(newState.filtering)
+        filter: buildFilterSpec(filtering),
+        derivedViews: {
+          sidebarViews: visualizations.conversationsSidebar.concat()
+        }
       });
     } else {
-      view = mailApi.viewFolderConversations(newState.live.folder);
+      results = {
+        root: mailApi.viewFolderConversations(newState.live.folder)
+      };
     }
-    view.on('seeked', onConversationsViewSeeked);
-    return view;
+    results.root.on('seeked', onConversationsViewSeeked);
+    return results;
   };
 
   /**
@@ -206,6 +226,11 @@ return function reduceViewing(oldState = DEFAULT_STATE, action) {
     return view;
   };
 
+  /**
+   * Flag for use by the update serials actions to tell us to update the serials
+   * object.  Not explicitly based on action type matching because there are
+   * also view guards.
+   */
   let dirtySerials = false;
   switch (action.type) {
     case SELECT_ACCOUNT: {
@@ -341,12 +366,24 @@ return function reduceViewing(oldState = DEFAULT_STATE, action) {
       }
       newState.filtering = {
         textFilter: oldState.filtering.textFilter,
-        otherFilters: otherFilters
+        otherFilters
       };
       break;
     }
 
     case ADD_VIS: {
+      newState.visualizations = Object.assign({}, oldState.visualizations);
+      switch (action.slot) {
+        case 'sidebar': {
+          newState.visualizations.conversationsSidebar =
+            newState.visualizations.conversationsSidebar.concat(
+              [action.visDef]);
+          break;
+        }
+        default: {
+          throw new Error('bad slot: ' + action.slot);
+        }
+      }
       break;
     }
 
@@ -368,7 +405,8 @@ return function reduceViewing(oldState = DEFAULT_STATE, action) {
   // the fact that the ensure*() methods below access sibling fields in the
   // objects that use object initialization syntax.  That obviously does not
   // work.  Ideas/patches appreciated for how to make this all less ugly.
-  if (newState.live !== oldState.live) {
+  if (newState.live !== oldState.live ||
+      newState.visualizations !== oldState.visualizations) {
     dirtySerials = true;
     // TODO: consider how to deal with conversation deletion.  The best solution
     // probably involves the proxy in the back-end maintaining the selection
@@ -384,7 +422,9 @@ return function reduceViewing(oldState = DEFAULT_STATE, action) {
         newState.live.conversation.on('change', onConversationChange);
       }
     }
-    newState.live.conversationsView = ensureConversationsView();
+    ({ root: newState.live.conversationsView,
+       sidebarViews: newState.live.conversationsSidebarViews } =
+         ensureConversationsView());
     newState.live.messagesView = ensureMessagesView();
   }
 

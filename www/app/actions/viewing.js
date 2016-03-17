@@ -135,24 +135,27 @@ return {
     };
   },
 
-  addVisualization(visDef) {
+  addVisualization(slot, visDef) {
     return {
       type: ADD_VIS,
+      slot,
       visDef
     };
   },
 
-  modifyVisualization(visId, visDef) {
+  modifyVisualization(slot, visId, visDef) {
     return {
       type: MODIFY_VIS,
+      slot,
       visId,
       visDef
     };
   },
 
-  removeVisualization(visId) {
+  removeVisualization(slot, visId) {
     return {
       type: REMOVE_VIS,
+      slot,
       visId
     };
   }

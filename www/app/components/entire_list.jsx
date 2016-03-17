@@ -33,6 +33,15 @@ var PureRenderMixin = require('react-addons-pure-render-mixin');
 var EntireList = React.createClass({
   mixins: [PureRenderMixin],
 
+  propTypes: {
+    selectedId: React.PropTypes.string,
+    view: React.PropTypes.object.isRequired,
+    conditionalWidget: React.PropTypes.func,
+    widget: React.PropTypes.func,
+    itemHeight: React.PropTypes.number,
+    pick: React.PropTypes.func.isRequired,
+  },
+
   defaultProps: {
     itemHeight: 0
   },

@@ -5,6 +5,10 @@ return {
   sidebar_accounts_label: 'Accounts',
   sidebar_folders_label: 'Folders',
 
+  visualizations_adding_menu_root: 'Visualizations',
+  visualizations_sidebar_menu_add_root: 'Add to Sidebar',
+
+
   // --- Account Home
   accountHomeShow3Col: '3-Column View',
   accountHomeShowFolders: 'Folders',

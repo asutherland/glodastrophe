@@ -8,10 +8,11 @@ const { connect } = require('react-redux');
 
 const mapStateToProps = (state) => {
   return {
+    views: state.live.conversationsSidebarViews
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (/*dispatch*/) => {
   return {
   };
 };
