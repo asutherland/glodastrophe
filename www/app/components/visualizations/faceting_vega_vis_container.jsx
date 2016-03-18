@@ -7,9 +7,10 @@ const PureRenderMixin = require('react-addons-pure-render-mixin');
 // We're fine pulling in all of Vega in the front-end.
 //const vega = require('vega');
 
-const WholeWindowedList = require('../whole_windowed_list');
+const EntireMaterialList = require('../entire_material_list');
 
-const FacetingVegaVis = require('../visualizations/faceting_vega_vis');
+const makeFacetingVegaVis =
+  require('../list_item_factories/faceting_vega_vis_item');
 
 
 /**
@@ -63,11 +64,14 @@ const FacetingVegaVisContainer = React.createClass({
       view,
       viewDef
     };
+
     return (
-      <WholeWindowedList
+      <EntireMaterialList
+        subheader={ viewDef.frontend.header }
         view={ view }
-        widget={ FacetingVegaVis }
+        viewEvent={ 'seeked' }
         passProps={ passProps }
+        listItemFactory={ makeFacetingVegaVis }
         />
     );
   }

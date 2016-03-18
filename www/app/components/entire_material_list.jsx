@@ -25,10 +25,13 @@ var EntireMaterialList = React.createClass({
   mixins: [PureRenderMixin],
 
   propTypes: {
+    passProps: React.PropTypes.object,
     pick: React.PropTypes.func.isRequired,
     selectedId: React.PropTypes.string,
     subheader: React.PropTypes.string.isRequired,
     view: React.PropTypes.object.isRequired,
+    // allows us to sorta transparently support both view types.
+    viewEvent: React.PropTypes.string.isRequired,
     /**
      * We have to use a factory instead of a widget because the
      * SelectableContainerEnhance depends on being able to introspect the
@@ -49,26 +52,28 @@ var EntireMaterialList = React.createClass({
   },
 
   componentWillMount: function() {
-    this.boundDirtyHandler = this.handleDirty; //.bind(this);
-    this.boundRenderer = this.renderItem; //.bind(this);
-    this.boundSeek = this.seek;
-
     var view = this.props.view;
-    view.on('complete', this.boundDirtyHandler);
+    view.on(this.props.viewEvent, this.handleDirty);
+    if (this.props.viewEvent === 'seeked') {
+      view.seekToTop(10, 990);
+    }
   },
 
   componentWillUnmount: function() {
     var view = this.props.view;
-    view.removeListener('complete', this.boundDirtyHandler);
+    view.removeListener(this.props.viewEvent, this.handleDirty);
   },
 
   componentWillReceiveProps: function(nextProps) {
     if (this.props.view) {
-      this.props.view.removeListener('complete', this.boundDirtyHandler);
+      this.props.view.removeListener(this.props.viewEvent, this.handleDirty);
     }
     if (nextProps.view) {
       this.setState({ serial: nextProps.view.serial });
-      nextProps.view.on('complete', this.boundDirtyHandler);
+      nextProps.view.on(this.props.viewEvent, this.handleDirty);
+      if (this.props.viewEvent === 'seeked') {
+        nextProps.view.seekToTop(10, 990);
+      }
     }
   },
 
@@ -80,8 +85,10 @@ var EntireMaterialList = React.createClass({
 
   render: function() {
     const listItemFactory = this.props.listItemFactory;
+    const { passProps } = this.props;
 
-    const children = this.props.view.items.map(listItemFactory);
+    const children = this.props.view.items.map(
+      item => listItemFactory(item, passProps));
 
     const valueLink = {
       value: this.props.selectedId,

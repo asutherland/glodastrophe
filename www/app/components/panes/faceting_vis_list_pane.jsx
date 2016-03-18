@@ -17,14 +17,11 @@ const FacetingVisListPane = React.createClass({
 
   render: function() {
     const viewWidgets = this.props.views.map((view) => {
-      const viewDef = view.viewDef;
       return (
-        <div key={ view.handle }>
-          <h3>{ viewDef.frontend.header }</h3>
-          <FacetingVegaVisContainer
-            view={ view }
-            />
-        </div>
+        <FacetingVegaVisContainer
+          key={ view.handle }
+          view={ view }
+          />
       );
     });
 

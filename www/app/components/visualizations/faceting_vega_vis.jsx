@@ -82,14 +82,8 @@ const FacetingVegaVis = React.createClass({
   },
 
   render: function() {
-    const { viewDef, item } = this.props;
-    const label = item.data[viewDef.frontend.labelFrom];
-
     return (
-      <div>
-        <div>{ label }</div>
-        <div ref='visContainer' />
-      </div>
+      <div ref='visContainer' />
     );
   }
 });

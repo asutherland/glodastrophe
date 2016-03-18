@@ -57,6 +57,7 @@ var SidebarMenu = React.createClass({
         <EntireMaterialList
           subheader={ this.props.intl.formatMessage({ id: 'sidebar_accounts_label' }) }
           view={ this.props.accountsView }
+          viewEvent={ 'complete' }
           selectedId={ this.props.selectedAccountId }
           pick={ this.props.onSelectAccountId }
           listItemFactory={ makeAccountListItem }
@@ -65,6 +66,7 @@ var SidebarMenu = React.createClass({
         <EntireMaterialList
           subheader={ this.props.intl.formatMessage({ id: 'sidebar_folders_label' }) }
           view={ this.props.accountFoldersView }
+          viewEvent={ 'complete' }
           selectedId={ this.props.selectedFolderId }
           pick={ this.props.onSelectFolderId }
           listItemFactory={ makeFolderListItem }
