@@ -1,18 +1,18 @@
 define(function(require) {
 'use strict';
 
-const FacetingVisListPane =
-  require('../components/panes/faceting_vis_list_pane');
+const VisListPane =
+  require('../components/panes/vis_list_pane');
 
 const { connect } = require('react-redux');
 
 const mapStateToProps = (state) => {
   return {
-    views: []
+    views: state.viewing.live.conversationsOverviewViews
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (/*dispatch*/) => {
   return {
   };
 };
@@ -20,7 +20,7 @@ const mapDispatchToProps = (dispatch) => {
 const SelectedOverviewFacetsPane = connect(
   mapStateToProps,
   mapDispatchToProps
-)(FacetingVisListPane);
+)(VisListPane);
 
 return SelectedOverviewFacetsPane;
 });

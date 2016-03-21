@@ -76,6 +76,7 @@ const DEFAULT_STATE = {
     folder: null,
     conversationsView: null,
     conversationsSidebarViews: [],
+    conversationsOverviewViews: [],
     conversation: null,
     messagesView: null,
   },
@@ -87,13 +88,18 @@ const DEFAULT_STATE = {
     messagesViewTocMetaSerial: null
   },
   visualizations: {
-    conversationsOverview: [],
+    conversationsOverview: [
+      // TEMPORARY DEFAULT HACK!
+      require('gelam/extras/vis_facet/schemas/overview_authored_content_heatmap')
+    ],
     conversationsSidebar: [
       // TEMPORARY DEFAULT HACK!
-      require('gelam/extras/vis_facet/schemas/facet_activity_sparkline')
+      require('gelam/extras/vis_facet/schemas/facet_activity_sparkline'),
+      require('gelam/extras/vis_facet/schemas/facet_domain_activity'),
     ],
     conversationSummary: null,
-    conversationOverview: []
+    conversationOverview: [
+    ]
   },
   visualizationDefs: {
     conversationSidebarDefsView: mailApi.viewRawList('vis_facet', 'faceters')
@@ -151,7 +157,8 @@ return function reduceViewing(oldState = DEFAULT_STATE, action) {
           oldState.filtering === newState.filtering ) {
         return {
           root: oldState.live.conversationsView,
-          sidebarViews: oldState.live.conversationsSidebarViews
+          sidebarViews: oldState.live.conversationsSidebarViews,
+          overviewViews: oldState.live.conversationsOverviewViews
         };
       }
       oldState.live.conversationsView.removeListener(
@@ -180,13 +187,15 @@ return function reduceViewing(oldState = DEFAULT_STATE, action) {
         folder: newState.live.folder,
         filter: buildFilterSpec(filtering),
         derivedViews: {
-          sidebarViews: visualizations.conversationsSidebar.concat()
+          sidebarViews: visualizations.conversationsSidebar.concat(),
+          overviewViews: visualizations.conversationsOverview.concat()
         }
       });
     } else {
       results = {
         root: mailApi.viewFolderConversations(newState.live.folder),
-        sidebarViews: []
+        sidebarViews: [],
+        overviewViews: []
       };
     }
     results.root.on('seeked', onConversationsViewSeeked);
@@ -427,7 +436,8 @@ return function reduceViewing(oldState = DEFAULT_STATE, action) {
       }
     }
     ({ root: newState.live.conversationsView,
-       sidebarViews: newState.live.conversationsSidebarViews } =
+       sidebarViews: newState.live.conversationsSidebarViews,
+       overviewViews: newState.live.conversationsOverviewViews } =
          ensureConversationsView());
     newState.live.messagesView = ensureMessagesView();
   }

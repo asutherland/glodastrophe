@@ -19,6 +19,7 @@ return {
   recreateAccount: 'Re-create Account',
   /** Delete the account permanently */
   deleteAccount: 'Delete Account',
+  syncAccountFolderList: 'Sync Folder List',
 
   // --- Settings / Setup stuff
   /** Hyperlink text to navigate to the add an account page */

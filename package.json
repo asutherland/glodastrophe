@@ -29,6 +29,8 @@
     "worker-loader": "^0.7.0"
   },
   "dependencies": {
+    "d3-hierarchy": "0.0.2",
+    "d3-scale": "^0.6.4",
     "material-ui": "^0.14.4",
     "react": "^0.14.7",
     "react-addons-pure-render-mixin": "^0.14.7",

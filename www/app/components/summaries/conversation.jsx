@@ -11,7 +11,7 @@ const Star = require('../actioners/star');
 const Unread = require('../actioners/unread');
 const Drafts = require('../actioners/drafts');
 
-//var ConvTimeThreadingVis = require('../visualizations/conv_time_threading');
+const ConvTimeThreadingVis = require('../visualizations/conv_time_threading');
 
 var ConversationSummary = React.createClass({
   mixins: [PureRenderMixin],
@@ -19,7 +19,8 @@ var ConversationSummary = React.createClass({
   propTypes: {
     item: React.PropTypes.object.isRequired,
     pick: React.PropTypes.func.isRequired,
-    selected: React.PropTypes.bool.isRequired
+    selected: React.PropTypes.bool.isRequired,
+    serial: React.PropTypes.number.isRequired
   },
 
   render: function() {
@@ -45,15 +46,13 @@ var ConversationSummary = React.createClass({
 
     var maybeVis;
     if (conv.messageTidbits.length > 1) {
-      /*
       maybeVis = (
         <ConvTimeThreadingVis
           key="vis"
           conv={conv}
-          widthBudget={ this.props.widthBudget - WIDTH_WASTE }
+          widthBudget={ 426 }
           />
       );
-      */
     }
 
     return (

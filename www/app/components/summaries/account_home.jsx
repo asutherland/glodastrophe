@@ -46,6 +46,10 @@ var AccountHome = React.createClass({
             label={ formatMessage({ id: 'deleteAccount' }) }
             onTouchTap={ this.deleteAccount }
             />
+          <FlatButton
+            label={ formatMessage({ id: 'syncAccountFolderList' }) }
+            onTouchTap={ this.syncFolderList }
+            />
         </CardActions>
       </Card>
     );
@@ -64,6 +68,10 @@ var AccountHome = React.createClass({
 
   deleteAccount: function() {
     this.props.item.deleteAccount();
+  },
+
+  syncFolderList: function() {
+    this.props.item.syncFolderList();
   }
 });
 

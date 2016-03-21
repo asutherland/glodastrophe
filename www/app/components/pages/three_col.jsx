@@ -41,14 +41,14 @@ const CONVERSATION_PANE_CONTAINER = {
 };
 
 const CONVERSATION_PANE_HEADER = {
-  height: '64px'
+  height: '128px'
 };
 
 const CONVERSATION_PANE_SCROLL_REGION = {
-  height: 'calc(100% - 64px)',
+  height: 'calc(100% - 128px)',
   width: '100%',
   position: 'absolute',
-  top: '64px',
+  top: '128px',
   left: '0'
 };
 

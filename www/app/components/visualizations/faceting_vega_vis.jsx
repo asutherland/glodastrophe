@@ -45,6 +45,9 @@ const FacetingVegaVis = React.createClass({
   componentDidUpdate: function() {
     const { vis } = this.state;
     const { view, viewDef, item } = this.props;
+    if (!vis) {
+      return;
+    }
 
     //
     if (viewDef.frontend.tocMetaData) {
