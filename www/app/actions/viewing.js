@@ -31,8 +31,8 @@ return {
    * internally does that waiting itself.
    */
   selectDefaultAccount() {
-    if (mailApi.accounts.length === 0) {
-      return null;
+    if (mailApi.accounts.items.length === 0) {
+      return { type: 'NOP' };
     }
     const account = mailApi.accounts.defaultAccount;
     return {
