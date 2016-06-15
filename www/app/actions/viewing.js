@@ -37,7 +37,7 @@ return {
     const account = mailApi.accounts.defaultAccount;
     return {
       type: SELECT_ACCOUNT,
-      accountId: account.id,
+      accountId: (account && account.id || null),
       folderType: 'inbox'
     };
   },

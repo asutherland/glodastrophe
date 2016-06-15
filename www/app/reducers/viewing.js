@@ -247,11 +247,17 @@ return function reduceViewing(oldState = DEFAULT_STATE, action) {
   let dirtySerials = false;
   switch (action.type) {
     case SELECT_ACCOUNT: {
-      let account = mailApi.accounts.getAccountById(action.accountId);
-      let folder = account.folders.getFirstFolderWithType(action.folderType);
+      let account = action.accountId ?
+                    mailApi.accounts.getAccountById(action.accountId) :
+                    null;
+
+      let folder = action.accountId ?
+                   account.folders.getFirstFolderWithType(action.folderType) :
+                  null;
+
       newState.selections = {
-        accountId: account.id,
-        folderId: folder.id,
+        accountId: (account && account.id) || null,
+        folderId: (folder && folder.id) || null,
         conversationId: null,
         messageId: null
       };
