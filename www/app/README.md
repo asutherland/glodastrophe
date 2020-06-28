@@ -103,7 +103,11 @@ definition with some minor wrapping.
 
 ## Coding Style, Etc. ##
 
-Current decisions that have good reasons:
+Intentional decisions that made sense in 2016 but almost certainly should be
+revisited now.  Particuarlly as it relates to JS modules.  Transpiling is now
+basically a given and this is no longer a project targeted at anyone but its
+developers, giant blobs of JS are less of a concern than they were for Firefox
+OS.
 
 * Only transpile JSX.  Stick to ES6/ES2015 features on
   http://kangax.github.io/compat-table/es6/ that beta versions of Firefox and
@@ -126,3 +130,10 @@ Current conventions that don't matter:
   used initially for a variety of legacy reasons that are no longer relevant.
   The pure functions seem cool and anything that can be done to make code
   smaller, simpler, etc. is great.
+
+## Localization ##
+
+`react-intl` was adopted originally as the best/only alternative, but
+https://www.projectfluent.org/ has come a long way since then and it seems
+appropriate to transition to
+https://github.com/projectfluent/fluent.js/tree/master/fluent-react

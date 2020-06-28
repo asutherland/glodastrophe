@@ -1,0 +1,28 @@
+{
+  "applications": {
+    "gecko": {
+      "id": "glodastrophe@visophyte.org",
+      "strict_min_version": "49.0a1"
+    }
+  },
+  "browser_action": {
+    "browser_style": false,
+    "default_icon": "glast-64.png",
+    "default_title": "Glodastrophe"
+  },
+  "description": "Technically a Messaging Client",
+  "homepage_url": "https://github.com/asutherland/glodastrophe",
+  "icons": {
+    "64": "glast-64.png"
+  },
+  "manifest_version": 2,
+  "name": "Glodastrophe",
+  "version": "0.1",
+  "background": {
+    "scripts": ["backend-main.js"]
+  },
+  "permissions": [
+    "https://phabricator.mozilla.org/*",
+    "unlimitedStorage"
+  ]
+}

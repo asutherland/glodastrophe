@@ -1,47 +1,46 @@
 ## What?
 
 glodastrophe is an experimental desktop (and maybe tablet) UI for the gaia email
-client backend.  Its name is an attempt at a clever reference that will not
-actually seem clever if you understand it.  My apologies if you understand it.
+client backend.  It's coming out of mothballs to be a Phabricator review queue
+tool, maybe.
+
+Its name was an attempt at a clever reference that will not actually seem clever
+if you understand it.  My apologies if you understand it.
 
 ## Why?
 
 User agency in messaging/communication is important.  In many ways open source
 is doing well here, but in many ways it is not.
 
+But most important is me better understanding what's up with my Phabricator
+reviews.
+
 ### Brief Comparisons with other Open Source Projects
 
-Nylas N1 is probably the most promising open source client at this time.  It's a
-desktop app developed in JS/HTML/CSS with offline capabilities.  It seems to be
-well engineered and actively developed by a serious full-time team, which is
-fantastic.  The fundamental issue is that it is architected to require an
-intermediary Python server that you either need to run or trust someone else to
-run for you (and either pay for that or "be the product", as they say).  You
-can't just point it at the IMAP server you already run for yourself or trust
-others to run for you and call it a day.  This is a significant architectural
-decision with a variety of cost, complexity, and privacy ramifications.  Which
-may or may not bother you.
+There was previously some mention of Nylas N1 and Mailpile here, but Nylas seems
+to have now been abandoned and forked to Mailspring with a closed source (but
+local) C++ sync engine and Mailpile is perhaps hibernating?
 
-Mailpile likewise has the issue of introducing an intermediary Python server
-but is then a pure webmail UI without the offline capabilities of N1.
+Although the backend supports POP3 and IMAP, any email support going forward
+will probably be limited to JMAP with the POP3 and IMAP support ripped out
+because JMAP is good and IMAP is bad and POP3 is horrible.
 
-The choice for a Python intermediary server is not crazy.  Mail clients and mail
-protocols are hard and there are great python libraries out there, whereas the
-JS mail protocol ecosystem is somewhat more recent.  The Mozilla Messaging
-experimental "raindrop" mail client many years ago also used Python for this
-reason too.  And there were upsides despite the additional server overhead, etc.
+The main thing to know is that you should probably use something else.  Probably
+Thunderbird!
 
-The gaia mail backend was explicitly designed to run on Firefox OS phone devices
-with existing mail servers and no provision for additional server
-intermediaries.  While the no-extra-servers constraint was in some ways forced,
-it was also done with the belief that the best way to improve servers is to
-work with existing open source mail servers like Dovecot and Cyrus instead of
-creating a new intermediary server.  Especially since servers like Dovecot and
-Cyrus are already able to run at affordable scale.  Fastmail's efforts to
-introduce conversations support in Cyrus and establish the JMAP protocol and
-implement it in Cyrus is arguably a validation of this hope.
+## How do I try and use it?
 
-## How do I use it / hack on it?
+It's going to be a webextension now, so probably wait for that.  If you want to
+develop it, probably check out the docs at
+https://github.com/asutherland/tabdrome#developing because that's the existing
+setup I'm reusing.
+
+See DIRECTORIES.md to better understand what's going on with all these
+directories.
+
+## How did I previsouly use it / hack on it?
+
+**THE BELOW IS OUTDATED UNLESS TCPSOCKET SUPPORT COMES BACK**
 
 I'm in the process of finishing up an overhaul so we use the following emerging
 standard stack:
@@ -115,3 +114,4 @@ Make sure you do or have done the following:
 - Probably reload the page so we can make sure that the dangerous permissions
   are totally available to the code.
 - Now you can add an email account!  Hooray!
+
