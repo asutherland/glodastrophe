@@ -1,13 +1,10 @@
-define(function (require) {
-'use strict';
-
-var React = require('react');
+import React from 'react';
 
 /**
  * Widget rendered for matching MailPeep instances in autocomplete results.
  */
-var ComposePeepSuggestion = React.createClass({
-  render: function() {
+export default class ComposePeepSuggestion extends React.Component {
+  render() {
     var classes = 'compose-peep-suggestion';
     var peep = this.props.peep;
 
@@ -28,7 +25,4 @@ var ComposePeepSuggestion = React.createClass({
       </div>
     );
   }
-});
-
-return ComposePeepSuggestion;
-});
+};

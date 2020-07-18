@@ -1,9 +1,6 @@
-define(function (require) {
-'use strict';
+import React from 'react';
 
-var React = require('react');
-
-const { FormattedMessage, injectIntl } = require('react-intl');
+import { Localized } from "@fluent/react";
 
 /**
  * XXX needs redux overhaul
@@ -31,8 +28,8 @@ const { FormattedMessage, injectIntl } = require('react-intl');
  * the discussion we had for gaia mail of creating a BrowserContext to replace
  * pieces of the model/header_cursor/list_cursor implementation.
  */
-var ConvFilterBar = React.createClass({
-  getInitialState: function() {
+export default class ConvFilterBar extends React.Component {
+  getInitialState() {
     this.timer = null;
     this.dirty = false;
     var filter = this.props.initialFilter || {
@@ -51,9 +48,9 @@ var ConvFilterBar = React.createClass({
       filterSubject: !!filter.subject,
       filterBody: !!filter.body
     };
-  },
+  }
 
-  componentWillUpdate: function(nextProps, nextState) {
+  componentWillUpdate(nextProps, nextState) {
     // only generate a change if some input changed.
     if (nextState.serial !== this.state.serial) {
       if (nextState.filterText && nextState.filterText.length >= 3) {
@@ -82,9 +79,9 @@ var ConvFilterBar = React.createClass({
         this.props.applyTextFilter(null);
       }
     }
-  },
+  }
 
-  render: function() {
+  render() {
     return (
       <div className="conv-filter-bar">
         <input type="text"
@@ -96,69 +93,66 @@ var ConvFilterBar = React.createClass({
           <input type="checkbox"
             checked={ this.state.filterSender }
             onChange={ this.onSenderChange } />
-          <FormattedMessage
+          <Localized
             id='filter_sender' />
         </label>
         <label>
           <input type="checkbox"
             checked={ this.state.filterRecipients }
             onChange={ this.onRecipientsChange } />
-          <FormattedMessage
+          <Localized
             id='filter_recipients' />
         </label>
         <label>
           <input type="checkbox"
             checked={ this.state.filterSubject }
             onChange={ this.onSubjectChange } />
-          <FormattedMessage
+          <Localized
             id='filter_subject' />
         </label>
         <label>
           <input type="checkbox"
             checked={ this.state.filterBody }
             onChange={ this.onBodyChange }/>
-          <FormattedMessage
+          <Localized
             id='filter_body' />
         </label>
       </div>
     );
-  },
+  }
 
-  onFilterTextChange: function(event) {
+  onFilterTextChange(event) {
     this.setState({
       serial: this.state.serial + 1,
       filterText: event.target.value
     });
-  },
+  }
 
-  onSenderChange: function(event) {
+  onSenderChange(event) {
     this.setState({
       serial: this.state.serial + 1,
       filterSender: event.target.checked
     });
-  },
+  }
 
-  onRecipientsChange: function(event) {
+  onRecipientsChange(event) {
     this.setState({
       serial: this.state.serial + 1,
       filterRecipients: event.target.checked
     });
-  },
+  }
 
-  onSubjectChange: function(event) {
+  onSubjectChange(event) {
     this.setState({
       serial: this.state.serial + 1,
       filterSubject: event.target.checked
     });
-  },
+  }
 
-  onBodyChange: function(event) {
+  onBodyChange(event) {
     this.setState({
       serial: this.state.serial + 1,
       filterBody: event.target.checked
     });
-  },
-});
-
-return injectIntl(ConvFilterBar);
-});
+  }
+};

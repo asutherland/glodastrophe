@@ -1,17 +1,14 @@
-define(function (require) {
-'use strict';
+import React from 'react';
 
-const React = require('react');
+import { Localized } from "@fluent/react";
+import { Link } from 'react-router-dom';
 
-const { FormattedMessage } = require('react-intl');
-const { Link } = require('react-router');
-
-const EntireList = require('../entire_list');
+import EntireList from '../entire_list';
 
 // XXX connect() this widget into redux-space so we can stop doing this.
-const mailApi = require('gelam/main-frame-setup');
+import mailApi from 'gelam/main-frame-setup';
 
-const AccountHome = require('../summaries/account_home');
+import AccountHome from '../summaries/account_home';
 
 const containerStyle = {
   margin: '10px'
@@ -27,8 +24,8 @@ const containerStyle = {
  * There is no intent to provide a useful UX here.  Ideally evolve this into
  * nothingness and evolve the summaries into something useful.
  */
-const Home = React.createClass({
-  render: function() {
+export default class Home extends React.Component {
+  render() {
     return (
       <div style={ containerStyle }>
         <EntireList
@@ -37,27 +34,24 @@ const Home = React.createClass({
           />
         <div style={ { paddingTop: '1em '} }>
           <Link to="/settings/accounts/add">
-            <FormattedMessage
+            <Localized
               id='settingsAccountAddLink'
               />
           </Link>
         </div>
         <div>
           <h2>
-            <FormattedMessage
+            <Localized
               id='debugHomeHeader'
               />
           </h2>
           <Link to="/debug/cronsync">
-            <FormattedMessage
+            <Localized
               id='debugCronSync'
               />
           </Link>
         </div>
       </div>
     );
-  },
-});
-
-return Home;
-});
+  }
+};

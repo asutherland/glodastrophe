@@ -1,10 +1,7 @@
-define(function(require) {
-'use strict';
+import React from 'react';
 
-var React = require('react');
-
-var embodyPlain = require('gelam/clientapi/bodies/embody_plain');
-var embodyHTML = require('gelam/clientapi/bodies/embody_html');
+import embodyPlain from 'gelam/clientapi/bodies/embody_plain';
+import embodyHTML from 'gelam/clientapi/bodies/embody_html';
 
 /**
  * Renders the body parts for a message.  If the body parts are not yet
@@ -20,22 +17,21 @@ var embodyHTML = require('gelam/clientapi/bodies/embody_html');
  *
  * This is a single-use binding and parents should key us appropriately!
  */
-var MessageBody = React.createClass({
-  defaultProps: {
-  },
-
-  getInitialState: function() {
-    return {
+export default class MessageBody extends React.Component {
+  constructor(props) {
+    this.state = {
       embodied: false
     };
-  },
+
+    this.placeholderRef = React.createRef();
+  }
 
   /**
    * Function to create the body parts, if possible.  Bails early if the body
    * parts aren't retrieved yet.  This allows the method to directly be invoked
    * every time a "change" event is received for the message.
    */
-  _embody: function() {
+  _embody() {
     var message = this.props.message;
     if (this.state.embodied) {
       return;
@@ -44,7 +40,7 @@ var MessageBody = React.createClass({
       return;
     }
 
-    var contentNode = React.findDOMNode(this.refs.placeholder);
+    var contentNode = this.placeholderRef.current;
     var embodyPromises = [];
 
     message.bodyReps.forEach(function(rep) {
@@ -80,23 +76,23 @@ var MessageBody = React.createClass({
         }
       });
     }
-  },
+  }
 
-  _showEmbeddedImages: function() {
+  _showEmbeddedImages() {
     var message = this.props.message;
     if (!message.embeddedImagesDownloaded) {
       return;
     }
 
-    var contentNode = React.findDOMNode(this.refs.placeholder);
+    var contentNode = this.placeholderRef.current;
     Array.from(contentNode.querySelectorAll('iframe')).forEach((iframe) => {
       message.showEmbeddedImages(iframe.contentDocument.body);
     });
 
     message.removeListener('change', this._showEmbeddedImages);
-  },
+  }
 
-  componentWillMount: function() {
+  componentWillMount() {
     // Trigger body part download if they aren't already downloaded.
     var message = this.props.message;
     if (!message.bodyRepsDownloaded) {
@@ -104,27 +100,27 @@ var MessageBody = React.createClass({
       // every time we hear a change, maybe try and embody ourselves
       message.on('change', this._embody);
     }
-  },
+  }
 
-  componentDidMount: function() {
+  componentDidMount() {
     // Try and embody if we have the parts.  componentWillMount took care of
     // making the requests already, if needed.
     this._embody();
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     this.props.message.removeListener('change', this._embody);
     this.props.message.removeListener('change', this._showEmbeddedImages);
-  },
+  }
 
-  componentWillReceiveProps: function(nextProps) {
+  componentWillReceiveProps(nextProps) {
     // Assert that our message never changes.
     if (nextProps.message !== this.props.message) {
       throw new Error('Our message must never change!');
     }
-  },
+  }
 
-  shouldComponentUpdate: function(/*nextProps, nextState*/) {
+  shouldComponentUpdate(/*nextProps, nextState*/) {
     // We handle everything internally for a single message.  We will never
     // receive new state because we require that our owner/parent be keyed so
     // that neither it nor its child bindings will be reused.
@@ -132,23 +128,20 @@ var MessageBody = React.createClass({
     // (We will be listening for "change" events and directly manipulating the
     // DOM when the body parts show up.)
     return false;
-  },
+  }
 
-  render: function() {
+  render() {
     var msg = this.props.item;
     return (
       <div
-        ref="placeholder"
+        ref={ this.placeholderRef }
         className="message-body-container"></div>
     );
-  },
+  }
 
-  clickMessage: function() {
+  clickMessage() {
     if (this.props.pick) {
       this.props.pick(this.props.item);
     }
   }
-});
-
-return MessageBody;
-});
+};

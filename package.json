@@ -3,11 +3,7 @@
   "volo": {
     "baseUrl": "www/lib",
     "dependencies": {
-      "react-list": "github:orgsync/react-list/0.4.2",
-      "react-intl.min": "github:yahoo/react-intl/v1.1.0#dist/react-intl.min.js",
       "evt": "github:jrburke/evt/1.2.1",
-      "require": "github:jrburke/requirejs/2.1.17",
-      "autosuggest": "github:moroshko/react-autosuggest/v1.14.0#dist/standalone/autosuggest.js",
       "medium-editor": "github:yabwe/medium-editor/5.2.0"
     }
   },
@@ -24,31 +20,39 @@
     "babel-eslint": "^10.1.0",
     "babel-loader": "^8.1.0",
     "chai": "^4.2.0",
+    "css-loader": "^3.6.0",
     "eslint": "^7.3.1",
     "eslint-plugin-react": "^7.20.1",
+    "file-loader": "^6.0.0",
     "html-webpack-plugin": "^4.3.0",
     "mocha": "^8.0.1",
+    "raw-loader": "^4.0.1",
     "react-hot-loader": "^4.12.21",
+    "style-loader": "^1.2.1",
     "transfer-webpack-plugin": "^0.1.4",
+    "url-loader": "^4.1.0",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12",
     "webpack-dev-server": "^3.11.0",
     "worker-loader": "^2.0.0"
   },
   "dependencies": {
-    "@material-ui/core": "^4.10.2",
-    "@material-ui/icons": "^4.9.1",
+    "@fluent/bundle": "^0.16.0",
+    "@fluent/langneg": "^0.5.0",
+    "@fluent/react": "^0.13.0",
     "d3-hierarchy": "^1.1.9",
     "d3-scale": "^3.2.1",
+    "intl-pluralrules": "^1.2.0",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-intl": "^4.7.5",
     "react-redux": "^7.2.0",
     "react-router-dom": "^5.2.0",
     "react-split-pane": "^0.1.91",
     "redux": "^4.0.5",
     "redux-thunk": "^2.3.0",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.88.2",
     "vega": "^5.13.0"
   }
 }

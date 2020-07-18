@@ -1,27 +1,20 @@
-define(function (require) {
-'use strict';
+import React from 'react';
 
-var React = require('react');
+import { Localized } from "@fluent/react";
 
-var FormattedMessage = require('react-intl').FormattedMessage;
+import EntireList from '../entire_list';
 
-var EntireList = require('../entire_list');
+import FolderSummary from '../summaries/folder';
 
-var FolderSummary = require('../summaries/folder');
-
-var PureRenderMixin = require('react-addons-pure-render-mixin');
-
-var FolderListPane = React.createClass({
-  mixins: [PureRenderMixin],
-
-  getInitialState: function() {
+export default class FolderListPane extends React.PureComponent {
+  getInitialState() {
     return {
       error: null,
       account: null,
     };
-  },
+  }
 
-  _getAccount: function(accountId) {
+  _getAccount(accountId) {
     if (!accountId) {
       this.setState({
         error: null,
@@ -41,21 +34,21 @@ var FolderListPane = React.createClass({
         });
       }.bind(this)
     );
-  },
+  }
 
-  componentWillMount: function() {
+  componentWillMount() {
     this._getAccount(this.props.accountId);
-  },
+  }
 
-  componentWillReceiveProps: function(nextProps) {
+  componentWillReceiveProps(nextProps) {
     this._getAccount(nextProps.accountId);
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     // We don't want to release the folders view; it's not owned by us.
-  },
+  }
 
-  render: function() {
+  render() {
     if (!this.props.accountId) {
       return <div></div>;
     }
@@ -77,18 +70,15 @@ var FolderListPane = React.createClass({
           pick={ this.props.pick }
           />
         <button onClick={ this.syncFolderList }>
-          <FormattedMessage
+          <Localized
             id='refreshFolderList'
             />
         </button>
       </div>
     );
-  },
+  }
 
-  syncFolderList: function() {
+  syncFolderList() {
     this.state.account.syncFolderList();
   }
-});
-
-return FolderListPane;
-});
+}

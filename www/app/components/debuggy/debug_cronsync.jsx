@@ -1,14 +1,10 @@
-define(function (require) {
-'use strict';
+import React from 'react';
 
-const React = require('react');
+import { Localized } from "@fluent/react";
 
-const { FormattedMessage } = require('react-intl');
+import DebugAccountNewSummary from './debug_account_new_summary';
 
-const DebugAccountNewSummary = require('./debug_account_new_summary');
-
-const mailApi = require('gelam/main-frame-setup');
-
+import mailApi from 'gelam/main-frame-setup';
 
 /**
  * Cronsync-centered debug view.
@@ -25,27 +21,27 @@ const mailApi = require('gelam/main-frame-setup');
  * - We show a "clear" button to explicitly request that the new tracking be
  *   cleared
  */
-var DebugCronsync = React.createClass({
-  getInitialState: function() {
+export default class DebugCronsync extends React.Component {
+  getInitialState() {
     return {
       newAggr: null
     };
-  },
+  }
 
-  componentDidMount: function() {
+  componentDidMount() {
     mailApi.on('newMessagesUpdate', this.onNewMessagesUpdate);
     mailApi.flushNewAggregates();
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     mailApi.removeListener('newMessagesUpdate', this.onNewMessagesUpdate);
-  },
+  }
 
-  onNewMessagesUpdate: function(newAggr) {
+  onNewMessagesUpdate(newAggr) {
     this.setState({ newAggr });
-  },
+  }
 
-  render: function() {
+  render() {
     let perAccountDivs = [];
     let newAggr = this.state.newAggr;
     if (newAggr) {
@@ -64,11 +60,11 @@ var DebugCronsync = React.createClass({
     return (
       <div className="debug-cronsync-pane">
         <div className="debug-cronsync-actions">
-          <button onClick={ this.forceCronSync }><FormattedMessage
+          <button onClick={ this.forceCronSync }><Localized
             id='forceCronSync'
             />
           </button>
-          <button onClick={ this.forceFlushNew }><FormattedMessage
+          <button onClick={ this.forceFlushNew }><Localized
             id='forceFlushNew'
             />
           </button>
@@ -78,16 +74,13 @@ var DebugCronsync = React.createClass({
         </div>
       </div>
     );
-  },
+  }
 
-  forceCronSync: function() {
+  forceCronSync() {
     mailApi.debugForceCronSync({});
-  },
+  }
 
-  forceFlushNew: function() {
+  forceFlushNew() {
     mailApi.flushNewAggregates();
   }
-});
-
-return DebugCronsync;
-});
+};

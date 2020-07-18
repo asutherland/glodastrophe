@@ -1,17 +1,19 @@
-define(function (require) {
-'use strict';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-var React = require('react');
-var PureRenderMixin = require('react-addons-pure-render-mixin');
+import { QuantizedHeightList } from 'quantized-list';
 
-var ReactList = require('react-list').QuantizedHeightList;
-
-var ComponentWidthMixin = require('react-component-width-mixin');
 
 /**
  * Bind a WindowedListView to a ReactList.  Our mapping is currently extremely
  * simple.  We just trigger a re-render whenever we are hinted that anything
  * has happened in the list.
+ *
+ * RECENT / XXX: We used to depend on react-component-width-mixin.  This has
+ * been removed for now, but it's probably appropriate to adopt use of a hook
+ * like `useResizeObserver` from https://github.com/jaredLunde/react-hook.
+ * (And in general given the component is already fairly complex, perhaps a hook
+ * rewrite is the way to go anyways?)
  *
  * ## shouldComponentUpdate and generations/serial ##
  *
@@ -31,28 +33,16 @@ var ComponentWidthMixin = require('react-component-width-mixin');
  * and shouldComponentUpdate can just check the serial between the old props
  * and the new props.
  */
-var WindowedList = React.createClass({
-  mixins: [ComponentWidthMixin, PureRenderMixin],
-
-  propTypes: {
-    conditionalWidget: React.PropTypes.func,
-    passProps: React.PropTypes.object,
-    pick: React.PropTypes.func.isRequired,
-    selectedId: React.PropTypes.string,
-    unitSize: React.PropTypes.number.isRequired,
-    view: React.PropTypes.object.isRequired,
-    widget: React.PropTypes.func,
-  },
-
-  getInitialState: function() {
+export default class WindowedList extends React.PureComponent {
+  getInitialState() {
     return {
       // We haven't actually rendered anything at this point, don't latch the
       // current serial.
       serial: null
     };
-  },
+  }
 
-  componentWillMount: function() {
+  componentWillMount() {
     this.boundDirtyHandler = this.handleDirty; //.bind(this);
     this.boundRenderer = this.renderItem; //.bind(this);
     this.boundSeek = this.seek;
@@ -60,14 +50,14 @@ var WindowedList = React.createClass({
     var view = this.props.view;
     // seeked is for windowed list views
     view.on('seeked', this.boundDirtyHandler);
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     var view = this.props.view;
     view.removeListener('seeked', this.boundDirtyHandler);
-  },
+  }
 
-  componentWillReceiveProps: function(nextProps) {
+  componentWillReceiveProps(nextProps) {
     // TODO: consider whether we really want ourselves to morph like this.
     // I've already had to `key` the ReactList to insure that we get it to
     // generate a seek request against us.  That's sort of a weird regression
@@ -81,15 +71,15 @@ var WindowedList = React.createClass({
       this.setState({ serial: null });
       nextProps.view.on('seeked', this.boundDirtyHandler);
     }
-  },
+  }
 
-  handleDirty: function() {
+  handleDirty() {
     this.setState({
       serial: this.props.view.serial
     });
-  },
+  }
 
-  seek: function(offset, before, visible, after) {
+  seek(offset, before, visible, after) {
     if (this.props.view) {
       // If we're at the top of the list, use seekToTop so that we latch to
       // the top and so new conversations that come in
@@ -101,9 +91,9 @@ var WindowedList = React.createClass({
         );
       }
     }
-  },
+  }
 
-  render: function() {
+  render() {
     if (!this.props.view) {
       return <div></div>;
     }
@@ -126,7 +116,7 @@ var WindowedList = React.createClass({
     // It should instead be applying transforms on each of the items in order
     // to avoid reflowing all of the items.
     return (
-      <ReactList
+      <QuantizedHeightList
         key={ this.props.view.handle }
         seek={ this.boundSeek }
         totalHeight={ this.props.view.totalHeight }
@@ -140,9 +130,9 @@ var WindowedList = React.createClass({
         selectedId={ this.props.selectedId }
         />
     );
-  },
+  }
 
-  renderItem: function(item, relIndex/*, unitSize*/) {
+  renderItem(item, relIndex/*, unitSize*/) {
     // Note: The react-widget seems to be making the assumption that we'll use
     // the relIndex as our key, although it doesn't actually depend on this.
     var conditionalWidget = this.props.conditionalWidget;
@@ -168,7 +158,14 @@ var WindowedList = React.createClass({
         />
     );
   }
-});
+};
 
-return WindowedList;
-});
+WindowedList.propTypes = {
+  conditionalWidget: PropTypes.func,
+  passProps: PropTypes.object,
+  pick: PropTypes.func.isRequired,
+  selectedId: PropTypes.string,
+  unitSize: PropTypes.number.isRequired,
+  view: PropTypes.object.isRequired,
+  widget: PropTypes.func,
+};

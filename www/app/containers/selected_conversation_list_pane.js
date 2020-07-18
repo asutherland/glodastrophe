@@ -1,12 +1,9 @@
-define(function(require) {
-'use strict';
+import ConversationListPane from
+  '../components/panes/conversation_list';
 
-const ConversationListPane =
-  require('../components/panes/conversation_list');
+import { connect } from 'react-redux';
 
-const { connect } = require('react-redux');
-
-const { selectConversationId } = require('../actions/viewing');
+import { selectConversationId } from '../actions/viewing';
 
 const mapStateToProps = (state) => {
   return {
@@ -28,5 +25,4 @@ const SelectedConversationListPane = connect(
   mapDispatchToProps
 )(ConversationListPane);
 
-return SelectedConversationListPane;
-});
+export default SelectedConversationListPane;

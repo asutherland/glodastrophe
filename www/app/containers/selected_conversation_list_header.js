@@ -1,13 +1,10 @@
-define(function(require) {
-'use strict';
+import ConversationListHeader from
+  '../components/pane_headers/conversation_list_header';
 
-const ConversationListHeader =
-  require('../components/pane_headers/conversation_list_header');
+import { connect } from 'react-redux';
 
-const { connect } = require('react-redux');
-
-const { toggleSidebar } = require('../actions/sidebar');
-const { navigateToDraft, addVisualization } = require('../actions/viewing');
+import { toggleSidebar } from '../actions/sidebar';
+import { navigateToDraft, addVisualization } from '../actions/viewing';
 
 const mapStateToProps = (state) => {
   return {
@@ -39,5 +36,4 @@ const SelectedConversationListHeader = connect(
   mapDispatchToProps
 )(ConversationListHeader);
 
-return SelectedConversationListHeader;
-});
+export default SelectedConversationListHeader;

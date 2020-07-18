@@ -1,16 +1,8 @@
-define(function (require) {
-'use strict';
+import React from 'react';
 
-const React = require('react');
-
-const FilterToolbar = React.createClass({
-  render: function() {
-    return (
-      <div>
-      </div>
-    );
-  },
-});
-
-return FilterToolbar;
-});
+export default function FilterToolbar(props) {
+  return (
+    <div>
+    </div>
+  );
+}

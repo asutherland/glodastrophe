@@ -1,8 +1,5 @@
-define(function (require) {
-'use strict';
-
-const React = require('react');
-const PureRenderMixin = require('react-addons-pure-render-mixin');
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const WholeWindowedList = require('../whole_windowed_list');
 
@@ -14,28 +11,19 @@ const DraftSummary = require('../summaries/draft');
  * and heights effectively cannot be pre-computed, we have to go for a fully
  * instantiated list.
  */
-var MessageListPane = React.createClass({
-  mixins: [PureRenderMixin],
-
-  propTypes: {
-    selectedMessageId: React.PropTypes.string,
-    view: React.PropTypes.object,
-    onNavigateToDraft: React.PropTypes.func.isRequired,
-    onSelectMessageId: React.PropTypes.func.isRequired,
-  },
-
+export default class MessageListPane extends React.PureComponent {
   /**
    * Drafts get their own Widget type.
    */
-  _pickMessageWidget: function(message) {
+  _pickMessageWidget(message) {
     if (message.isDraft) {
       return DraftSummary;
     } else {
       return MessageSummary;
     }
-  },
+  }
 
-  render: function() {
+  render() {
     const view = this.props.view;
 
     // If there is no view, just be empty.
@@ -59,7 +47,11 @@ var MessageListPane = React.createClass({
       </div>
     );
   }
-});
+};
 
-return MessageListPane;
-});
+MessageListPane.propTypes = {
+  selectedMessageId: PropTypes.string,
+  view: PropTypes.object,
+  onNavigateToDraft: PropTypes.func.isRequired,
+  onSelectMessageId: PropTypes.func.isRequired,
+};

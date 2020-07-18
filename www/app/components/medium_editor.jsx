@@ -1,9 +1,6 @@
-define(function (require) {
-'use strict';
+import React from 'react';
 
-var React = require('react');
-
-var RealMediumEditor = require('medium-editor');
+import RealMediumEditor from 'medium-editor';
 
 /**
  * A non-react-idiomatic use of MediumEditor informed by
@@ -27,9 +24,15 @@ var RealMediumEditor = require('medium-editor');
  * - We do that forever until unmounted.  If you want to reset our state, make
  *   sure we get destroyed, I guess.
  */
-var MediumEditor = React.createClass({
-  componentDidMount: function() {
-    let editorNode = React.findDOMNode(this);
+export default class MediumEditor extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.selfRef = React.createRef();
+  }
+
+  componentDidMount() {
+    let editorNode = this.selfRef.current;
     this.populateEditor(editorNode, this.props.initialContent);
 
     this.dirty = false;
@@ -42,25 +45,25 @@ var MediumEditor = React.createClass({
         this.props.onDirty(this.getState);
       }
     });
-  },
+  }
 
-  getState: function() {
+  getState() {
     this.dirty = false;
-    return this.fromEditor(React.findDOMNode(this));
-  },
+    return this.fromEditor(this.selfRef.current);
+  }
 
-  shouldComponentUpdate: function() {
+  shouldComponentUpdate() {
     return false;
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     this.medium.destroy();
-  },
+  }
 
   /**
    * Inserts an email into the contenteditable element.
    */
-  populateEditor: function(editorNode, value) {
+  populateEditor(editorNode, value) {
     var lines = value.split('\n');
     console.log('editor lines:', lines);
     var frag = document.createDocumentFragment();
@@ -80,12 +83,12 @@ var MediumEditor = React.createClass({
     }
 
     editorNode.appendChild(frag);
-  },
+  }
 
   /**
    * Gets the raw value from a contenteditable div
    */
-  fromEditor: function(editorNode) {
+  fromEditor(editorNode) {
     var content = '';
     var len = editorNode.childNodes.length;
     var lastWasPara = false;
@@ -117,17 +120,15 @@ var MediumEditor = React.createClass({
     }
 
     return content;
-  },
+  }
 
-  render: function() {
+  render() {
     return (
       <div className="draft-body-editor"
         contentEditable="true"
+        ref={ this.selfRef }
         >
       </div>
     );
   }
-});
-
-return MediumEditor;
-});
+};

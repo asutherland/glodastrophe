@@ -1,11 +1,8 @@
-define(function (require) {
-'use strict';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-const React = require('react');
+import { List } from '@material-ui/core';
 
-const PureRenderMixin = require('react-addons-pure-render-mixin');
-
-const List = require('material-ui/lib/lists/list');
 const { SelectableContainerEnhance } =
   require('material-ui/lib/hoc/selectable-enhance');
 
@@ -21,50 +18,31 @@ const SelectableList = SelectableContainerEnhance(List);
  * collapsible folder hiearchy issues which are their own complexity.  So we'll
  * deal with that when we need to.
  */
-var EntireMaterialList = React.createClass({
-  mixins: [PureRenderMixin],
+export default class EntireMaterialList extends React.PureComponent {
+  constructor(props) {
+    super(props);
+  }
 
-  propTypes: {
-    passProps: React.PropTypes.object,
-    pick: React.PropTypes.func.isRequired,
-    selectedId: React.PropTypes.string,
-    subheader: React.PropTypes.string.isRequired,
-    view: React.PropTypes.object.isRequired,
-    // allows us to sorta transparently support both view types.
-    viewEvent: React.PropTypes.string.isRequired,
-    /**
-     * We have to use a factory instead of a widget because the
-     * SelectableContainerEnhance depends on being able to introspect the
-     * immediate children and have them be ListItems.  Happily, there isn't
-     * really any difference.
-     */
-    listItemFactory: React.PropTypes.func.isRequired
-  },
-
-  defaultProps: {
-    itemHeight: 0
-  },
-
-  getInitialState: function() {
+  getInitialState() {
     return {
       serial: this.props.view.serial,
     };
-  },
+  }
 
-  componentWillMount: function() {
+  componentWillMount() {
     var view = this.props.view;
     view.on(this.props.viewEvent, this.handleDirty);
     if (this.props.viewEvent === 'seeked') {
       view.seekToTop(10, 990);
     }
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     var view = this.props.view;
     view.removeListener(this.props.viewEvent, this.handleDirty);
-  },
+  }
 
-  componentWillReceiveProps: function(nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (this.props.view) {
       this.props.view.removeListener(this.props.viewEvent, this.handleDirty);
     }
@@ -75,15 +53,15 @@ var EntireMaterialList = React.createClass({
         nextProps.view.seekToTop(10, 990);
       }
     }
-  },
+  }
 
-  handleDirty: function() {
+  handleDirty() {
     this.setState({
       serial: this.props.view.serial
     });
-  },
+  }
 
-  render: function() {
+  render() {
     const listItemFactory = this.props.listItemFactory;
     const { passProps } = this.props;
 
@@ -103,12 +81,30 @@ var EntireMaterialList = React.createClass({
         { children }
       </SelectableList>
     );
-  },
+  }
 
-  onChangeSelection: function(evt, value) {
+  onChangeSelection(evt, value) {
     this.props.pick(value);
   }
-});
+}
 
-return EntireMaterialList;
-});
+EntireMaterialList.defaultProps = {
+  itemHeight: 0,
+};
+
+EntireMaterialList.propTypes = {
+  passProps: PropTypes.object,
+  pick: PropTypes.func.isRequired,
+  selectedId: PropTypes.string,
+  subheader: PropTypes.string.isRequired,
+  view: PropTypes.object.isRequired,
+  // allows us to sorta transparently support both view types.
+  viewEvent: PropTypes.string.isRequired,
+  /**
+   * We have to use a factory instead of a widget because the
+   * SelectableContainerEnhance depends on being able to introspect the
+   * immediate children and have them be ListItems.  Happily, there isn't
+   * really any difference.
+   */
+  listItemFactory: PropTypes.func.isRequired
+};

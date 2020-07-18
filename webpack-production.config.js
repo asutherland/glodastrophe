@@ -11,6 +11,7 @@ var gelamJSRoot = path.resolve(__dirname, 'deps/gelam/js');
  * https://github.com/callemall/material-ui/blob/master/examples/webpack-example/
  */
 var config = {
+  mode: 'development',
   entry: {
     main: path.resolve(__dirname, 'www/app/main.jsx'),
     // TODO: figure out how to do chunking a bit better.  Probably playing with
@@ -35,14 +36,17 @@ var config = {
     ],
     */
   },
+  // Render source-map file for final build
+  devtool: 'source-map',
   resolve: {
-    root: [
+    modules: [
       // glodastrophe
       path.resolve(__dirname, 'www/lib'),
       // gelam libs
-      path.resolve(__dirname, 'deps/gelam/js/ext')
+      path.resolve(__dirname, 'deps/gelam/js/ext'),
+      "node_modules"
     ],
-    extensions: ["", ".js", ".jsx"],
+    extensions: [".js", ".jsx"],
     alias: {
       // glodastrophe mappings
       app: path.resolve(__dirname, 'www/app'),
@@ -66,8 +70,6 @@ var config = {
     }
     //node_modules: ["web_modules", "node_modules"]  (Default Settings)
   },
-  //Render source-map file for final build
-  devtool: 'source-map',
   //output config
   output: {
     path: buildPath,    //Path of output file
@@ -87,7 +89,7 @@ var config = {
       maxChunks: 1
     }),
     //Allows error warnings but does not stop compiling. Will remove when eslint is added
-    new webpack.NoErrorsPlugin(),
+    //new webpack.NoErrorsPlugin(),
     //Transfer Files
     new TransferWebpackPlugin([
       { from: 'static', to: '' }
@@ -99,21 +101,57 @@ var config = {
     })
   ],
   module: {
-    preLoaders: [
-    ],
-    loaders: [
+    rules: [
+      // don't attempt to process the viz.js compiled file...
       {
-        test: /\.(jsx)$/, //All .js and .jsx files
-        loaders: ['babel'], //react-hot is like browser sync and babel loads jsx and es6-7
-        exclude: [nodeModulesPath]
-      }
+        test: /\.render\.js$/,
+        use: ['file-loader']
+      },
+      {
+        test: /\.jsx$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader'
+      },
+      {
+        test: /\.css$/,
+        use: [
+          'style-loader',
+          'css-loader'
+        ]
+      },
+      {
+        test: /\.ftl$/i,
+        use: 'raw-loader',
+      },
+      {
+        test: /\.worker\.js$/,
+        loader: 'worker-loader',
+        options: {
+          name: 'gelam-worker.js'
+        }
+      },
+      // "url" loader works like "file" loader except that it embeds assets
+      // smaller than specified limit in bytes as data URLs to avoid requests.
+      // A missing `test` is equivalent to a match.
+      {
+        test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],
+        loader: require.resolve('url-loader'),
+        options: {
+          limit: 10000,
+          name: 'static/media/[name].[hash:8].[ext]',
+        },
+      },
+      // "file" loader makes sure assets end up in the `build` folder.
+      // When you `import` an asset, you get its filename.
+      {
+        test: [/\.eot$/, /\.ttf$/, /\.svg$/, /\.woff$/, /\.woff2$/],
+        loader: require.resolve('file-loader'),
+        options: {
+          name: 'static/media/[name].[hash:8].[ext]',
+        },
+      },
     ]
   },
-  worker: {
-    output: {
-      filename: 'gelam-worker.js'
-    }
-  }
 };
 
 module.exports = config;

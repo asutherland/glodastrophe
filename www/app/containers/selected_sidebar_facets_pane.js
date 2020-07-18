@@ -1,10 +1,7 @@
-define(function(require) {
-'use strict';
+import FacetingVisListPane from
+  '../components/panes/faceting_vis_list_pane';
 
-const FacetingVisListPane =
-  require('../components/panes/faceting_vis_list_pane');
-
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => {
   return {
@@ -22,5 +19,4 @@ const SelectedSidebarFacetsPane = connect(
   mapDispatchToProps
 )(FacetingVisListPane);
 
-return SelectedSidebarFacetsPane;
-});
+export default SelectedSidebarFacetsPane;

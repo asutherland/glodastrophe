@@ -1,10 +1,7 @@
-define(function(require) {
-'use strict';
+import VisListPane from
+  '../components/panes/vis_list_pane';
 
-const VisListPane =
-  require('../components/panes/vis_list_pane');
-
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => {
   return {
@@ -22,5 +19,4 @@ const SelectedOverviewFacetsPane = connect(
   mapDispatchToProps
 )(VisListPane);
 
-return SelectedOverviewFacetsPane;
-});
+export default SelectedOverviewFacetsPane;

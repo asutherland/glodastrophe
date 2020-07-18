@@ -1,26 +1,23 @@
-define(function (require) {
-'use strict';
+import React from 'react';
 
-var React = require('react');
-
-var FormattedMessage = require('react-intl').FormattedMessage;
+import { Localized } from "@fluent/react";
 
 /**
  * Reply button for a message.  In theory this could get fancy and provide magic
  * expanding support for reply all/reply list/forward/etc./etc.
  */
-var MessageForward = React.createClass({
-  render: function() {
+export default class MessageForward extends React.Component {
+  render() {
     return (
       <button className="message-action-forward"
               onClick={ this.clickForward }>
-        <FormattedMessage
+        <Localized
           id='messageForward' />
       </button>
     );
-  },
+  }
 
-  clickForward: function(event) {
+  clickForward(event) {
     event.stopPropagation();
     // Pass noComposer so that a MessageComposition is not automatically created
     // for us.  Because we
@@ -29,7 +26,4 @@ var MessageForward = React.createClass({
       this.props.navigateToDraft(id);
     });
   }
-});
-
-return MessageForward;
-});
+};

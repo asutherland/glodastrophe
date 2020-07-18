@@ -1,13 +1,10 @@
-define(function (require) {
-'use strict';
+import React from 'react';
 
-var React = require('react');
-
-var FormattedMessage = require('react-intl').FormattedMessage;
+import { Localized } from "@fluent/react";
 
 // The undoable widget itself is eventually intended to be a reusable popup-ish
 // thing.
-var Undoable = require('../summaries/undoable');
+import Undoable from '../summaries/undoable';
 
 const MAX_KEPT_UNDO_OPS = 10;
 
@@ -17,37 +14,37 @@ const MAX_KEPT_UNDO_OPS = 10;
  * here ourselves. We register on the MailAPI to hear about new
  * UndoableOperations and add them to our (capped) list.
  */
-var DebugUndoableTracker = React.createClass({
-  getInitialState: function() {
+export default class DebugUndoableTracker extends React.Component {
+  getInitialState() {
     return {
       undoableOps: [],
       serial: 0
     };
-  },
+  }
 
-  componentDidMount: function() {
+  componentDidMount() {
     const mailApi = this.props.mailApi;
     mailApi.on('undoableOp', this.onNewUndoableOp);
     mailApi.on('undoing', this.onUndoing);
 
     mailApi.flushNewAggregates();
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     const mailApi = this.props.mailApi;
     mailApi.removeListener('undoableOp', this.onNewUndoableOp);
     mailApi.removeListener('undoing', this.onUndoing);
-  },
+  }
 
-  onNewUndoableOp: function(op) {
+  onNewUndoableOp(op) {
     const curOps = this.state.undoableOps;
     this.setState({
       undoableOps: [op].concat(curOps).slice(0, MAX_KEPT_UNDO_OPS),
       serial: this.state.serial + 1
     });
-  },
+  }
 
-  onUndoing: function(op) {
+  onUndoing(op) {
     const curOps = this.state.undoableOps;
     let idx = curOps.indexOf(op);
     console.log('undoing index', idx);
@@ -58,9 +55,9 @@ var DebugUndoableTracker = React.createClass({
         serial: this.state.serial + 1
       });
     }
-  },
+  }
 
-  render: function() {
+  render() {
     let opWidgets = this.state.undoableOps.map((op) => {
       return <Undoable key={ op.id } op={ op } />;
     });
@@ -68,14 +65,11 @@ var DebugUndoableTracker = React.createClass({
     return (
       <div>
         <h3 key='head'>
-          <FormattedMessage
+          <Localized
             id='debugUndoTrackerHeader' />
         </h3>
         { opWidgets }
       </div>
     );
   }
-});
-
-return DebugUndoableTracker;
-});
+};

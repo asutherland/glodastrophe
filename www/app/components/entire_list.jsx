@@ -1,121 +1,66 @@
-define(function (require) {
-'use strict';
+import React, { useEffect, useState } from 'react';
 
-var React = require('react');
+import { List as ReactList } from 'react-list';
 
-var ReactList = require('react-list').List;
-
-var PureRenderMixin = require('react-addons-pure-render-mixin');
+import PropTypes from 'prop-types';
 
 /**
- * Bind a EntireListview to a ReactList.  Our mapping is currently extremely
- * simple.  We just trigger a re-render whenever we are hinted that anything
- * has happened in the list.
+ * Renders all of the items in an `EntireListView`, automatically re-rendering
+ * itself whenever the list changes or items in the list are updated.
  *
- * ## shouldComponentUpdate and generations/serial ##
+ * Rendered item widgets will have the following props passed:
+ * - item: The list item itself.
+ * - extra: Any extra context provided as `extra` to the list.
+ * - serial: The current serial of the item.  This can be used with `React.memo`
+ *   or `React.PureComponent` to avoid needlessly re-rendering items which have
+ *   not changed.
+ * - selected: A boolean that's the result of comparing the item's id against
+ *   the `selectedId` prop provided to the list.
+ * - pick: Function that should be called with the item if the item is clicked
+ *   on in a way that might denote selection and isn't superseded by in-widget
+ *   UI.
  *
- * EntireListView maintains a `serial` attribute on itself and all the items
- * it contains.  Each (batched) update increments the serial of the list view,
- * and each item updated is stamped with the serial of the most recent update it
- * has received.  Accordingly, we know that an item needs to update if its
- * serial number is greater than the serial number it had when it was
- * registered.
+ * The list takes the following props:
+ * - view: The EntireListView to render.
+ * - extra: A context object to be passed as `extra` to the widget.  Not called
+ *   context to avoid colliding with React's concept of context.  Not spread
+ *   like {...passProps} to try and avoid weird multi-level propagation.
+ * - widget or conditionalWidget: conditionalWidget is a function that takes the
+ *   item and returns a widget, widget is just the same widget used the entire
+ *   time.
  *
- * Relatedly, there's the issue of how to get the ReactList to update.  It uses
- * PureRenderMixin which means that its props/state must change.  Since we don't
- * want to/can't mess with its state, we can touch the props when a new
- * update comes in and a new serial is released.  It will re-render() itself
- * which means that we expect our renderItem method to be called.  At which
- * point we can also just make sure to reflect the item's serial onto its props
- * and shouldComponentUpdate can just check the serial between the old props
- * and the new props.
+ * This previously used "react-list" which attempted to only render things into
+ * the DOM when they became visible, but there wasn't much justification for
+ * that and if there was, it was 4 years ago.
  */
-var EntireList = React.createClass({
-  mixins: [PureRenderMixin],
+export default function EntireList(props) {
+  const view = props.view;
+  const extra = props.extra;
 
-  propTypes: {
-    selectedId: React.PropTypes.string,
-    view: React.PropTypes.object.isRequired,
-    conditionalWidget: React.PropTypes.func,
-    widget: React.PropTypes.func,
-    itemHeight: React.PropTypes.number,
-    pick: React.PropTypes.func.isRequired,
-  },
+  const [serial, setSerial] = useState(view.serial);
 
-  defaultProps: {
-    itemHeight: 0
-  },
+  useEffect(() => {
+    view.on('complete', () => { setSerial(view.serial); });
+  }, [view]);
 
-  getInitialState: function() {
-    return {
-      serial: this.props.view.serial,
-    };
-  },
+  const renderedItems = view.items.map((item) => {
+    const Widget = props.widget || props.conditionalWidget(item);
 
-  componentWillMount: function() {
-    this.boundDirtyHandler = this.handleDirty; //.bind(this);
-    this.boundRenderer = this.renderItem; //.bind(this);
-    this.boundSeek = this.seek;
-
-    var view = this.props.view;
-    view.on('complete', this.boundDirtyHandler);
-  },
-
-  componentWillUnmount: function() {
-    var view = this.props.view;
-    view.removeListener('complete', this.boundDirtyHandler);
-  },
-
-  componentWillReceiveProps: function(nextProps) {
-    if (this.props.view) {
-      this.props.view.removeListener('complete', this.boundDirtyHandler);
-    }
-    if (nextProps.view) {
-      this.setState({ serial: nextProps.view.serial });
-      nextProps.view.on('complete', this.boundDirtyHandler);
-    }
-  },
-
-  handleDirty: function() {
-    this.setState({
-      serial: this.props.view.serial
-    });
-  },
-
-  render: function() {
     return (
-      <ReactList
-        length={ this.props.view.items.length }
-        itemHeight={ this.props.itemHeight }
-        itemRenderer={ this.boundRenderer }
-        serial={ this.props.view.serial }
-        selectedId={ this.props.selectedId }
+      <Widget
+        key={ item.id }
+        item={ item }
+        extra={ extra }
+        serial={ item.serial }
+        selected={ props.selectedId === item.id }
+        pick={ props.pick }
         />
     );
-  },
+  });
 
-  renderItem: function(absIndex/*, relIndex*/) {
-    // Note: The react-widget seems to be making the assumption that we'll use
-    // the relIndex as our key, although it doesn't actually depend on this.
-    var conditionalWidget = this.props.conditionalWidget;
-    var Widget;
-
-    var item = this.props.view.items[absIndex];
-    if (conditionalWidget) {
-      Widget = conditionalWidget(item);
-    } else {
-      Widget = this.props.widget;
-    }
-    if (!item) {
-      // if not yet loaded and to allow some DOM stability, key off the absolute
-      // index.
-      return <div key={ 'abs' + absIndex }>LoadinG</div>;
-    }
-    return <Widget key={ item.id } item={ item } serial={ item.serial }
-                   selected={ this.props.selectedId === item.id }
-                   pick={ this.props.pick }/>;
-  }
-});
-
-return EntireList;
-});
+  return (
+    <div>
+      { renderedItems }
+    </div>
+  );
+}

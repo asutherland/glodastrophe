@@ -1,16 +1,13 @@
-define(function (require) {
-'use strict';
+import React from 'react';
 
-var React = require('react');
-
-var Autosuggest = require('autosuggest');
+import Autosuggest from 'autosuggest';
 
 /**
  * A widget to enable tagging a conversation.  It could also trivially support
  * tagging messages, but that's not a desired UI flow at this time because it
  * doesn't match up with gmail semantics.  Flags should likely be used for that.
  */
-var TagAdder = React.createClass({
+export default class TagAdder extends React.Component {
   /**
    * Filter the list of known labels.
    *
@@ -19,7 +16,7 @@ var TagAdder = React.createClass({
    * https://github.com/moroshko/react-autosuggest/issues/27 seems like a better
    * long-term solution for this.
    */
-  getSuggestions: function(input, callback) {
+  getSuggestions(input, callback) {
     var conv = this.props.conversation;
     var allLabels = conv.getKnownLabels();
     // future work: use an escaping regex mechanism.
@@ -28,21 +25,21 @@ var TagAdder = React.createClass({
       return folder.name.toLocaleLowerCase().indexOf(lowerInput) !== -1;
     });
     callback(null, matches);
-  },
+  }
 
-  renderSuggestion: function(folder, input) {
+  renderSuggestion(folder, input) {
     // TODO: highlight the matching substring stuff
     // TODO: depth stuff
     return (
       <div>{folder.path}</div>
     );
-  },
+  }
 
-  getSuggestionValue: function(folder) {
+  getSuggestionValue(folder) {
     return folder.name;
-  },
+  }
 
-  render: function() {
+  render() {
     var conv = this.props.conversation;
     var classes = 'taggy-item';
     var folder = this.props.folder;
@@ -63,15 +60,12 @@ var TagAdder = React.createClass({
         inputAttributes={ inputAttributes }
         />
     );
-  },
+  }
 
-  addTag: function(folder) {
+  addTag(folder) {
     var conv = this.props.conversation;
     conv.addLabels([folder]);
     // clear the value.
     React.findDOMNode(this.refs.autosuggest.refs.input).value = '';
   }
-});
-
-return TagAdder;
-});
+};

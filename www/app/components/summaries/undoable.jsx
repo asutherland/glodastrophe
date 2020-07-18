@@ -1,33 +1,26 @@
-define(function (require) {
-'use strict';
+import React from 'react';
 
-var React = require('react');
+import { Localized } from "@fluent/react";
 
-var FormattedMessage = require('react-intl').FormattedMessage;
+export default function Undoable(props) {
+  const op = props.op;
 
-var Undoable = React.createClass({
-  render: function() {
-    let op = this.props.op;
-    return (
-      <div className="undoable">
-        <span>
-          <FormattedMessage
-            id={ `undoable_${op.affectedType}_${op.operation}` }
-            values={ {count: op.affectedCount } } />
-        </span>
-        <button className="undo-button"
-          onClick={ this.clickUndo }>
-          <FormattedMessage
-            id='undoButton' />
-        </button>
-      </div>
-    );
-  },
-
-  clickUndo: function() {
-    this.props.op.undo();
+  function onClickUndo() {
+    op.undo();
   }
-});
 
-return Undoable;
-});
+  return (
+    <div className="undoable">
+      <span>
+        <FormattedMessage
+          id={ `undoable_${op.affectedType}_${op.operation}` }
+          values={ {count: op.affectedCount } } />
+      </span>
+      <button className="undo-button"
+        onClick={ onClickUndo }>
+        <Localized
+          id='undoButton' />
+      </button>
+    </div>
+  );
+}

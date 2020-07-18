@@ -1,10 +1,5 @@
-define(function (require) {
-'use strict';
-
-const React = require('react');
-const PureRenderMixin = require('react-addons-pure-render-mixin');
-
-const { injectIntl } = require('react-intl');
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const AppBar = require('material-ui/lib/app-bar');
 const Divider = require('material-ui/lib/divider');
@@ -19,32 +14,20 @@ const MenuItem = require('material-ui/lib/menus/menu-item');
 /**
  * The header and interface for a list of conversations.
  */
-const ConversationListHeader = React.createClass({
-  mixins: [PureRenderMixin],
-
-  propTypes: {
-    conversationSidebarDefsView: React.PropTypes.object,
-    mailApi: React.PropTypes.object.isRequired,
-    view: React.PropTypes.object,
-    viewTocMetaSerial: React.PropTypes.number,
-    onAddSidebarVis: React.PropTypes.func.isRequired,
-    onNavigateToDraft: React.PropTypes.func.isRequired,
-    onToggleSidebar: React.PropTypes.func.isRequired,
-  },
-
-  getInitialState: function() {
+export default class ConversationListHeader extends React.PureComponent {
+  getInitialState() {
     return {};
-  },
+  }
 
-  componentDidMount: function() {
+  componentDidMount() {
     const view = this.props.view;
     if (view) {
       view.on('metaChange', this.onMetaChange);
       view.on('syncComplete', this.onSyncComplete);
     }
-  },
+  }
 
-  componentWillUpdate: function(nextProps/*, nextState*/) {
+  componentWillUpdate(nextProps/*, nextState*/) {
     // We use this instead of componentWillReceiveProps because this only gets
     // called if shouldComponentUpdate returned true which means we're slightly
     // more debounced.
@@ -61,23 +44,23 @@ const ConversationListHeader = React.createClass({
         newView.on('syncComplete', this.onSyncComplete);
       }
     }
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     const view = this.props.view;
     if (view) {
       view.removeListener('metaChange', this.onMetaChange);
       view.removeListener('syncComplete', this.onSyncComplete);
     }
-  },
+  }
 
-  onMetaChange: function() {
+  onMetaChange() {
     // NB: metaChange is smart enough to only trigger on deltas
     // We don't do serial tracking on ourselves, so just trigger a forceUpdate.
     this.forceUpdate();
-  },
+  }
 
-  onSyncComplete: function(/*{ newishCount }*/) {
+  onSyncComplete(/*{ newishCount }*/) {
     // I'm leaving this stub here as a reminder we have this functionality in
     // case we want to put back a feature that helps indicate that new messages
     // have shown up at the top of the list view.  It might be more appropriate
@@ -86,9 +69,9 @@ const ConversationListHeader = React.createClass({
     // a flag that's automatically tracked based on scroll position and instead
     // we just know to update when it changes state like we do for a meta
     // change.
-  },
+  }
 
-  render: function() {
+  render() {
     const view = this.props.view;
 
     if (!view) {
@@ -177,29 +160,35 @@ const ConversationListHeader = React.createClass({
           />
       </div>
     );
-  },
+  }
 
-  onRefreshView: function() {
+  onRefreshView() {
     this.props.view.refresh();
-  },
+  }
 
-  onGrowView: function() {
+  onGrowView() {
     this.props.view.grow();
-  },
+  }
 
   /**
    * Begin composing a new message... by jumping to the drafts folder and
    * showing the draft.
    */
-  onBeginCompose: function() {
+  onBeginCompose() {
     this.props.mailApi.beginMessageComposition(
       null, this.props.view.folder, { command: 'blank', noComposer: true })
     .then(({ id }) => {
       this.props.onNavigateToDraft(id);
     });
   }
+};
 
-});
-
-return injectIntl(ConversationListHeader);
-});
+ConversationListHeader.propTypes = {
+  conversationSidebarDefsView: PropTypes.object,
+  mailApi: PropTypes.object.isRequired,
+  view: PropTypes.object,
+  viewTocMetaSerial: PropTypes.number,
+  onAddSidebarVis: PropTypes.func.isRequired,
+  onNavigateToDraft: PropTypes.func.isRequired,
+  onToggleSidebar: PropTypes.func.isRequired,
+};

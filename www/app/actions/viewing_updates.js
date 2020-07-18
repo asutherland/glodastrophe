@@ -1,6 +1,3 @@
-define(function(require) {
-'use strict';
-
 /**
  * This file provides the actions used by the viewing-reducer's subscriptions to
  * generate actions so it can update the serial numbers that are required for
@@ -36,27 +33,29 @@ setTimeout(() => {
 }, 0);
 
 
-const { UPDATE_CONVERSATIONS_VIEW_SERIALS, UPDATE_CONVERSATION_SERIAL,
-        UPDATE_MESSAGES_VIEW_SERIALS } = require('./actionTypes');
+import { UPDATE_CONVERSATIONS_VIEW_SERIALS, UPDATE_CONVERSATION_SERIAL,
+        UPDATE_MESSAGES_VIEW_SERIALS } from './actionTypes';
 
-return {
-  dispatchConversationsViewSerialUpdate: function(view) {
-    store.dispatch({
-      type: UPDATE_CONVERSATIONS_VIEW_SERIALS,
-      view
-    });
-  },
-  dispatchConversationSerialUpdate: function(conv) {
-    store.dispatch({
-      type: UPDATE_CONVERSATION_SERIAL,
-      conv
-    });
-  },
-  dispatchMessagesViewSerialUpdate: function(view) {
-    store.dispatch({
-      type: UPDATE_MESSAGES_VIEW_SERIALS,
-      view
-    });
-  }
+export function dispatchConversationsViewSerialUpdate(view) {
+  store.dispatch({
+    type: UPDATE_CONVERSATIONS_VIEW_SERIALS,
+    view
+  });
 };
-});
+
+
+export function  dispatchConversationSerialUpdate(conv) {
+  store.dispatch({
+    type: UPDATE_CONVERSATION_SERIAL,
+    conv
+  });
+};
+
+
+export function dispatchMessagesViewSerialUpdate(view) {
+  store.dispatch({
+    type: UPDATE_MESSAGES_VIEW_SERIALS,
+    view
+  });
+};
+

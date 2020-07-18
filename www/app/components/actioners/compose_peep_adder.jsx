@@ -1,22 +1,27 @@
-define(function (require) {
-'use strict';
+import React from 'react';
 
-var React = require('react');
-
-var Autosuggest = require('autosuggest');
-
-var ComposePeepSuggestion = require('./compose_peep_suggestion');
+import ComposePeepSuggestion from './compose_peep_suggestion';
 
 /**
+ * TODO: Broken / disabled.  Removed the react-autosuggest component and it
+ * seems semantic-ui's is probably good enough for these needs.  See the XXX in
+ * `draft.jsx` where it could make sense to replace the discrete components
+ * here with a consolidated per-row or general envelope abstraction which could
+ * use semantic-ui's Dropdown.
+ *
  * Input area for adding peeps to a mail with some very limited autocompletion
  * support.
  */
-var ComposePeepAdder = React.createClass({
-  componentDidMount: function() {
+export default class ComposePeepAdder extends React.Component {
+  constructor(props) {
+  }
+
+  componentDidMount() {
+    return;
     var inputNode = this.inputNode =
       React.findDOMNode(this.refs.autosuggest.refs.input);
     inputNode.addEventListener('keydown', this.onInputInput);
-  },
+  }
 
   /**
    * Process characters that terminate manual address input/bubble-ification or
@@ -31,7 +36,7 @@ var ComposePeepAdder = React.createClass({
    *
    * - backspace: This nukes a bubble
    */
-  onInputKeyDown: function(event) {
+  onInputKeyDown(event) {
     let inputNode = this.inputNode;
     let inputValue = inputNode.value;
     // The input looks emaily if there's an at-sign in there.
@@ -90,9 +95,9 @@ var ComposePeepAdder = React.createClass({
     if (clearValue) {
       inputNode.value = '';
     }
-  },
+  }
 
-  getSuggestions: function(input, callback) {
+  getSuggestions(input, callback) {
     if (!input) {
       callback(null, []);
       return;
@@ -105,26 +110,27 @@ var ComposePeepAdder = React.createClass({
       (err) => {
         callback(err);
       });
-  },
+  }
 
-  renderSuggestion: function(peep/*, input*/) {
+  renderSuggestion(peep/*, input*/) {
     // TODO: highlight the matching substring stuff
     return (
       <ComposePeepSuggestion peep={ peep } />
     );
-  },
+  }
 
-  getSuggestionValue: function(peep) {
+  getSuggestionValue(peep) {
     return peep.address;
-  },
+  }
 
-  render: function() {
+  render() {
     var idName = 'addrecip-' + this.props.bin;
 
     var inputAttributes = {
       type: 'email'
     };
 
+    /*
     return (
       <Autosuggest
         ref="autosuggest"
@@ -135,8 +141,11 @@ var ComposePeepAdder = React.createClass({
         onSuggestionSelected={ this.addRecipientFromSuggestion }
         inputAttributes={ inputAttributes }
         />
-    );
-  },
+    );*/
+    return (
+      <input type="text"></input>
+    )
+  }
 
   /**
    * Try and add a recipient based on the contents of the input box.  Any
@@ -144,18 +153,18 @@ var ComposePeepAdder = React.createClass({
    * have prevented the value from being manipulated or performed a
    * transformative fix-up prior to calling us.
    */
-  addRecipientFromInput: function() {
+  addRecipientFromInput() {
     let value = this.inputNode.value;
     // Try and add the recipient.  But if the parse fails, leave things intact.
     if (this.addRecipientFromString(value)) {
       this.inputNode.value = '';
     }
-  },
+  }
 
   /**
    * Add a recipient from user-provided input.
    */
-  addRecipientFromString: function(value) {
+  addRecipientFromString(value) {
     let composer = this.props.composer;
     let mailbox = composer.api.parseMailbox(value);
     if (mailbox) {
@@ -165,13 +174,13 @@ var ComposePeepAdder = React.createClass({
     }
 
     return false;
-  },
+  }
 
   /**
    * Given an autocomplete suggestion, add the peep to the relevant recipient
    * list.
    */
-  addRecipientFromSuggestion: function(peep) {
+  addRecipientFromSuggestion(peep) {
     this.props.composer.addRecipient(
       this.props.bin,
       { name: peep.name, address: peep.address });
@@ -181,7 +190,4 @@ var ComposePeepAdder = React.createClass({
     // negligent, not incompetent.
     setTimeout(() => { this.inputNode.value = ''; }, 0);
   }
-});
-
-return ComposePeepAdder;
-});
+};

@@ -1,27 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-export class List extends React.Component {
-  static propTypes = {
-    initialIndex: React.PropTypes.number,
-    itemRenderer: React.PropTypes.func,
-    itemsRenderer: React.PropTypes.func,
-    length: React.PropTypes.number,
-    pageSize: React.PropTypes.number,
-    threshold: React.PropTypes.number
-  };
+export class List extends React.PureComponent {
+  constructor(props) {
+    super(props);
 
-  static defaultProps = {
-    itemRenderer: (i, j) => <div key={j}>{i}</div>,
-    itemsRenderer: (items, ref) => <div ref={ref}>{items}</div>,
-    length: 0,
-    pageSize: 10,
-    threshold: 500
-  };
+    this.selfRef = React.createRef();
 
-  state = {
-    from: 0,
-    size: this.props.pageSize
-  };
+    this.state = {
+      from: 0,
+      size: this.props.pageSize
+    };
+  }
 
   componentWillReceiveProps(next) {
     const {size} = this.state;
@@ -51,7 +41,7 @@ export class List extends React.Component {
   }
 
   getScrollParent() {
-    let el = React.findDOMNode(this);
+    let el = this.selfRef.current;
     while (el = el.parentElement) {
       const overflowY = window.getComputedStyle(el).overflowY;
       if (overflowY === 'auto' || overflowY === 'scroll') return el;
@@ -61,7 +51,7 @@ export class List extends React.Component {
 
   getScroll() {
     const {scrollParent} = this;
-    const elTop = React.findDOMNode(this).getBoundingClientRect().top;
+    const elTop = this.selfRef.current.getBoundingClientRect().top;
     if (scrollParent === window) return -elTop;
     const scrollParentTop = scrollParent.getBoundingClientRect().top;
     return scrollParentTop + scrollParent.clientTop - elTop;
@@ -70,7 +60,7 @@ export class List extends React.Component {
   setScroll(y) {
     const {scrollParent} = this;
     if (scrollParent === window) {
-      const elTop = React.findDOMNode(this).getBoundingClientRect().top;
+      const elTop = this.selfRef.current.getBoundingClientRect().top;
       const windowTop = document.documentElement.getBoundingClientRect().top;
       return window.scrollTo(0, Math.round(elTop) - windowTop + y);
     }
@@ -78,10 +68,10 @@ export class List extends React.Component {
   }
 
   scrollTo(i) {
-    const itemEl = React.findDOMNode(this.items).children[i];
+    const itemEl = this.selfRef.current.children[i];
     if (!itemEl) return;
     const itemElTop = itemEl.getBoundingClientRect().top;
-    const elTop = React.findDOMNode(this).getBoundingClientRect().top;
+    const elTop = this.selfRef.current.getBoundingClientRect().top;
     this.setScroll(itemElTop - elTop);
   }
 
@@ -93,7 +83,7 @@ export class List extends React.Component {
 
   updateFrame() {
     const frameBottom = this.getScroll() + this.getViewportHeight();
-    const elBottom = React.findDOMNode(this).getBoundingClientRect().height;
+    const elBottom = this.selfRef.current.getBoundingClientRect().height;
     const {pageSize, length, threshold} = this.props;
     if (elBottom >= frameBottom + threshold) return;
     this.setState({size: Math.min(this.state.size + pageSize, length)});
@@ -105,37 +95,38 @@ export class List extends React.Component {
     for (let i = 0; i < size; ++i) {
       items.push(this.props.itemRenderer(from + i, i));
     }
-    return this.props.itemsRenderer(items, c => this.items = c);
+    return this.props.itemsRenderer(items, this.selfRef);
   }
 }
 
-List.prototype.shouldComponentUpdate =
-  React.addons.PureRenderMixin.shouldComponentUpdate;
+List.propTypes = {
+  initialIndex: PropTypes.number,
+  itemRenderer: PropTypes.func,
+  itemsRenderer: PropTypes.func,
+  length: PropTypes.number,
+  pageSize: PropTypes.number,
+  threshold: PropTypes.number
+};
+
+List.defaultProps = {
+  itemRenderer: (i, j) => <div key={j}>{i}</div>,
+  itemsRenderer: (items, ref) => <div ref={ref}>{items}</div>,
+  length: 0,
+  pageSize: 10,
+  threshold: 500
+};
 
 export class UniformList extends List {
-  static propTypes = {
-    initialIndex: React.PropTypes.number,
-    itemHeight: React.PropTypes.number,
-    itemRenderer: React.PropTypes.func,
-    itemsPerRow: React.PropTypes.number,
-    itemsRenderer: React.PropTypes.func,
-    length: React.PropTypes.number,
-    threshold: React.PropTypes.number
-  };
+  constructor(props) {
+    super(props);
 
-  static defaultProps = {
-    itemRenderer: (i, j) => <div key={j}>{i}</div>,
-    itemsRenderer: (items, ref) => <div ref={ref}>{items}</div>,
-    length: 0,
-    threshold: 500
-  };
-
-  state = {
-    from: 0,
-    itemHeight: this.props.itemHeight || 0,
-    itemsPerRow: this.props.itemsPerRow || 1,
-    size: 1
-  };
+    this.state = {
+      from: 0,
+      itemHeight: this.props.itemHeight || 0,
+      itemsPerRow: this.props.itemsPerRow || 1,
+      size: 1
+    };
+  }
 
   componentWillReceiveProps(next) {
     let {itemsPerRow, from, size} = this.state;
@@ -167,7 +158,7 @@ export class UniformList extends List {
     let {itemHeight, itemsPerRow} = this.props;
 
     if (itemHeight == null || itemsPerRow == null) {
-      const itemEls = React.findDOMNode(this.items).children;
+      const itemEls = this.selfRef.current.children;
       if (!itemEls.length) return;
 
       const firstRect = itemEls[0].getBoundingClientRect();
@@ -226,34 +217,24 @@ export class UniformList extends List {
   }
 }
 
+UniformList.propTypes = {
+  initialIndex: PropTypes.number,
+  itemHeight: PropTypes.number,
+  itemRenderer: PropTypes.func,
+  itemsPerRow: PropTypes.number,
+  itemsRenderer: PropTypes.func,
+  length: PropTypes.number,
+  threshold: PropTypes.number
+};
+
+UniformList.defaultProps = {
+  itemRenderer: (i, j) => <div key={j}>{i}</div>,
+  itemsRenderer: (items, ref) => <div ref={ref}>{items}</div>,
+  length: 0,
+  threshold: 500
+};
+
 export class QuantizedHeightList extends List {
-  static propTypes = {
-    initialIndex: React.PropTypes.number,
-    itemRenderer: React.PropTypes.func,
-    itemsRenderer: React.PropTypes.func,
-    seek: React.PropTypes.func,
-    seekedData: React.PropTypes.array,
-    seekedOffset: React.PropTypes.number,
-    seekThreshold: React.PropTypes.number,
-    threshold: React.PropTypes.number,
-    totalHeight: React.PropTypes.number,
-    unitSize: React.PropTypes.number
-  };
-
-  static defaultProps = {
-    itemRenderer: (i, j) => <div key={j}>{i}</div>,
-    itemsRenderer: (items, ref) => <div ref={ref}>{items}</div>,
-    length: 0,
-    seekedData: [], // (immutable, so its reuse does not matter)
-    seekedOffset: 0,
-    seekThreshold: 100,
-    threshold: 500,
-    unitSize: 40
-  };
-
-  state = {
-  };
-
   scrollTo(unitOffset) {
     this.setScroll(this.getSpace(unitOffset));
   }
@@ -310,7 +291,7 @@ export class QuantizedHeightList extends List {
     const items = this.props.seekedData.map((item, i) => {
       return this.props.itemRenderer(item, i, unitSize);
     });
-    const container = this.props.itemsRenderer(items, c => this.items = c);
+    const container = this.props.itemsRenderer(items, this.selfRef);
 
     const transform =
       `translate(0, ${this.getSpace(this.props.seekedOffset)}px)`;
@@ -325,3 +306,27 @@ export class QuantizedHeightList extends List {
     );
   }
 }
+
+QuantizedHeightList.propTypes = {
+  initialIndex: PropTypes.number,
+  itemRenderer: PropTypes.func,
+  itemsRenderer: PropTypes.func,
+  seek: PropTypes.func,
+  seekedData: PropTypes.array,
+  seekedOffset: PropTypes.number,
+  seekThreshold: PropTypes.number,
+  threshold: PropTypes.number,
+  totalHeight: PropTypes.number,
+  unitSize: PropTypes.number
+};
+
+QuantizedHeightList.defaultProps = {
+  itemRenderer: (i, j) => <div key={j}>{i}</div>,
+  itemsRenderer: (items, ref) => <div ref={ref}>{items}</div>,
+  length: 0,
+  seekedData: [], // (immutable, so its reuse does not matter)
+  seekedOffset: 0,
+  seekThreshold: 100,
+  threshold: 500,
+  unitSize: 40
+};

@@ -1,11 +1,8 @@
-define(function(require) {
-'use strict';
+import SidebarMenu from '../components/pages/sidebar_menu';
 
-const SidebarMenu = require('../components/pages/sidebar_menu');
+import { connect } from 'react-redux';
 
-const { connect } = require('react-redux');
-
-const { selectAccountId, selectFolderId } = require('../actions/viewing');
+import { selectAccountId, selectFolderId } from '../actions/viewing';
 
 const mapStateToProps = (state) => {
   return {
@@ -37,5 +34,4 @@ const SelectedSidebarMenu = connect(
   mapDispatchToProps
 )(SidebarMenu);
 
-return SelectedSidebarMenu;
-});
+export default SelectedSidebarMenu;

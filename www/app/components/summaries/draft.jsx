@@ -1,18 +1,15 @@
-define(function (require) {
-'use strict';
+import React from 'react';
 
-var React = require('react');
-var PureRenderMixin = require('react-addons-pure-render-mixin');
+import { Localized } from "@fluent/react";
+import { FluentDateTime } from "@fluent/bundle";
 
-var FormattedMessage = require('react-intl').FormattedMessage;
+import ComposePeep from '../actioners/compose_peep';
+import ComposePeepAdder from '../actioners/compose_peep_adder';
+import ComposeAttachment from '../actioners/compose_attachment';
 
-var ComposePeep = require('../actioners/compose_peep');
-var ComposePeepAdder = require('../actioners/compose_peep_adder');
-var ComposeAttachment = require('../actioners/compose_attachment');
+import embodyHTML from 'gelam/clientapi/bodies/embody_html';
 
-var embodyHTML = require('gelam/clientapi/bodies/embody_html');
-
-var MediumEditor = require('../medium_editor');
+import MediumEditor from '../medium_editor';
 
 const draftScopedStyle = `
 p:first-child { margin-block-start: 0; }
@@ -30,18 +27,18 @@ p:last-child { margin-block-end: 0; }
  * initial population.  We don't bother maintaining a serial number on the
  * composer and instead just forceUpdate.
  */
-var DraftSummary = React.createClass({
-  mixins: [PureRenderMixin],
+export default class DraftSummary extends React.PureComponent {
+  constructor(props) {
+    super(props)
 
-  getInitialState: function() {
-    return {
+    this.state = {
       composer: null,
       serial: 0,
       dirty: false
     };
-  },
+  }
 
-  _getComposer: function() {
+  _getComposer() {
     this.dirtiedBodyRetriever = null;
     this.props.item.editAsDraft().then((composer) => {
       composer.on('change', () => {
@@ -56,32 +53,36 @@ var DraftSummary = React.createClass({
                    React.findDOMNode(this.refs.immutableHtml));
       }
     });
-  },
+  }
 
-  componentDidMount: function() {
+  componentDidMount() {
     this._getComposer();
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     if (this.state.composer) {
       this.state.composer.release();
     }
-  },
+  }
 
-  componentWillReceiveProps: function(nextProps) {
+  componentWillReceiveProps(nextProps) {
     // Assert that our message never changes.
     if (nextProps.item !== this.props.item) {
       throw new Error('Our message must never change!');
     }
-  },
+  }
 
-  render: function() {
+  render() {
     var composer = this.state.composer;
     if (!composer) {
       return <div></div>;
     }
     var api = composer.api;
 
+    // XXX This should potentially be able to be handled via the semantic-ui
+    // Dropdown mechanism more directly.  This would result in the dropdown
+    // being full width, which seems generally desirable.  The higher level
+    // issue is likely how to support drag/drop between to/cc/bcc.
     let makeRecipRow = (bin, l10nId) => {
       let composePeeps = composer[bin].map((nameAddrPair) => {
         return (
@@ -95,7 +96,7 @@ var DraftSummary = React.createClass({
       return (
         <div className="draft-recip-row">
           <span className="draft-recip-bin-label">
-            <FormattedMessage id={ l10nId } />
+            <Localized id={ l10nId } />
           </span>
           { composePeeps }
           <ComposePeepAdder
@@ -180,38 +181,38 @@ var DraftSummary = React.createClass({
         </div>
       </div>
     );
-  },
+  }
 
-  subjectChange: function(event) {
+  subjectChange(event) {
     this.state.composer.setSubject(event.target.value);
-  },
+  }
 
-  bodyDirtied: function(retrieveFunc) {
+  bodyDirtied(retrieveFunc) {
     this.dirtiedBodyRetriever = retrieveFunc;
     this.setState({ dirty: true });
-  },
+  }
 
-  _persistStateToComposer: function() {
+  _persistStateToComposer() {
     if (this.dirtiedBodyRetriever) {
       this.state.composer.textBody = this.dirtiedBodyRetriever();
       this.dirtiedBodyRetriever = null;
     }
-  },
+  }
 
   /**
    * type=file inputs are dumb looking, so we have our attach button trigger the
    * actual input under the hood.  Which will cascade through to a call to
    * attachFile below.
    */
-  triggerAttach: function() {
+  triggerAttach() {
     React.findDOMNode(this.refs.file).click();
-  },
+  }
 
   /**
    * The actual attachment-attaching logic that `triggerAttach` helps us get to
    * happen.
    */
-  attachFile: function(event) {
+  attachFile(event) {
     var fileInput = event.target;
     Array.from(fileInput.files).forEach((file) => {
       this.state.composer.addAttachment({
@@ -219,23 +220,20 @@ var DraftSummary = React.createClass({
         blob: file
       });
     });
-  },
+  }
 
-  deleteDraft: function() {
+  deleteDraft() {
     this.state.composer.abortCompositionDeleteDraft();
-  },
+  }
 
-  sendMessage: function() {
+  sendMessage() {
     this._persistStateToComposer();
     this.state.composer.finishCompositionSendMessage();
-  },
+  }
 
-  saveDraft: function() {
+  saveDraft() {
     this._persistStateToComposer();
     this.state.composer.saveDraft();
     this.setState({ dirty: false });
   }
-});
-
-return DraftSummary;
-});
+};

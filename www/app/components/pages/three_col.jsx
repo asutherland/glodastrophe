@@ -1,31 +1,28 @@
-define(function (require) {
-'use strict';
+import React from 'react';
 
-const React = require('react');
+import SelectedSidebarMenu from
+  '../../containers/selected_sidebar_menu';
 
-const SelectedSidebarMenu =
-  require('../../containers/selected_sidebar_menu');
+import SelectedConversationListHeader from
+  '../../containers/selected_conversation_list_header';
+import SelectedOverviewFacetsPane from
+  '../../containers/selected_overview_facets_pane';
+import SelectedSidebarFacetsPane from
+  '../../containers/selected_sidebar_facets_pane';
+import SelectedConversationListPane from
+  '../../containers/selected_conversation_list_pane';
 
-const SelectedConversationListHeader =
-  require('../../containers/selected_conversation_list_header');
-const SelectedOverviewFacetsPane =
-  require('../../containers/selected_overview_facets_pane');
-const SelectedSidebarFacetsPane =
-  require('../../containers/selected_sidebar_facets_pane');
-const SelectedConversationListPane =
-  require('../../containers/selected_conversation_list_pane');
-
-const SelectedMessageListHeader =
-  require('../../containers/selected_message_list_header');
-const SelectedMessageListPane =
-  require('../../containers/selected_message_list_pane');
+import SelectedMessageListHeader from
+  '../../containers/selected_message_list_header';
+import SelectedMessageListPane from
+  '../../containers/selected_message_list_pane';
 
 /*
  * Our split-panes use localStorage as a least-bad option for UI persistance
  * throughout the development process.  Now that we've got redux in play, it
  * might be feasible and practical to have it manage the state instead.
  */
-const SplitPane = require('react-split-pane');
+import SplitPane from 'react-split-pane';
 const splitRestore = name => localStorage.getItem(name);
 const splitSave = function(name) {
   return (size) => { localStorage.setItem(name, size); };
@@ -68,8 +65,8 @@ const CONVERSATION_PANE_SCROLL_REGION = {
  *
  *
  */
-var ThreeCol = React.createClass({
-  render: function() {
+export default class ThreeCol extends React.Component {
+  render() {
     return (
       <div style={ { height: '100%' } }>
         <SelectedSidebarMenu />
@@ -97,8 +94,5 @@ var ThreeCol = React.createClass({
         </SplitPane>
       </div>
     );
-  },
-});
-
-return ThreeCol;
-});
+  }
+};

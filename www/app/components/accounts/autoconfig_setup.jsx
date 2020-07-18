@@ -1,23 +1,19 @@
-define(function (require) {
-'use strict';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-const React = require('react');
+import { Localized } from "@fluent/react";
 
-const { FormattedMessage, injectIntl } = require('react-intl');
 
 /**
  * Largely pre-redux autoconfig widget.  Wrapped into minimal redux integration
  * via `WrappedAutoconfigSetup` widget.  Definitely consider reduxifying
  * further.
  */
-const AutoconfigSetup = React.createClass({
-  propTypes: {
-    mailApi: React.PropTypes.object.isRequired,
-    onAccountCreated: React.PropTypes.func.isRequired
-  },
+export default class AutoconfigSetup extends React.Component {
+  constructor(props) {
+    super(props);
 
-  getInitialState: function() {
-    return {
+    this.state = {
       // future work: show a spinner overlay and disable the inputs while pending
       autoconfigInProgress: false,
       errorCode: null,
@@ -27,9 +23,9 @@ const AutoconfigSetup = React.createClass({
       password: '',
       learnedBlob: null,
     };
-  },
+  }
 
-  render: function() {
+  render() {
     var errorNodes = [];
     if (this.state.autoconfigInProgress) {
       return (
@@ -61,34 +57,39 @@ const AutoconfigSetup = React.createClass({
         <div>{ errorNodes }</div>
         <div>{ learnbox }</div>
         <h1>
-          <FormattedMessage
-            id='setupAutoconfigHeaderTitle'
+          <Localized
+            id='setupAutoconfig_headerTitle'
             />
         </h1>
         <div>
-          <input type="text"
-            value={this.state.displayName}
-            onChange={this.handleNameChange}
-            placeholder={ formatMessage({ id: 'setupAutoconfigDisplayNamePlaceholder' }) }
-            />
+          <Localized id="setupAutoconfig_input_displayName" attrs={{placeholder: true}}>
+            <input type="text"
+              value={this.state.displayName}
+              onChange={this.handleNameChange}
+              placeholder={ formatMessage({ id: 'setupAutoconfigDisplayNamePlaceholder' }) }
+              />
+          </Localized>
         </div>
         <div>
-          <input type="email"
-            value={this.state.emailAddress}
-            onChange={this.handleEmailChange}
-            placeholder={ formatMessage({ id: 'setupAutoconfigEmailAddressPlaceholder' }) }
-            />
+          <Localized id="setupAutoconfig_input_emailAddress" attrs={{placeholder: true}}>
+            <input type="email"
+              value={this.state.emailAddress}
+              onChange={this.handleEmailChange}
+              />
+          </Localized>
         </div>
         <div>
-          <input type="password"
-            value={this.state.password}
-            onChange={this.handlePasswordChange}
-            placeholder={ formatMessage({ id: 'setupAutoconfigPasswordPlaceholder' }) }
-            />
+          <Localized id="setupAutoconfig_input_password" attrs={{placeholder: true}}>
+            <input type="password"
+              value={this.state.password}
+              onChange={this.handlePasswordChange}
+              placeholder={ formatMessage({ id: 'setupAutoconfigPasswordPlaceholder' }) }
+              />
+          </Localized>
         </div>
         <div>
           <button onClick={ this.startAutoconfig }>
-            <FormattedMessage
+            <Localized
               id='setupAutoconfigTriggerAutoconfigButtonLabel'
             />
           </button>
@@ -97,22 +98,22 @@ const AutoconfigSetup = React.createClass({
         </div>
       </div>
     );
-  },
+  }
 
   // These seem inefficient, but perhaps the clarity is worth the boilerplate?
-  handleNameChange: function(evt) {
+  handleNameChange(evt) {
     this.setState({ displayName: evt.target.value });
-  },
+  }
 
-  handleEmailChange: function(evt) {
+  handleEmailChange(evt) {
     this.setState({ emailAddress: evt.target.value });
-  },
+  }
 
-  handlePasswordChange: function(evt) {
+  handlePasswordChange(evt) {
     this.setState({ password: evt.target.value });
-  },
+  }
 
-  learnAboutAccount: function() {
+  learnAboutAccount() {
     var mailApi = this.props.mailApi;
     mailApi.learnAboutAccount(
       {
@@ -121,17 +122,17 @@ const AutoconfigSetup = React.createClass({
     .then((results) => {
       this.setState({ learnedBlob: results });
     });
-  },
+  }
 
-  createUsingLearnedInfo: function() {
+  createUsingLearnedInfo() {
     this.doCreate(this.state.learnedBlob.configInfo);
-  },
+  }
 
-  startAutoconfig: function() {
+  startAutoconfig() {
     this.doCreate(null);
-  },
+  }
 
-  doCreate: function(domainInfo) {
+  doCreate(domainInfo) {
     var mailApi = this.props.mailApi;
 
     // don't have multiple autoconfigs in flight at the same time
@@ -166,7 +167,4 @@ const AutoconfigSetup = React.createClass({
       this.props.onAccountCreated(account.id);
     });
   }
-});
-
-return injectIntl(AutoconfigSetup);
-});
+}

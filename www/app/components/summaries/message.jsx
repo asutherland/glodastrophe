@@ -1,38 +1,28 @@
-define(function (require) {
-'use strict';
+import React from 'react';
 
-const React = require('react');
-const PureRenderMixin = require('react-addons-pure-render-mixin');
+import { Localized } from "@fluent/react";
 
-const { FormattedMessage, FormattedRelative } = require('react-intl');
+import Star from '../actioners/star';
+import Unread from '../actioners/unread';
 
-const Star = require('../actioners/star');
-const Unread = require('../actioners/unread');
+import MessageReply from '../actioners/message_reply';
+import MessageForward from '../actioners/message_forward';
 
-const MessageReply = require('../actioners/message_reply');
-const MessageForward = require('../actioners/message_forward');
+import Attachments from './message_attachments';
+import MessageBody from './message_body';
 
-const Attachments = require('./message_attachments');
-const MessageBody = require('./message_body');
+export default class MessageSummary extends React.PureComponent {
+  constructor(props) {
+    super(props);
 
-const MessageSummary = React.createClass({
-  mixins: [PureRenderMixin],
-
-  propTypes: {
-    item: React.PropTypes.object.isRequired,
-    pick: React.PropTypes.func.isRequired,
-    selected: React.PropTypes.bool.isRequired
-  },
-
-  getInitialState: function() {
-    const message = this.props.item;
-    return {
+    const message = props.item;
+    this.state = {
       // expand all messages that are unread or starred
       expanded: !message.isRead || message.isStarred
     };
-  },
+  }
 
-  render: function() {
+  render() {
     const msg = this.props.item;
 
     var itemClassNames = 'message-item';
@@ -50,7 +40,7 @@ const MessageSummary = React.createClass({
         maybeDownloadEmbeddedImages = (
           <div className='message-download-embedded-images'
             onClick={ this.downloadEmbeddedImages } >
-            <FormattedMessage
+            <Localized
               id='messageDownloadEmbeddedImages' />
           </div>
         );
@@ -77,7 +67,7 @@ const MessageSummary = React.createClass({
             <Unread item={ msg } />
             <Star item={ msg } />
             <div className="message-date">
-              <FormattedRelative value={msg.date} />
+             <Localized id="messageDate" vars={{ date: msg.date }}/>
             </div>
             <div className="message-author">
               { msg.author.name || msg.author.address }
@@ -91,21 +81,18 @@ const MessageSummary = React.createClass({
         { bodyish }
       </div>
     );
-  },
+  }
 
-  toggleExpanded: function() {
+  toggleExpanded() {
     this.setState({
       expanded: !this.state.expanded
     });
-  },
+  }
 
-  downloadEmbeddedImages: function() {
+  downloadEmbeddedImages() {
     // Although this returns a Promise, the MessageBody is clever and listens
     // to change events.  The download will result in a change notification,
     // so it does't need us poking it and we don't need the promise.
     this.props.item.downloadEmbeddedImages();
   }
-});
-
-return MessageSummary;
-});
+};

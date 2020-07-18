@@ -1,7 +1,5 @@
-define(function (require) {
-'use strict';
+import React from 'react';
 
-var React = require('react');
 
 /**
  * Render a tag/label thing with an 'x' button-ish thing to be able to remove
@@ -9,8 +7,8 @@ var React = require('react');
  * display a complicated menu to punish users for clicking on anything but the
  * small 'x'.
  */
-var Star = React.createClass({
-  render: function() {
+export default class Star extends React.Component {
+  render() {
     var item = this.props.item;
     var classes = 'star-widget ' +
       (item.isStarred ? 'star-widget-starred' : 'star-widget-unstarred');
@@ -21,13 +19,10 @@ var Star = React.createClass({
         { starChar }
       </span>
     );
-  },
+  }
 
-  clickToggle: function(event) {
+  clickToggle(event) {
     event.stopPropagation();
     this.props.item.toggleStarred();
   }
-});
-
-return Star;
-});
+};

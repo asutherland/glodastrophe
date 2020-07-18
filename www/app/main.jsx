@@ -1,48 +1,47 @@
-define(function (require) {
-'use strict';
+import React from 'react';
+window.React = React;
 
-const React = window.React = require('react');
-const ReactDOM = window.ReactDOM = require('react-dom');
+import ReactDOM from 'react-dom';
+window.ReactDOM = ReactDOM;
 
-const injectTapEventPlugin = require('react-tap-event-plugin');
+import { HashRouter, Route, IndexRoute } from 'react-router-om';
+import { Provider } from 'react-redux';
 
-
-const { IntlProvider } = require('react-intl');
-const { Router, Route, IndexRoute, hashHistory } = require('react-router');
-const { Provider } = require('react-redux');
-
-const store = require('./store');
-
-const localeMessages = require('locales/en-US');
+import store from './store';
 
 // Make sure the backend spins up no matter what and provide a convenient way to
 // get at it in the developer console.
-const mailApi = window.mailApi = require('gelam/main-frame-setup');
+import mailApi from 'gelam/main-frame-setup';
+window.mailApi = mailApi;
 
 // -- Pages
-const Home = require('./components/home/home');
+import Home from './components/home/home';
 
-const WrappedAutoconfigSetup = require('./containers/wrapped_autoconfig_setup');
+import WrappedAutoconfigSetup from './containers/wrapped_autoconfig_setup';
 
-const ThreeCol = require('./components/pages/three_col');
+import ThreeCol from './components/pages/three_col';
 
-const { selectDefaultAccount } = require('./actions/viewing');
+import { selectDefaultAccount } from './actions/viewing';
 
 // - Debug Views
-const DebugCronsync = require('./components/debuggy/debug_cronsync');
+import DebugCronsync from './components/debuggy/debug_cronsync';
+
+// -- l10n stuff
+import { FluentBundle, FluentResource } from '@fluent/bundle';
+import { ReactLocalization, LocalizationProvider } from '@fluent/react';
+import messages_enUS from 'locales/en-US.ftl';
+
+const resource_enUS = new FluentResource(messages_enUS);
+const bundle_enUS = new FluentBundle('English');
+bundle_enUS.addResouce(resource_enUS);
+const l10n = new ReactLocalization([bundle_enUS]);
 
 
-var App = React.createClass({
-  propTypes: {
-    children: React.PropTypes.object.isRequired
-  },
-
-  render: function() {
+class App extends React.Component {
+  render() {
     return this.props.children;
   }
-});
-
-injectTapEventPlugin();
+}
 
 /*
  * Only create bring up the UI once the backend has loaded.  This simplifies
@@ -76,18 +75,18 @@ mailApi.latestOnce('accountsLoaded', () => {
   console.log('rendering into DOM');
   ReactDOM.render(
     <Provider store={ store }>
-      <IntlProvider locale='en' messages={ localeMessages }>
-        <Router history={hashHistory}>
+      <LocalizationProvider l10n={l10n}>
+        <HashRouter>
           <Route path="/" component={ App }>
             <IndexRoute component={ Home } />
             <Route path="settings/accounts/add" component={ WrappedAutoconfigSetup } />
             <Route path="view/3col" component={ ThreeCol } />
             <Route path="debug/cronsync" component={ DebugCronsync } />
           </Route>
-        </Router>
-      </IntlProvider>
+        </HashRouter>
+      </LocalizationProvider>
     </Provider>,
     document.getElementById('content')
   );
 });
-});
+

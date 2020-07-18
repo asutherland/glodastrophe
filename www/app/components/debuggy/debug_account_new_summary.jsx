@@ -1,9 +1,6 @@
-define(function (require) {
-'use strict';
+import React from 'react';
 
-var React = require('react');
-
-var FormattedMessage = require('react-intl').FormattedMessage;
+import { Localized } from "@fluent/react";
 
 /**
  * Cronsync-centered debug view.
@@ -20,8 +17,8 @@ var FormattedMessage = require('react-intl').FormattedMessage;
  * - We show a "clear" button to explicitly request that the new tracking be
  *   cleared
  */
-var DebugAccountNewSummary = React.createClass({
-  render: function() {
+export default class DebugAccountNewSummary extends React.Component {
+  render() {
     return (
       <div className="debug-cronsync-account-data">
         <div>{ this.props.accountId }</div>
@@ -29,22 +26,18 @@ var DebugAccountNewSummary = React.createClass({
           { JSON.stringify(this.props.newData, null, 2) }
         </div>
         <button onClick={ this.clearNewTracking }>
-          <FormattedMessage
+          <Localized
             id='debugClearNewTracking'
             />
         </button>
       </div>
     );
-  },
+  }
 
-  clearNewTracking: function() {
+  clearNewTracking() {
     this.props.mailApi.clearNewTrackingForAccount({
       accountId: this.props.accountId,
       silent: false
     });
-  },
-
-});
-
-return DebugAccountNewSummary;
-});
+  }
+};

@@ -1,19 +1,16 @@
-define(function (require) {
-'use strict';
+import React from 'react';
 
-const React = require('react');
+import EntireList from '../entire_list';
 
-const EntireList = require('../entire_list');
-
-const AccountMenuItem = require('../list_items/account_menu_item');
+import AccountMenuItem from '../list_items/account_menu_item';
 
 /**
  * List of currently known accounts for display in the sidebar.  Not used
  * directly; the `SelectedAccountListMenu` container is used instead.  This
  * could quite possibly be folded into that module, but I'm still learning.
  */
-var AccountsListMenu = React.createClass({
-  render: function() {
+export default class AccountsListMenu extends React.Component {
+  render() {
     return (
       <EntireList
         view={ this.props.accounts }
@@ -22,8 +19,5 @@ var AccountsListMenu = React.createClass({
         pick={ this.props.pick }
         />
     );
-  },
-});
-
-return AccountsListMenu;
-});
+  }
+};

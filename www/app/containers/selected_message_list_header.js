@@ -1,10 +1,7 @@
-define(function(require) {
-'use strict';
+import MessageListHeader from
+  '../components/pane_headers/message_list_header';
 
-const MessageListHeader =
-  require('../components/pane_headers/message_list_header');
-
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => {
   return {
@@ -18,5 +15,4 @@ const SelectedMessageListHeader = connect(
   null
 )(MessageListHeader);
 
-return SelectedMessageListHeader;
-});
+export default SelectedMessageListHeader;

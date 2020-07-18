@@ -1,8 +1,4 @@
-define(function (require) {
-'use strict';
-
-const React = require('react');
-const PureRenderMixin = require('react-addons-pure-render-mixin');
+import React from 'react';
 
 // We're fine pulling in all of Vega in the front-end.
 //const vega = require('vega');
@@ -10,7 +6,7 @@ const PureRenderMixin = require('react-addons-pure-render-mixin');
 const EntireMaterialList = require('../entire_material_list');
 
 const makeFacetingVegaVis =
-  require('../list_item_factories/faceting_vega_vis_item');
+  require('../list_items/faceting_vega_vis_item');
 
 
 /**
@@ -24,13 +20,7 @@ const makeFacetingVegaVis =
  * in order to allow scales to be used consistently across all visualizations
  * even though we cram them in different widgets.
  */
-const FacetingVegaVisContainer = React.createClass({
-  mixins: [PureRenderMixin],
-
-  propTypes: {
-    view: React.PropTypes.object.isRequired,
-  },
-
+export default class FacetingVegaVisContainer extends React.PureComponent {
   /*
   getInitialState: function() {
     return {
@@ -48,7 +38,7 @@ const FacetingVegaVisContainer = React.createClass({
   },
   */
 
-  render: function() {
+  render() {
     const { view } = this.props;
     /*
     const { chart } = this.state;
@@ -75,7 +65,4 @@ const FacetingVegaVisContainer = React.createClass({
         />
     );
   }
-});
-
-return FacetingVegaVisContainer;
-});
+};

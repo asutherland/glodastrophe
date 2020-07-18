@@ -1,15 +1,13 @@
-define(function (require) {
-'use strict';
+import React from 'react';
 
-var React = require('react');
 
 /**
  * Render a message recipient with an 'x' button to be able to remove them in
  * a composition/write context.  Differs from `ReaderPeep` which exists in a
  * reading context.
  */
-var ComposeAttachment = React.createClass({
-  render: function() {
+export default class ComposeAttachment extends React.Component {
+  render() {
     var attachment = this.props.attachment;
 
     return (
@@ -25,13 +23,10 @@ var ComposeAttachment = React.createClass({
         </button>
       </div>
     );
-  },
+  }
 
-  clickRemove: function(event) {
+  clickRemove(event) {
     event.stopPropagation();
     this.props.composer.removeAttachment(this.props.attachment);
   }
-});
-
-return ComposeAttachment;
-});
+};

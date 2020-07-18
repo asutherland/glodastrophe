@@ -1,22 +1,11 @@
-define(function (require) {
-'use strict';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-const React = require('react');
-const PureRenderMixin = require('react-addons-pure-render-mixin');
+import WholeWindowedList from '../whole_windowed_list';
+import VegaVis from '../visualizations/vega_vis';
 
-
-const WholeWindowedList = require('../whole_windowed_list');
-const VegaVis = require('../visualizations/vega_vis');
-
-
-const VisListPane = React.createClass({
-  mixins: [PureRenderMixin],
-
-  propTypes: {
-    views: React.PropTypes.array.isRequired
-  },
-
-  render: function() {
+export default class VisListPane extends React.PureComponent {
+  render() {
     const viewWidgets = this.props.views.map((view) => {
       const passProps = {
         viewDef: view.viewDef
@@ -37,7 +26,8 @@ const VisListPane = React.createClass({
       </div>
     );
   }
-});
+};
 
-return VisListPane;
-});
+VisListPane.propTypes = {
+  views: PropTypes.array.isRequired
+};

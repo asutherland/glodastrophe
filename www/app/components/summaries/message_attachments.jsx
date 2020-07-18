@@ -1,28 +1,21 @@
-define(function (require) {
-'use strict';
+import React from 'react';
 
-var React = require('react');
+import Attachment from './message_attachment';
 
-var Attachment = require('./message_attachment');
+export default function MessageAttachments(props) {
+  const msg = this.props.message;
 
-var MessageAttachments = React.createClass({
-  render: function() {
-    var msg = this.props.message;
-
-    var attachments = msg.attachments.map((attachment) => {
-      return (
-        <Attachment key={ attachment.partId }
-          attachment={ attachment } />
-      );
-    });
-
+  const attachments = msg.attachments.map((attachment) => {
     return (
-      <div className="message-attachments">
-        { attachments }
-      </div>
+      <Attachment key={ attachment.partId }
+        attachment={ attachment } />
     );
-  },
-});
+  });
 
-return MessageAttachments;
-});
+  return (
+    <div className="message-attachments">
+      { attachments }
+    </div>
+  );
+};
+

@@ -1,7 +1,4 @@
-define(function (require) {
-'use strict';
-
-var React = require('react');
+import React from 'react';
 
 /**
  * Render a tag/label thing with an 'x' button-ish thing to be able to remove
@@ -9,8 +6,8 @@ var React = require('react');
  * display a complicated menu to punish users for clicking on anything but the
  * small 'x'.
  */
-var Taggy = React.createClass({
-  render: function() {
+export default class Taggy extends React.Component {
+  render() {
     var classes = 'taggy-item';
     var folder = this.props.folder;
 
@@ -22,22 +19,19 @@ var Taggy = React.createClass({
         </button>
       </div>
     );
-  },
+  }
 
-  clickFolder: function(event) {
+  clickFolder(event) {
     event.stopPropagation();
     if (this.props.pick) {
       this.props.pick(this.props.folder);
     }
-  },
+  }
 
-  clickRemove: function(event) {
+  clickRemove(event) {
     event.stopPropagation();
     if (this.props.labelOwner) {
       this.props.labelOwner.removeLabels([this.props.folder]);
     }
   }
-});
-
-return Taggy;
-});
+};

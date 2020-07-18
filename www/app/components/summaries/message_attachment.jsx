@@ -1,61 +1,11 @@
-define(function (require) {
-'use strict';
+import React from 'react';
 
-var React = require('react');
+import { Localized } from "@fluent/react";
 
-var FormattedMessage = require('react-intl').FormattedMessage;
+export default function MessageAttachment(props) {
+  const attachment = props.attachment;
 
-var MessageAttachment = React.createClass({
-  render: function() {
-    var attachment = this.props.attachment;
-
-    var maybeDownload;
-    if (attachment.isDownloaded) {
-      maybeDownload = <div>
-        <button onClick={ this.viewAttachment }>
-          <FormattedMessage
-            id='attachmentView' />
-        </button>
-      </div>;
-    } else if (attachment.isDownloading) {
-      maybeDownload = <div>
-        <FormattedMessage
-          id='attachmentDownloading' />
-      </div>;
-    } else if (attachment.isDownloadable) {
-      maybeDownload = <div>
-        <button onClick={ this.download }>
-          <FormattedMessage
-            id='attachmentDownload' />
-        </button>
-      </div>;
-    } else {
-      maybeDownload = <div className="message-attachment-no-download">
-        <FormattedMessage
-          id='attachmentNoDownload' />
-      </div>;
-    }
-
-    return (
-      <div className="message-attachment-item">
-        <div className="message-attachment-mimetype">
-          { attachment.mimetype }
-        </div>
-        <div className="message-attachment-filename">
-          { attachment.filename }
-        </div>
-        <div className="message-attachment-size">
-          { attachment.sizeEstimateInBytes }
-        </div>
-        <div className="message-attachment-download-slot">
-          { maybeDownload }
-        </div>
-      </div>
-    );
-  },
-
-  viewAttachment: function() {
-    var attachment = this.props.attachment;
+  function onViewAttachment() {
     console.log('getting blob');
     attachment.getDownloadedBlob().then((blob) => {
       console.log('got blob');
@@ -67,13 +17,55 @@ var MessageAttachment = React.createClass({
         URL.revokeObjectURL(url);
       }, 0);
     });
-  },
-
-  download: function() {
-    // DeviceStorage is no good on desktop.  Just store stuff in IndexedDB.
-    this.props.attachment.download({ downloadTarget: 'cache' });
   }
-});
 
-return MessageAttachment;
-});
+  function onDownload() {
+    // DeviceStorage is no good on desktop.  Just store stuff in IndexedDB.
+    attachment.download({ downloadTarget: 'cache' });
+  }
+
+  var maybeDownload;
+  if (attachment.isDownloaded) {
+    maybeDownload = <div>
+      <button onClick={ this.viewAttachment }>
+        <Localized
+          id='attachmentView' />
+      </button>
+    </div>;
+  } else if (attachment.isDownloading) {
+    maybeDownload = <div>
+      <Localized
+        id='attachmentDownloading' />
+    </div>;
+  } else if (attachment.isDownloadable) {
+    maybeDownload = <div>
+      <button onClick={ this.download }>
+        <Localized
+          id='attachmentDownload' />
+      </button>
+    </div>;
+  } else {
+    maybeDownload = <div className="message-attachment-no-download">
+      <Localized
+        id='attachmentNoDownload' />
+    </div>;
+  }
+
+  return (
+    <div className="message-attachment-item">
+      <div className="message-attachment-mimetype">
+        { attachment.mimetype }
+      </div>
+      <div className="message-attachment-filename">
+        { attachment.filename }
+      </div>
+      <div className="message-attachment-size">
+        { attachment.sizeEstimateInBytes }
+      </div>
+      <div className="message-attachment-download-slot">
+        { maybeDownload }
+      </div>
+    </div>
+  );
+}
+

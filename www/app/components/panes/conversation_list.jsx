@@ -1,28 +1,16 @@
-define(function (require) {
-'use strict';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-const React = require('react');
-const PureRenderMixin = require('react-addons-pure-render-mixin');
+import WindowedList from '../windowed_list';
 
-const WindowedList = require('../windowed_list');
-
-const ConversationSummary = require('../summaries/conversation');
-
+import ConversationSummary from '../summaries/conversation';
 
 /**
  * Display the list of conversations in a folder/whatever with a summary at the
  * top.
  */
-var ConversationListPane = React.createClass({
-  mixins: [PureRenderMixin],
-
-  propTypes: {
-    selectedConversationId: React.PropTypes.string,
-    view: React.PropTypes.object,
-    onSelectConversationId: React.PropTypes.func.isRequired,
-  },
-
-  render: function() {
+export default class ConversationListPane extends React.PureComponent {
+  render() {
     const view = this.props.view;
 
     // Be empty if there's no view.
@@ -41,8 +29,11 @@ var ConversationListPane = React.createClass({
           />
       </div>
     );
-  },
-});
+  }
+};
 
-return ConversationListPane;
-});
+ConversationListPane.propTypes = {
+  selectedConversationId: PropTypes.string,
+  view: PropTypes.object,
+  onSelectConversationId: PropTypes.func.isRequired,
+};

@@ -1,21 +1,14 @@
-define(function (require) {
-'use strict';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-const React = require('react');
+import { Localized } from "@fluent/react";
 
-const { injectIntl } = require('react-intl');
+import { Header, List, Segment, Sidebar } from 'semantic-ui-react';
 
-const FontIcon = require('material-ui/lib/font-icon');
+import EntireList from '../entire_list';
 
-const LeftNav = require('material-ui/lib/left-nav');
-const List = require('material-ui/lib/lists/list');
-const ListItem = require('material-ui/lib/lists/list-item');
-const Divider = require('material-ui/lib/divider');
-
-const EntireMaterialList = require('../entire_material_list');
-
-const makeAccountListItem = require('../list_item_factories/account_list_item');
-const makeFolderListItem = require('../list_item_factories/folder_list_item');
+import AccountListItem from '../list_items/account_list_item';
+import FolderListItem from '../list_items/folder_list_item';
 
 
 /**
@@ -28,59 +21,64 @@ const makeFolderListItem = require('../list_item_factories/folder_list_item');
  * There is no intent to provide a useful UX here.  Ideally evolve this into
  * nothingness and evolve the summaries into something useful.
  */
-var SidebarMenu = React.createClass({
-  propTypes: {
-    open: React.PropTypes.bool.isRequired,
-    accountsView: React.PropTypes.object.isRequired,
-    selectedAccountId: React.PropTypes.string,
-    accountFoldersView: React.PropTypes.object,
-    selectedFolderId: React.PropTypes.string,
-    onSelectAccountId: React.PropTypes.func.isRequired,
-    onSelectFolderId: React.PropTypes.func.isRequired
-  },
-
-  contextTypes: {
-    router: React.PropTypes.object.isRequired,
-  },
-
-  render: function() {
-    return (
-      <LeftNav open={ this.props.open }>
-        <List>
-          <ListItem
-            primaryText={ this.props.intl.formatMessage({ id: 'sidebar_home' }) }
-            leftIcon={ <FontIcon className="material-icons">home</FontIcon> }
-            onTouchTap={ this.goHome }
-            />
-        </List>
-        <Divider />
-        <EntireMaterialList
-          subheader={ this.props.intl.formatMessage({ id: 'sidebar_accounts_label' }) }
-          view={ this.props.accountsView }
-          viewEvent={ 'complete' }
-          selectedId={ this.props.selectedAccountId }
-          pick={ this.props.onSelectAccountId }
-          listItemFactory={ makeAccountListItem }
-          />
-        <Divider />
-        <EntireMaterialList
-          subheader={ this.props.intl.formatMessage({ id: 'sidebar_folders_label' }) }
-          view={ this.props.accountFoldersView }
-          viewEvent={ 'complete' }
-          selectedId={ this.props.selectedFolderId }
-          pick={ this.props.onSelectFolderId }
-          listItemFactory={ makeFolderListItem }
-          />
-      </LeftNav>
-    );
-  },
-
-  goHome: function() {
+export default function SidebarMenu(props) {
+  function onGoHome() {
     // per material-ui issues, it appears that we need to do manual handlers for
     // MenuItems but for *Button things we can use containerElement={<Link.../>}
     this.context.router.push('/');
   }
-});
 
-return injectIntl(SidebarMenu);
-});
+  return (
+    <Siderbar.Pushable>
+      <Sidebar
+        >
+        <Segment>
+          <List>
+            <List.Item
+              icon='home'
+              onClick={ this.goHome }
+              >
+              <Localized id='sidebar_home' />
+            </List.Item>
+          </List>
+        </Segment>
+        <Header as='h5' attached>
+          <Localized id='sidebar_accounts_label' />
+        </Header>
+        <Segment>
+          <EntireList
+            view={ this.props.accountsView }
+            selectedId={ this.props.selectedAccountId }
+            pick={ this.props.onSelectAccountId }
+            widget={ AccountListItem }
+          />
+        </Segment>
+        <Header as='h5' attached>
+          <Localized id='sidebar_folders_label' />
+        </Header>
+        <Segment>
+          <EntireList
+            view={ this.props.accountFoldersView }
+            selectedId={ this.props.selectedFolderId }
+            pick={ this.props.onSelectFolderId }
+            widget={ FolderListItem }
+          />
+        </Segment>
+      </Sidebar>
+    </Siderbar.Pushable>
+  );
+
+
+};
+
+SidebarMenu.propTypes = {
+  open: PropTypes.bool.isRequired,
+  accountsView: PropTypes.object.isRequired,
+  selectedAccountId: PropTypes.string,
+  accountFoldersView: PropTypes.object,
+  selectedFolderId: PropTypes.string,
+  onSelectAccountId: PropTypes.func.isRequired,
+  onSelectFolderId: PropTypes.func.isRequired
+};
+
+

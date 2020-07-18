@@ -1,13 +1,7 @@
-define(function(require) {
-'use strict';
+import { TOGGLE_SIDEBAR } from './actionTypes';
 
-const { TOGGLE_SIDEBAR } = require('../actions/actionTypes');
-
-return {
-  toggleSidebar: function() {
-    return {
-      type: TOGGLE_SIDEBAR
-    };
-  }
+export function toggleSidebar() {
+  return {
+    type: TOGGLE_SIDEBAR
+  };
 };
-});

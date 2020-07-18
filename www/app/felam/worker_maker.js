@@ -1,5 +1,5 @@
 define(function(require) {
 'use strict';
 
-return require('worker!./worker_bootstrap');
+return require('worker-loader!./worker_bootstrap');
 });

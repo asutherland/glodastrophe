@@ -1,79 +1,44 @@
-define(function (require) {
-'use strict';
+import React, { useCallback } from 'react';
+import { Localized } from '@fluent/react';
 
-const React = require('react');
+import { useDispatch } from 'react-redux'
+import { useHistory } from "react-router-dom";
 
-const { injectIntl } = require('react-intl');
+import { Button, Card } from 'semantic-ui-react';
 
-const Card = require('material-ui/lib/card/card');
-const CardActions = require('material-ui/lib/card/card-actions');
-const CardHeader = require('material-ui/lib/card/card-header');
-const FlatButton = require('material-ui/lib/flat-button');
 
-const { selectAccountId } = require('../../actions/viewing');
+import { selectAccountId } from '../../actions/viewing';
 
-var AccountHome = React.createClass({
-  propTypes: {
-    item: React.PropTypes.object.isRequired
-  },
+export default function AccountHome(props) {
+  const account = props.item;
+  const dispatch = useDispatch();
+  const history = useHistory();
 
-  contextTypes: {
-    store: React.PropTypes.object,
-    router: React.PropTypes.object
-  },
-
-  render: function() {
-    const account = this.props.item;
-    const { formatMessage } = this.props.intl;
-    return (
-      <Card>
-        <CardHeader
-          title={ account.name }
-          subtitle={ account.type }
-          actAsExpander={ true }
-          showExpandableButton={ true }
-          />
-        <CardActions expandable={ true } >
-          <FlatButton
-            label={ formatMessage({ id: 'show_account_contents' }) }
-            onTouchTap={ this.showAccount }
-            />
-          <FlatButton
-            label={ formatMessage({ id: 'recreateAccount' }) }
-            onTouchTap={ this.recreateAccount }
-            />
-          <FlatButton
-            label={ formatMessage({ id: 'deleteAccount' }) }
-            onTouchTap={ this.deleteAccount }
-            />
-          <FlatButton
-            label={ formatMessage({ id: 'syncAccountFolderList' }) }
-            onTouchTap={ this.syncFolderList }
-            />
-        </CardActions>
-      </Card>
-    );
-  },
-
-  showAccount: function() {
-    console.log('got show account click!');
-    const account = this.props.item;
-    this.context.store.dispatch(selectAccountId(account.id));
-    this.context.router.push('/view/3col');
-  },
-
-  recreateAccount: function() {
-    this.props.item.recreateAccount();
-  },
-
-  deleteAccount: function() {
-    this.props.item.deleteAccount();
-  },
-
-  syncFolderList: function() {
-    this.props.item.syncFolderList();
+  function doShowAccount() {
+    dispatch(selectAccountId(account.id));
+    history.push('/view/3col');
   }
-});
 
-return injectIntl(AccountHome);
-});
+  return (
+    <Card>
+      <Card.Content>
+        <Card.Header>{ account.name }</Card.Header>
+        <Card.Meta>{ account.type }</Card.Meta>
+      </Card.Content>
+      <Card.Content>
+        <Button onClick={ doShowAccount } >
+          <Localized id='show_account_contents' />
+        </Button>
+        <Button onClick={ () => { account.recreateAccount(); } } >
+          <Localized id='recreateAccount' />
+        </Button>
+        <Button onClick={ () => { account.deleteAccount(); } } >
+          <Localized id='deleteAccount' />
+        </Button>
+        <Button onClick={ () => { account.syncFolderList(); } } >
+          <Localized id='syncAccountFolderList' />
+        </Button>
+      </Card.Content>
+    </Card>
+  );
+}

@@ -1,11 +1,7 @@
-define(function(require) {
-'use strict';
-
-
-const { connect } = require('react-redux');
+import { connect } from 'react-redux';
 const { hashHistory } = require('react-router');
 
-const AutoconfigSetup = require('../components/accounts/autoconfig_setup');
+import AutoconfigSetup from '../components/accounts/autoconfig_setup';
 
 const { selectAccountId } = require('../actions/viewing');
 
@@ -36,5 +32,4 @@ const WrappedAutoconfigSetup = connect(
   mapDispatchToProps
 )(AutoconfigSetup);
 
-return WrappedAutoconfigSetup;
-});
+export default WrappedAutoconfigSetup;

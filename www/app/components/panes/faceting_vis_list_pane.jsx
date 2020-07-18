@@ -1,21 +1,11 @@
-define(function (require) {
-'use strict';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-const React = require('react');
-const PureRenderMixin = require('react-addons-pure-render-mixin');
+import FacetingVegaVisContainer from
+  '../visualizations/faceting_vega_vis_container';
 
-const FacetingVegaVisContainer =
-  require('../visualizations/faceting_vega_vis_container');
-
-
-const FacetingVisListPane = React.createClass({
-  mixins: [PureRenderMixin],
-
-  propTypes: {
-    views: React.PropTypes.array.isRequired
-  },
-
-  render: function() {
+export default class FacetingVisListPane extends React.PureComponent {
+  render() {
     const viewWidgets = this.props.views.map((view) => {
       return (
         <FacetingVegaVisContainer
@@ -31,7 +21,8 @@ const FacetingVisListPane = React.createClass({
       </div>
     );
   }
-});
+};
 
-return FacetingVisListPane;
-});
+FacetingVisListPane.propTypes = {
+  views: PropTypes.array.isRequired
+};

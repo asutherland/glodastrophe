@@ -1,12 +1,9 @@
-define(function(require) {
-'use strict';
+import MessageListPane from
+  '../components/panes/message_list';
 
-const MessageListPane =
-  require('../components/panes/message_list');
+import { connect } from 'react-redux';
 
-const { connect } = require('react-redux');
-
-const { navigateToDraft, selectMessageId } = require('../actions/viewing');
+import { navigateToDraft, selectMessageId } from '../actions/viewing';
 
 const mapStateToProps = (state) => {
   return {
@@ -31,5 +28,4 @@ const SelectedMessageListPane = connect(
   mapDispatchToProps
 )(MessageListPane);
 
-return SelectedMessageListPane;
-});
+export default SelectedMessageListPane;
