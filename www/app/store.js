@@ -1,15 +1,11 @@
-define(function(require) {
-'use strict';
-
-const { createStore, applyMiddleware } = require('redux');
-const thunk = require('redux-thunk');
+import { createStore, applyMiddleware } from 'redux';
+import ReduxThunk from 'redux-thunk';
 
 const rootReducer = require('./reducers/index');
 
 const store = window.REDUX_STORE = createStore(
   rootReducer,
-  applyMiddleware(thunk)
+  applyMiddleware(ReduxThunk)
 );
 
-return store;
-});
+export default store;

@@ -14,6 +14,7 @@ var config = {
   mode: 'development',
   entry: {
     main: path.resolve(__dirname, 'www/app/main.jsx'),
+    'backend-main': path.resolve(__dirname, 'web-ext-src/main.js'),
     // TODO: figure out how to do chunking a bit better.  Probably playing with
     // CommonsChunkPlugin is all that is needed, but the mechanism by which the
     // worker chunk is brought into existence likely needs to be understood
@@ -73,7 +74,8 @@ var config = {
   //output config
   output: {
     path: buildPath,    //Path of output file
-    filename: '[name].js'  //Name of output file
+    filename: '[name].js',  //Name of output file
+    globalObject: 'globalThis'
   },
   plugins: [
     //Minify the bundle

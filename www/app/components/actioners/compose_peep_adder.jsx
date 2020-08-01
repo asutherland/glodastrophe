@@ -144,7 +144,7 @@ export default class ComposePeepAdder extends React.Component {
     );*/
     return (
       <input type="text"></input>
-    )
+    );
   }
 
   /**

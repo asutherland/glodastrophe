@@ -1,8 +1,9 @@
 import React from 'react';
 
-import Autosuggest from 'autosuggest';
-
 /**
+ * TODO: Broken / disabled.  Removed the react-autosuggest component and it
+ * seems semantic-ui's is probably good enough for these needs.
+ *
  * A widget to enable tagging a conversation.  It could also trivially support
  * tagging messages, but that's not a desired UI flow at this time because it
  * doesn't match up with gmail semantics.  Flags should likely be used for that.
@@ -49,6 +50,7 @@ export default class TagAdder extends React.Component {
       placeholder: 'Add tag...'
     };
 
+    /*
     return (
       <Autosuggest
         ref="autosuggest"
@@ -59,6 +61,10 @@ export default class TagAdder extends React.Component {
         onSuggestionSelected={ this.addTag }
         inputAttributes={ inputAttributes }
         />
+    );
+    */
+    return (
+      <input type="text"></input>
     );
   }
 

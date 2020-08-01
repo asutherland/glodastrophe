@@ -1,21 +1,18 @@
-define(function(require) {
-'use strict';
+import mailApi from 'gelam/main-frame-setup';
+import { accountIdFromFolderId, accountIdFromConvId }
+  from 'gelam/id_conversions';
 
-const mailApi = require('gelam/main-frame-setup');
-const { accountIdFromFolderId, accountIdFromConvId } =
-  require('gelam/id_conversions');
-
-const { SELECT_ACCOUNT, SELECT_FOLDER, SELECT_CONVERSATION, SELECT_MESSAGE,
+import { SELECT_ACCOUNT, SELECT_FOLDER, SELECT_CONVERSATION, SELECT_MESSAGE,
         NAVIGATE_TO_DRAFT,
         UPDATE_CONVERSATIONS_VIEW_SERIALS, UPDATE_CONVERSATION_SERIAL,
         UPDATE_MESSAGES_VIEW_SERIALS,
         MODIFY_TEXT_FILTER, MODIFY_FILTER,
-        ADD_VIS, MODIFY_VIS, REMOVE_VIS } =
-  require('../actions/actionTypes');
+        ADD_VIS, MODIFY_VIS, REMOVE_VIS } from
+  '../actions/actionTypes';
 
-const { dispatchConversationsViewSerialUpdate, dispatchConversationSerialUpdate,
-        dispatchMessagesViewSerialUpdate } =
-  require('../actions/viewing_updates');
+import { dispatchConversationsViewSerialUpdate, dispatchConversationSerialUpdate,
+        dispatchMessagesViewSerialUpdate } from
+  '../actions/viewing_updates';
 
 const MIN_TEXTFILTER_LEN = 3;
 
@@ -102,7 +99,9 @@ const DEFAULT_STATE = {
     ]
   },
   visualizationDefs: {
-    conversationSidebarDefsView: mailApi.viewRawList('vis_facet', 'faceters')
+    // XXX commented this out because the vis_facet extension namespace is no
+    // longer defined because the extension isn't installed/activated.
+    //conversationSidebarDefsView: mailApi.viewRawList('vis_facet', 'faceters')
   }
 };
 
@@ -131,7 +130,7 @@ function onMessagesViewSeeked(view) {
  * and whether the redux strategy seems cleaner.  (Once I get the hang of redux,
  * that is.  I am unlikely to get this right the first try.)
  */
-return function reduceViewing(oldState = DEFAULT_STATE, action) {
+export default function reduceViewing(oldState = DEFAULT_STATE, action) {
   // Bail if this action doesn't affect us.
   if (ACTIONS_WE_CARE_ABOUT.indexOf(action.type) === -1) {
     return oldState;
@@ -460,4 +459,4 @@ return function reduceViewing(oldState = DEFAULT_STATE, action) {
 
   return newState;
 };
-});
+

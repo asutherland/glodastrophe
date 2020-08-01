@@ -33,7 +33,7 @@ import messages_enUS from 'locales/en-US.ftl';
 
 const resource_enUS = new FluentResource(messages_enUS);
 const bundle_enUS = new FluentBundle('English');
-bundle_enUS.addResouce(resource_enUS);
+bundle_enUS.addResource(resource_enUS);
 const l10n = new ReactLocalization([bundle_enUS]);
 
 
