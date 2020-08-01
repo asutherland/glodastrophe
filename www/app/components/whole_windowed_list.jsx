@@ -1,8 +1,4 @@
-define(function (require) {
-'use strict';
-
-var React = require('react');
-var PureRenderMixin = require('react-addons-pure-render-mixin');
+import React from 'react';
 
 /**
  * Display the entirety of a WindowedListView by rendering *ALL* of it into
@@ -12,25 +8,16 @@ var PureRenderMixin = require('react-addons-pure-render-mixin');
  * This component takes care of generating the seek requests itself.  (Which is
  * a top-capped seek with an absurd number of requested items.)
  */
-var WholeWindowedList = React.createClass({
-  mixins: [PureRenderMixin],
+export default class WholeWindowedList extends React.PureComponent {
+  constructor(props) {
+    super(props);
 
-  propTypes: {
-    conditionalWidget: React.PropTypes.func,
-    passProps: React.PropTypes.object,
-    pick: React.PropTypes.func,
-    selectedId: React.PropTypes.string,
-    view: React.PropTypes.object.isRequired,
-    widget: React.PropTypes.func,
-  },
-
-  getInitialState: function() {
-    return {
+    this.state = {
       serial: this.props.view.serial,
     };
-  },
+  }
 
-  componentWillMount: function() {
+  componentWillMount() {
     this.boundDirtyHandler = this.handleDirty; //.bind(this);
     this.boundSeek = this.seek;
 
@@ -40,15 +27,15 @@ var WholeWindowedList = React.createClass({
 
     // A thousand of whatever this is is enough!
     view.seekToTop(10, 990);
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     if (this.props.view) {
       this.props.view.removeListener('seeked', this.boundDirtyHandler);
     }
-  },
+  }
 
-  componentWillReceiveProps: function(nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (this.props.view) {
       this.props.view.removeListener('seeked', this.boundDirtyHandler);
     }
@@ -58,24 +45,24 @@ var WholeWindowedList = React.createClass({
       // A thousand of whatever this is is enough!
       nextProps.view.seekToTop(10, 990);
     }
-  },
+  }
 
-  handleDirty: function() {
+  handleDirty() {
     this.setState({
       serial: this.props.view.serial
     });
-  },
+  }
 
-  render: function() {
+  render() {
     var widgets = this.props.view.items.map(this.renderItem);
     return (
       <div>
         {widgets}
       </div>
     );
-  },
+  }
 
-  renderItem: function(item, relIndex) {
+  renderItem(item, relIndex) {
     // Note: The react-widget seems to be making the assumption that we'll use
     // the relIndex as our key, although it doesn't actually depend on this.
     var conditionalWidget = this.props.conditionalWidget;
@@ -102,7 +89,4 @@ var WholeWindowedList = React.createClass({
         />
     );
   }
-});
-
-return WholeWindowedList;
-});
+};

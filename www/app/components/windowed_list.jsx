@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { QuantizedHeightList } from 'quantized-list';
-
+import { QuantizedHeightList } from '../quantized-list';
 
 /**
  * Bind a WindowedListView to a ReactList.  Our mapping is currently extremely

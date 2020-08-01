@@ -1,29 +1,21 @@
-define(function (require) {
-'use strict';
+import React from 'react';
 
-const React = require('react');
-const PureRenderMixin = require('react-addons-pure-render-mixin');
+// We're fine pulling in all of Vega in the front-end.
+import { parse } from 'vega';
 
-const vega = require('vega');
+export default class FacetingVegaVis extends React.PureComponent {
+  constructor(props) {
+    super(props);
 
-const FacetingVegaVis = React.createClass({
-  mixins: [PureRenderMixin],
+    this.state = {
+      vis: null
+    }
+  }
 
-  propTypes: {
-    //chart: React.PropTypes.func.isRequired,
-    item: React.PropTypes.object.isRequired,
-    serial: React.PropTypes.number.isRequired,
-    view: React.PropTypes.object.isRequired,
-    viewDef: React.PropTypes.object.isRequired
-  },
 
-  getInitialState: function() {
-    return { vis: null };
-  },
-
-  componentDidMount: function() {
+  componentDidMount() {
     const { item, viewDef } = this.props;
-    vega.parse.spec(viewDef.frontend.spec, (chart) => {
+    parse.spec(viewDef.frontend.spec, (chart) => {
       const vis = chart({
         el: this.refs.visContainer,
         // This call primarily being made on the basis of it being able to debug
@@ -40,9 +32,9 @@ const FacetingVegaVis = React.createClass({
 
       vis.update();
     });
-  },
+  }
 
-  componentDidUpdate: function() {
+  componentDidUpdate() {
     const { vis } = this.state;
     const { view, viewDef, item } = this.props;
     if (!vis) {
@@ -76,20 +68,17 @@ const FacetingVegaVis = React.createClass({
       .remove(() => true)
       .insert(useData);
     vis.update();
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     if (this.state.vis) {
       this.state.vis.destroy();
     }
-  },
+  }
 
-  render: function() {
+  render() {
     return (
       <div ref='visContainer' />
     );
   }
-});
-
-return FacetingVegaVis;
-});
+};

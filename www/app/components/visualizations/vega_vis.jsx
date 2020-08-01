@@ -1,33 +1,25 @@
-define(function (require) {
-'use strict';
-
-const React = require('react');
-const PureRenderMixin = require('react-addons-pure-render-mixin');
+import React from 'react';
 
 // We're fine pulling in all of Vega in the front-end.
-const vega = require('vega');
+import { parse } from 'vega';
 
 /**
- *
+ * Vega visualization backed by data pre-computed by the backend (which tries
+ * to run a subset of vega limited to pure data processing and not any
+ * rendering logic.)
  */
-const VegaVis = React.createClass({
-  mixins: [PureRenderMixin],
+export default class VegasVis extends React.PureComponent {
+  constructor(props) {
+    super(props);
 
-  propTypes: {
-    item: React.PropTypes.object.isRequired,
-    serial: React.PropTypes.number.isRequired,
-    viewDef: React.PropTypes.object.isRequired
-  },
-
-  getInitialState: function() {
-    return {
+    this.state = {
       vis: null
-    };
-  },
+    }
+  }
 
-  componentDidMount: function() {
+  componentDidMount() {
     const { viewDef, item } = this.props;
-    vega.parse.spec(viewDef.frontend.spec, (chart) => {
+    parse.spec(viewDef.frontend.spec, (chart) => {
       const vis = chart({
         el: this.refs.visContainer,
         // This call primarily being made on the basis of it being able to debug
@@ -43,9 +35,9 @@ const VegaVis = React.createClass({
 
       vis.update();
     });
-  },
+  }
 
-  componentDidUpdate: function() {
+  componentDidUpdate() {
     const { vis } = this.state;
     const { viewDef, item } = this.props;
 
@@ -59,20 +51,17 @@ const VegaVis = React.createClass({
       .remove(() => true)
       .insert(useData);
     vis.update();
-  },
+  }
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     if (this.state.vis) {
       this.state.vis.destroy();
     }
-  },
+  }
 
-  render: function() {
+  render() {
     return (
       <div ref='visContainer' />
     );
   }
-});
-
-return VegaVis;
-});
+};

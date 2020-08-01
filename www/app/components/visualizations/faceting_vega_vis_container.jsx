@@ -1,13 +1,10 @@
 import React from 'react';
+import FacetingVegaVisItem from '../list_items/faceting_vega_vis_item';
 
 // We're fine pulling in all of Vega in the front-end.
 //const vega = require('vega');
 
-const EntireMaterialList = require('../entire_material_list');
-
-const makeFacetingVegaVis =
-  require('../list_items/faceting_vega_vis_item');
-
+const EntireList = require('../entire_list');
 
 /**
  * Originally tried to create a single chart factory from the definition, but
@@ -49,19 +46,19 @@ export default class FacetingVegaVisContainer extends React.PureComponent {
     */
 
     const viewDef = view.viewDef;
-    const passProps = {
+    const extra = {
       //chart,
       view,
       viewDef
     };
 
+    // XXX want to show `viewDef.frontend.header` as some kind of heading.
+    // XXX this claimed it was using the viewEvent "seeked"???
     return (
-      <EntireMaterialList
-        subheader={ viewDef.frontend.header }
+      <EntireList
         view={ view }
-        viewEvent={ 'seeked' }
-        passProps={ passProps }
-        listItemFactory={ makeFacetingVegaVis }
+        widget={ FacetingVegaVisItem }
+        extra={ extra }
         />
     );
   }

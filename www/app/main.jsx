@@ -4,7 +4,7 @@ window.React = React;
 import ReactDOM from 'react-dom';
 window.ReactDOM = ReactDOM;
 
-import { HashRouter, Route, IndexRoute } from 'react-router-om';
+import { HashRouter, Route, Switch } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
 import store from './store';
@@ -77,12 +77,12 @@ mailApi.latestOnce('accountsLoaded', () => {
     <Provider store={ store }>
       <LocalizationProvider l10n={l10n}>
         <HashRouter>
-          <Route path="/" component={ App }>
-            <IndexRoute component={ Home } />
-            <Route path="settings/accounts/add" component={ WrappedAutoconfigSetup } />
-            <Route path="view/3col" component={ ThreeCol } />
-            <Route path="debug/cronsync" component={ DebugCronsync } />
-          </Route>
+          <Switch>
+            <Route exact path="/" component={ Home } />
+            <Route path="/settings/accounts/add" component={ WrappedAutoconfigSetup } />
+            <Route path="/view/3col" component={ ThreeCol } />
+            <Route path="/debug/cronsync" component={ DebugCronsync } />
+          </Switch>
         </HashRouter>
       </LocalizationProvider>
     </Provider>,

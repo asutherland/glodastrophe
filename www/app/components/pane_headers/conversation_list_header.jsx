@@ -1,12 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const AppBar = require('material-ui/lib/app-bar');
-const Divider = require('material-ui/lib/divider');
-const FontIcon = require('material-ui/lib/font-icon');
-const IconButton = require('material-ui/lib/icon-button');
-const IconMenu = require('material-ui/lib/menus/icon-menu');
-const MenuItem = require('material-ui/lib/menus/menu-item');
+import { Dropdown, Menu } from 'semantic-ui-react';
+import { Localized } from '@fluent/react';
 
 //const ConvFilterBar = require('../filter_bar/conv_filter_bar');
 
@@ -100,65 +96,62 @@ export default class ConversationListHeader extends React.PureComponent {
     // seeming to handle JSX inside prop values and because it's really weird
     // non-idiomatic stuff that does bad indentation things.
 
-    const menuButton = (
-      <IconButton
-        tooltip={ this.props.intl.formatMessage({ id: 'toggle_sidebar' }) }
-        onTouchTap={ this.props.onToggleSidebar } >
-        <FontIcon className="material-icons">menu</FontIcon>
-      </IconButton>
-    );
-
     const sidebarAddMenuItems =
       this.props.conversationSidebarDefsView.items.map((viewDef) => {
         const addVis = () => {
           this.props.onAddSidebarVis(viewDef);
         };
         return (
-          <MenuItem
-            primaryText={ viewDef.name }
-            onTouchTap={ addVis }
+          <Dropdown.Item
+            text={ viewDef.name }
+            onClick={ addVis }
             />
         );
       });
 
-    const visualizationMenuItems = [
-      <MenuItem
-        primaryText={ this.props.intl.formatMessage({ id: 'visualizations_sidebar_menu_add_root'}) }
-        menuItems={ sidebarAddMenuItems }
-        />
-    ];
-
-    const actionMenuButton =
-      <IconButton>
-        <FontIcon className="material-icons">more_vert</FontIcon>
-      </IconButton>;
-    const actionMenu = (
-      <IconMenu iconButtonElement={ actionMenuButton }>
-        <MenuItem
-          primaryText={ this.props.intl.formatMessage({ id: 'conversations_compose_menu_item' }) }
-          onTouchTap={ this.onBeginCompose } />
-        <MenuItem
-          primaryText={ this.props.intl.formatMessage({ id: 'conversations_refresh_view_menu_item' }) }
-          onTouchTap={ this.onRefreshView } />
-        <MenuItem
-          primaryText={ this.props.intl.formatMessage({ id: 'conversations_grow_view_menu_item' }) }
-          onTouchTap={ this.onGrowView } />
-        <Divider />
-        <MenuItem
-          primaryText={ this.props.intl.formatMessage({ id: 'visualizations_adding_menu_root' }) }
-          menuItems={ visualizationMenuItems } />
-      </IconMenu>
-    );
-
+    // XXX localize tooltips here that are unable to be a Localize element.
+    // (Doing this easily wants this component re-written to use hooks.)
+    // localization id for toggle sidebar will be: 'toggle_sidebar'
     return (
-      <div>
-        <AppBar
-          title={ title }
-          iconElementLeft={ menuButton }
-          iconElementRight={ actionMenu }
-          onTitleTouchTap={ this.props.onToggleSidebar }
+      <Menu>
+        <Menu.Item
+          icon='sidebar'
+          title='TogglE SidebaR'
+          onClick={ this.props.onToggleSidebar }
           />
-      </div>
+        <Dropdown item icon='tasks' position='right'>
+          <Dropdown.Menu>
+            <Dropdown.Item
+              onClick={ this.onBeginCompose }
+              >
+              <Localized id='conversations_compose_menu_item' />
+            </Dropdown.Item>
+            <Dropdown.Item
+              onClick={ this.onRefreshView }
+              >
+              <Localized id='conversations_refresh_view_menu_item' />
+            </Dropdown.Item>
+            <Dropdown.Item
+              onClick={ this.onGrowView }
+              >
+              <Localized id='conversations_grow_view_menu_item' />
+            </Dropdown.Item>
+            <Dropdown.Item
+              onClick={ this.onBeginCompose }
+              >
+              <Localized id='visualizations_adding_menu_root' />
+              <Dropdown.Menu>
+                <Dropdown.Item>
+                  <Localized id='visualizations_sidebar_menu_add_root' />
+                  <Dropdown.Menu>
+                    { sidebarAddMenuItems }
+                  </Dropdown.Menu>
+                </Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
+      </Menu>
     );
   }
 

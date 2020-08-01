@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-import { List as ReactList } from 'react-list';
-
-import PropTypes from 'prop-types';
-
 /**
  * Renders all of the items in an `EntireListView`, automatically re-rendering
  * itself whenever the list changes or items in the list are updated.

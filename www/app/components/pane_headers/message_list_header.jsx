@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import Taggy from '../actioners/taggy';
 import TagAdder from '../actioners/tag_adder';
@@ -8,8 +7,10 @@ import TagAdder from '../actioners/tag_adder';
  * The header and interface for a list of messages.
  */
 export default class MessageListHeader extends React.Component {
-  getInitialState() {
-    return {};
+  constructor(props) {
+    super(props);
+
+    this.state = {};
   }
 
   render() {
@@ -33,9 +34,4 @@ export default class MessageListHeader extends React.Component {
       </div>
     );
   }
-};
-
-MessageListHeader.propTypes = {
-  conversation: React.PropTypes.object,
-  conversationSerial: React.PropTypes.number,
 };
