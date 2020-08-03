@@ -31,6 +31,9 @@ import { FluentBundle, FluentResource } from '@fluent/bundle';
 import { ReactLocalization, LocalizationProvider } from '@fluent/react';
 import messages_enUS from 'locales/en-US.ftl';
 
+import 'semantic-ui-css/semantic.min.css';
+
+
 const resource_enUS = new FluentResource(messages_enUS);
 const bundle_enUS = new FluentBundle('English');
 bundle_enUS.addResource(resource_enUS);

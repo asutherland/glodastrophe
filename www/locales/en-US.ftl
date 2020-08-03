@@ -25,17 +25,29 @@ settingsAccountAddLink = Add a new account…
 # -- Card: autoconfig_setup.jsx
 # Header title for account setup via autoconfiguration given the display
 # name, email address, and password.
-setupAutoconfig_headerTitle = Add account
-setupAutoconfig_input_displayName =
+setupAutoconfig_headerTitle = Add Mail Account
+setupAutoconfig_displayName_label = Display Name
+setupAutoconfig_displayName_input =
   .placeholder = Your name
-setupAutoconfig_input_emailAddress =
+setupAutoconfig_emailAddress_label = Email Address
+setupAutoconfig_emailAddress_input =
   .placeholder = email@example.com
-setupAutoconfig_input_password =
+setupAutoconfig_password_label = Password
+setupAutoconfig_password_input =
   .placeholder = password
 
 # The button that actually starts the process of trying to automatically
 # configure the account.
 setupAutoconfigTriggerAutoconfigButtonLabel = Add Account…
+setupAutoconfig_debugAutoconfig_label = Show Autoconfig Data
+
+setup_manual_phabricator_header = Add Phabricator Account
+setup_manual_phabricator_server_label = Server URL
+setup_manual_phabricator_server_input =
+  .placeholder = https://...
+setup_manual_phabricator_apiKey_label = API Key
+setup_manual_phabricator_apiKey_input =
+  .placeholder = api-...
 
 # -- folder_list.jsx
 refreshFolderList = Refresh folder list

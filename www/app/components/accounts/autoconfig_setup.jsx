@@ -1,7 +1,7 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-import { Localized } from "@fluent/react";
+import { Button, Divider, Form } from 'semantic-ui-react';
+import { Localized } from '@fluent/react';
 
 
 /**
@@ -22,7 +22,16 @@ export default class AutoconfigSetup extends React.Component {
       emailAddress: '',
       password: '',
       learnedBlob: null,
+
+      phabServerUrl: 'https://phabricator.services.mozilla.com/',
+      phabApiKey: '',
     };
+
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleEmailChange = this.handleEmailChange.bind(this);
+    this.handlePasswordChange = this.handlePasswordChange.bind(this);
+    this.handlePhabServerChange = this.handlePhabServerChange.bind(this);
+    this.handlePhabKeyChange = this.handlePhabKeyChange.bind(this);
   }
 
   render() {
@@ -50,52 +59,77 @@ export default class AutoconfigSetup extends React.Component {
       );
     }
 
-    const { formatMessage } = this.props.intl;
-
     return (
       <div className="add-account-page">
         <div>{ errorNodes }</div>
         <div>{ learnbox }</div>
-        <h1>
-          <Localized
-            id='setupAutoconfig_headerTitle'
-            />
-        </h1>
-        <div>
-          <Localized id="setupAutoconfig_input_displayName" attrs={{placeholder: true}}>
-            <input type="text"
-              value={this.state.displayName}
-              onChange={this.handleNameChange}
-              placeholder={ formatMessage({ id: 'setupAutoconfigDisplayNamePlaceholder' }) }
+        <section>
+          <h1><Localized id='setupAutoconfig_headerTitle' /></h1>
+          <Form>
+            <Form.Field>
+              <label><Localized id='setupAutoconfig_displayName_label' /></label>
+              <Localized id="setupAutoconfig_displayName_input" attrs={{placeholder: true}}>
+                <input type="text"
+                  value={this.state.displayName}
+                  onChange={this.handleNameChange}
+                  />
+              </Localized>
+            </Form.Field>
+            <Form.Field>
+              <label><Localized id='setupAutoconfig_emailAddress_label' /></label>
+              <Localized id="setupAutoconfig_emailAddress_input" attrs={{placeholder: true}}>
+                <input type="text"
+                  value={this.state.emailAddress}
+                  onChange={this.handleEmailChange}
+                  />
+              </Localized>
+            </Form.Field>
+            <Form.Field>
+              <label><Localized id='setupAutoconfig_password_label' /></label>
+              <Localized id="setupAutoconfig_password_input" attrs={{placeholder: true}}>
+                <input type="password"
+                  value={this.state.password}
+                  onChange={this.handlePasswordChange}
+                  />
+              </Localized>
+            </Form.Field>
+            <Button onClick={ this.startAutoconfig }>
+              <Localized id='setupAutoconfigTriggerAutoconfigButtonLabel' />
+            </Button>
+            <Button onClick={ this.learnAboutAccount }>
+              <Localized id='setupAutoconfig_debugAutoconfig_label' />
+            </Button>
+          </Form>
+        </section>
+        <Divider />
+        <section>
+          <h1><Localized id='setup_manual_phabricator_header' /></h1>
+          <Form>
+            <Form.Field>
+              <label><Localized id='setup_manual_phabricator_server_label' /></label>
+              <Localized id="setup_manual_phabricator_server_input" attrs={{placeholder: true}}>
+                <input type="text"
+                  value={this.state.phabServerUrl}
+                  onChange={this.handlePhabServerChange}
+                  />
+              </Localized>
+            </Form.Field>
+            <Form.Field>
+              <label><Localized id='setup_manual_phabricator_apiKey_label' /></label>
+              <Localized id="setup_manual_phabricator_apiKey_input" attrs={{placeholder: true}}>
+                <input type="text"
+                  value={this.state.phabApiKey}
+                  onChange={this.handlePhabKeyChange}
+                  />
+              </Localized>
+            </Form.Field>
+            <Button onClick={ this.startPhabricatorAdd }>
+              <Localized
+                id='setupAutoconfigTriggerAutoconfigButtonLabel'
               />
-          </Localized>
-        </div>
-        <div>
-          <Localized id="setupAutoconfig_input_emailAddress" attrs={{placeholder: true}}>
-            <input type="email"
-              value={this.state.emailAddress}
-              onChange={this.handleEmailChange}
-              />
-          </Localized>
-        </div>
-        <div>
-          <Localized id="setupAutoconfig_input_password" attrs={{placeholder: true}}>
-            <input type="password"
-              value={this.state.password}
-              onChange={this.handlePasswordChange}
-              placeholder={ formatMessage({ id: 'setupAutoconfigPasswordPlaceholder' }) }
-              />
-          </Localized>
-        </div>
-        <div>
-          <button onClick={ this.startAutoconfig }>
-            <Localized
-              id='setupAutoconfigTriggerAutoconfigButtonLabel'
-            />
-          </button>
-          <button onClick={ this.learnAboutAccount }>LearN AbouT AccounT</button>
-
-        </div>
+            </Button>
+          </Form>
+        </section>
       </div>
     );
   }
@@ -111,6 +145,14 @@ export default class AutoconfigSetup extends React.Component {
 
   handlePasswordChange(evt) {
     this.setState({ password: evt.target.value });
+  }
+
+  handlePhabServerChange(evt) {
+    this.setState({ phabServerUrl: evt.target.value });
+  }
+
+  handlePhabKeyChange(evt) {
+    this.setState({ phabApiKey: evt.target.value });
   }
 
   learnAboutAccount() {
@@ -130,6 +172,10 @@ export default class AutoconfigSetup extends React.Component {
 
   startAutoconfig() {
     this.doCreate(null);
+  }
+
+  startPhabricatorAdd() {
+
   }
 
   doCreate(domainInfo) {
