@@ -174,8 +174,36 @@ export default class AutoconfigSetup extends React.Component {
     this.doCreate(null);
   }
 
-  startPhabricatorAdd() {
+  async startPhabricatorAdd() {
+    var mailApi = this.props.mailApi;
 
+    // don't have multiple autoconfigs in flight at the same time
+    if (this.state.autoconfigInProgress) {
+      return;
+    }
+
+    // Indicate an autoconfig is in progress and clear existing error state.
+    this.setState({
+      autoconfigInProgress: true,
+      errorCode: null,
+      errorDetails: null
+    });
+    let { error, errorDetails, account } = await mailApi.tryToCreateAccount(
+      {
+        phabServerUrl: this.state.phabServerUrl,
+        phabApiKey: this.state.phabApiKey,
+      });
+
+    if (error) {
+      this.setState({
+        autoconfigInProgress: false,
+        errorCode: error,
+        errorDetails
+      });
+      return;
+    }
+
+    this.props.onAccountCreated(account.id);
   }
 
   doCreate(domainInfo) {

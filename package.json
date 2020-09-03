@@ -43,6 +43,7 @@
     "d3-hierarchy": "^1.1.9",
     "d3-scale": "^3.2.1",
     "intl-pluralrules": "^1.2.0",
+    "parse-git-patch": "^1.0.7",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
