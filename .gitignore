@@ -1,3 +1,4 @@
 /build/
 /node_module/
 /web-ext-artifacts/
+node_modules
