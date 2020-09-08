@@ -87,6 +87,10 @@ var config = {
       }
     }),
     */
+    // This prevents a million billion unique hash bundles from being created,
+    // but it would be better to have explicitly named chunks since there is the
+    // intent that account types are dynamically loaded.  This may result in
+    // wanting 1-3 chunks per account type in the worker.
     new webpack.optimize.LimitChunkCountPlugin({
       maxChunks: 1
     }),

@@ -1,7 +1,4 @@
-define(function() {
-'use strict';
-
-const { oldToNewConversationMessageComparator } = require('gelam/db/comparators');
+import { oldToNewConversationMessageComparator } from 'gelam/db/comparators';
 
 /**
  * Churn up our application-specific summary stuff:
@@ -13,7 +10,7 @@ const { oldToNewConversationMessageComparator } = require('gelam/db/comparators'
  *
  *
  */
-return function churnConversation(convInfo, messages/*, oldConvInfo */) {
+export default function churnConversation(convInfo, messages/*, oldConvInfo */) {
   // Ensure the messages are sorted oldest to newest.  We do this because for
   // simplicity for gaia mail's UX decisions we initially opted to do
   // NEW-TO-OLD.  A more rigorous treatment and rationale is needed, however.
@@ -59,5 +56,4 @@ return function churnConversation(convInfo, messages/*, oldConvInfo */) {
   } else {
     convInfo.height = 2;
   }
-};
-});
+}
