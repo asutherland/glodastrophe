@@ -87,12 +87,14 @@ const DEFAULT_STATE = {
   visualizations: {
     conversationsOverview: [
       // TEMPORARY DEFAULT HACK!
-      require('gelam/extras/vis_facet/schemas/overview_authored_content_heatmap')
+      // XXX these will need to be made into imports if re-enabled.
+      //require('gelam/extras/vis_facet/schemas/overview_authored_content_heatmap')
     ],
     conversationsSidebar: [
       // TEMPORARY DEFAULT HACK!
-      require('gelam/extras/vis_facet/schemas/facet_activity_sparkline'),
-      require('gelam/extras/vis_facet/schemas/facet_domain_activity'),
+      // XXX these will need to be made into imports if re-enabled.
+      //require('gelam/extras/vis_facet/schemas/facet_activity_sparkline'),
+      //require('gelam/extras/vis_facet/schemas/facet_domain_activity'),
     ],
     conversationSummary: null,
     conversationOverview: [
@@ -248,6 +250,10 @@ export default function reduceViewing(oldState = DEFAULT_STATE, action) {
     case SELECT_ACCOUNT: {
       let account = mailApi.accounts.getAccountById(action.accountId);
       let folder = account.folders.getFirstFolderWithType(action.folderType);
+      // It's possible the account may not have any folders when first created.
+      if (!folder) {
+        break;
+      }
       newState.selections = {
         accountId: account.id,
         folderId: folder.id,
@@ -458,5 +464,5 @@ export default function reduceViewing(oldState = DEFAULT_STATE, action) {
   }
 
   return newState;
-};
+}
 

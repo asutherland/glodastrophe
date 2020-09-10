@@ -1,8 +1,8 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Localized } from '@fluent/react';
 
-import { useDispatch } from 'react-redux'
-import { useHistory } from "react-router-dom";
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 
 import { Button, Card } from 'semantic-ui-react';
 
@@ -26,16 +26,16 @@ export default function AccountHome(props) {
         <Card.Meta>{ account.type }</Card.Meta>
       </Card.Content>
       <Card.Content>
-        <Button onClick={ doShowAccount } >
+        <Button size='small' onClick={ doShowAccount } >
           <Localized id='show_account_contents' />
         </Button>
-        <Button onClick={ () => { account.recreateAccount(); } } >
+        <Button size='small' onClick={ () => { account.recreateAccount(); } } >
           <Localized id='recreateAccount' />
         </Button>
-        <Button onClick={ () => { account.deleteAccount(); } } >
+        <Button size='small' onClick={ () => { account.deleteAccount(); } } >
           <Localized id='deleteAccount' />
         </Button>
-        <Button onClick={ () => { account.syncFolderList(); } } >
+        <Button size='small' onClick={ () => { account.syncFolderList(); } } >
           <Localized id='syncAccountFolderList' />
         </Button>
       </Card.Content>

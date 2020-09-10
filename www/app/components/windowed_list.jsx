@@ -1,3 +1,4 @@
+/* eslint-disable react/no-deprecated */
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -42,9 +43,9 @@ export default class WindowedList extends React.PureComponent {
   }
 
   componentWillMount() {
-    this.boundDirtyHandler = this.handleDirty; //.bind(this);
-    this.boundRenderer = this.renderItem; //.bind(this);
-    this.boundSeek = this.seek;
+    this.boundDirtyHandler = this.handleDirty.bind(this);
+    this.boundRenderer = this.renderItem.bind(this);
+    this.boundSeek = this.seek.bind(this);
 
     var view = this.props.view;
     // seeked is for windowed list views
@@ -157,7 +158,7 @@ export default class WindowedList extends React.PureComponent {
         />
     );
   }
-};
+}
 
 WindowedList.propTypes = {
   conditionalWidget: PropTypes.func,

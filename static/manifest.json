@@ -22,7 +22,7 @@
     "scripts": ["backend-main.js"]
   },
   "permissions": [
-    "https://phabricator.mozilla.org/*",
+    "https://phabricator.services.mozilla.com/*",
     "unlimitedStorage"
   ]
 }

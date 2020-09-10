@@ -32,6 +32,9 @@ export default class AutoconfigSetup extends React.Component {
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handlePhabServerChange = this.handlePhabServerChange.bind(this);
     this.handlePhabKeyChange = this.handlePhabKeyChange.bind(this);
+
+    this.startAutoconfig = this.startAutoconfig.bind(this);
+    this.startPhabricatorAdd = this.startPhabricatorAdd.bind(this);
   }
 
   render() {
@@ -192,6 +195,9 @@ export default class AutoconfigSetup extends React.Component {
       {
         phabServerUrl: this.state.phabServerUrl,
         phabApiKey: this.state.phabApiKey,
+      },
+      {
+        type: 'phabricator',
       });
 
     if (error) {

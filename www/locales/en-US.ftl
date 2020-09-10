@@ -12,9 +12,9 @@ accountHomeShowFolders = Folders
 
 show_account_contents = Show
 
-  /** Delete the current account then create it again */
+# Delete the current account then create it again */
 recreateAccount = Re-create Account
-  /** Delete the account permanently */
+# Delete the account permanently */
 deleteAccount = Delete Account
 syncAccountFolderList = Sync Folder List
 

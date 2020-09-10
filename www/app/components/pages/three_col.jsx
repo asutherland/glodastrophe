@@ -68,31 +68,36 @@ const CONVERSATION_PANE_SCROLL_REGION = {
 export default class ThreeCol extends React.Component {
   render() {
     return (
-      <div style={ { height: '100%' } }>
+      <SplitPane split='vertical'
+        defaultSize={ splitRestore('3col:split0') }
+        onChange={ splitSave('3col:split0') }
+        >
         <SelectedSidebarMenu />
-        <SplitPane split="vertical"
-                   defaultSize={ splitRestore('3col:split1') }
-                   onChange={ splitSave('3col:split1') }>
-          <div style={ CONVERSATION_PANE_CONTAINER }>
-            <div style={ CONVERSATION_PANE_HEADER }>
-              <SelectedConversationListHeader />
-              <SelectedOverviewFacetsPane />
+        <div>
+          <SplitPane split="vertical"
+                    defaultSize={ splitRestore('3col:split1') }
+                    onChange={ splitSave('3col:split1') }>
+            <div style={ CONVERSATION_PANE_CONTAINER }>
+              <div style={ CONVERSATION_PANE_HEADER }>
+                <SelectedConversationListHeader />
+                <SelectedOverviewFacetsPane />
+              </div>
+              <div style={ CONVERSATION_PANE_SCROLL_REGION }>
+                {/*<SplitPane split="vertical"
+                          defaultSize={ splitRestore('3col:split2') }
+                          onChange={ splitSave('3col:split2') }>
+                  <SelectedSidebarFacetsPane /> */}
+                  <SelectedConversationListPane />
+                {/*</SplitPane>*/}
+              </div>
             </div>
-            <div style={ CONVERSATION_PANE_SCROLL_REGION }>
-              <SplitPane split="vertical"
-                         defaultSize={ splitRestore('3col:split2') }
-                         onChange={ splitSave('3col:split2') }>
-                <SelectedSidebarFacetsPane />
-                <SelectedConversationListPane />
-              </SplitPane>
+            <div className="message-list-pane">
+              <SelectedMessageListHeader />
+              <SelectedMessageListPane />
             </div>
-          </div>
-          <div className="message-list-pane">
-            <SelectedMessageListHeader />
-            <SelectedMessageListPane />
-          </div>
-        </SplitPane>
-      </div>
+          </SplitPane>
+        </div>
+      </SplitPane>
     );
   }
-};
+}

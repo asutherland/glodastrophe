@@ -33,7 +33,7 @@ export default function EntireList(props) {
   const view = props.view;
   const extra = props.extra;
 
-  const [serial, setSerial] = useState(view.serial);
+  const [, setSerial] = useState(view.serial);
 
   useEffect(() => {
     view.on('complete', () => { setSerial(view.serial); });
@@ -54,9 +54,11 @@ export default function EntireList(props) {
     );
   });
 
+  const ContainerElem = props.as || 'div';
+
   return (
-    <div>
+    <ContainerElem>
       { renderedItems }
-    </div>
+    </ContainerElem>
   );
 }

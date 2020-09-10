@@ -11,6 +11,16 @@ import { Localized } from '@fluent/react';
  * The header and interface for a list of conversations.
  */
 export default class ConversationListHeader extends React.PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.onMetaChange = this.onMetaChange.bind(this);
+    this.onSyncComplete = this.onSyncComplete.bind(this);
+    this.onRefreshView = this.onRefreshView.bind(this);
+    this.onGrowView = this.onGrowView.bind(this);
+    this.onBeginCompose = this.onBeginCompose.bind(this);
+  }
+
   getInitialState() {
     return {};
   }
@@ -23,6 +33,7 @@ export default class ConversationListHeader extends React.PureComponent {
     }
   }
 
+  // eslint-disable-next-line react/no-deprecated
   componentWillUpdate(nextProps/*, nextState*/) {
     // We use this instead of componentWillReceiveProps because this only gets
     // called if shouldComponentUpdate returned true which means we're slightly
@@ -74,6 +85,7 @@ export default class ConversationListHeader extends React.PureComponent {
       return <div></div>;
     }
 
+
     const tocMeta = view.tocMeta;
     // Start with the folder name.
     let title = view.folder.name;
@@ -84,6 +96,7 @@ export default class ConversationListHeader extends React.PureComponent {
     if (tocMeta.syncBlocked) {
       title += ` [${tocMeta.syncBlocked}]`;
     }
+
 
     // We could possibly also include tocMeta.lastSuccessfulSyncAt.
     // UX-wise, I'm thinking it'd be better to have an exceptional state for us
@@ -96,61 +109,71 @@ export default class ConversationListHeader extends React.PureComponent {
     // seeming to handle JSX inside prop values and because it's really weird
     // non-idiomatic stuff that does bad indentation things.
 
-    const sidebarAddMenuItems =
+    const sidebarAddMenuItems = [];
+    /*
       this.props.conversationSidebarDefsView.items.map((viewDef) => {
         const addVis = () => {
           this.props.onAddSidebarVis(viewDef);
         };
         return (
           <Dropdown.Item
+            key={ viewDef.name }
             text={ viewDef.name }
             onClick={ addVis }
             />
         );
       });
+    */
 
     // XXX localize tooltips here that are unable to be a Localize element.
     // (Doing this easily wants this component re-written to use hooks.)
     // localization id for toggle sidebar will be: 'toggle_sidebar'
     return (
       <Menu>
+        {/* DISABLED SINCE THE MENU DOESN'T COLLAPSE AWAY ANYMORE
         <Menu.Item
           icon='sidebar'
           title='TogglE SidebaR'
           onClick={ this.props.onToggleSidebar }
           />
-        <Dropdown item icon='tasks' position='right'>
-          <Dropdown.Menu>
-            <Dropdown.Item
-              onClick={ this.onBeginCompose }
-              >
-              <Localized id='conversations_compose_menu_item' />
-            </Dropdown.Item>
-            <Dropdown.Item
-              onClick={ this.onRefreshView }
-              >
-              <Localized id='conversations_refresh_view_menu_item' />
-            </Dropdown.Item>
-            <Dropdown.Item
-              onClick={ this.onGrowView }
-              >
-              <Localized id='conversations_grow_view_menu_item' />
-            </Dropdown.Item>
-            <Dropdown.Item
-              onClick={ this.onBeginCompose }
-              >
-              <Localized id='visualizations_adding_menu_root' />
-              <Dropdown.Menu>
-                <Dropdown.Item>
-                  <Localized id='visualizations_sidebar_menu_add_root' />
-                  <Dropdown.Menu>
-                    { sidebarAddMenuItems }
-                  </Dropdown.Menu>
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown.Item>
-          </Dropdown.Menu>
-        </Dropdown>
+        */}
+        <Menu.Item>
+          { title }
+        </Menu.Item>
+        <Menu.Menu position='right'>
+          <Dropdown item icon='tasks' position='right'>
+            <Dropdown.Menu>
+              <Dropdown.Item
+                onClick={ this.onBeginCompose }
+                >
+                <Localized id='conversations_compose_menu_item' />
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={ this.onRefreshView }
+                >
+                <Localized id='conversations_refresh_view_menu_item' />
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={ this.onGrowView }
+                >
+                <Localized id='conversations_grow_view_menu_item' />
+              </Dropdown.Item>
+              <Dropdown.Item
+                onClick={ this.onBeginCompose }
+                >
+                <Localized id='visualizations_adding_menu_root' />
+                <Dropdown.Menu>
+                  <Dropdown.Item>
+                    <Localized id='visualizations_sidebar_menu_add_root' />
+                    <Dropdown.Menu>
+                      { sidebarAddMenuItems }
+                    </Dropdown.Menu>
+                  </Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </Menu.Menu>
       </Menu>
     );
   }
@@ -174,7 +197,7 @@ export default class ConversationListHeader extends React.PureComponent {
       this.props.onNavigateToDraft(id);
     });
   }
-};
+}
 
 ConversationListHeader.propTypes = {
   conversationSidebarDefsView: PropTypes.object,

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-deprecated */
 import React from 'react';
 
 /**
@@ -89,4 +90,4 @@ export default class WholeWindowedList extends React.PureComponent {
         />
     );
   }
-};
+}

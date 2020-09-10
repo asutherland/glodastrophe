@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Localized } from "@fluent/react";
+import { Localized } from '@fluent/react';
 
 import { Header, List, Segment, Sidebar } from 'semantic-ui-react';
 
@@ -9,6 +9,7 @@ import EntireList from '../entire_list';
 
 import AccountListItem from '../list_items/account_list_item';
 import FolderListItem from '../list_items/folder_list_item';
+import { useHistory } from 'react-router-dom';
 
 
 /**
@@ -22,21 +23,24 @@ import FolderListItem from '../list_items/folder_list_item';
  * nothingness and evolve the summaries into something useful.
  */
 export default function SidebarMenu(props) {
+  // XXX This was originally done in an alternate form for material-ui, perhaps
+  // this could just use a Link now?
+  const history = useHistory();
   function onGoHome() {
-    // per material-ui issues, it appears that we need to do manual handlers for
-    // MenuItems but for *Button things we can use containerElement={<Link.../>}
-    this.context.router.push('/');
+    history.push('/');
   }
 
+  // XXX This had been converted from a material-ui sidebar-ish thing that
+  // got converted to a semantic-ui sidebar, but that started having layout
+  // problems when interacting with the react-split-pane.  I'm reverting this
+  // to be its own always-present split-pane for sanity.
   return (
-    <Siderbar.Pushable>
-      <Sidebar
-        >
+    <Segment.Group>
         <Segment>
           <List>
             <List.Item
               icon='home'
-              onClick={ this.goHome }
+              onClick={ onGoHome }
               >
               <Localized id='sidebar_home' />
             </List.Item>
@@ -47,9 +51,10 @@ export default function SidebarMenu(props) {
         </Header>
         <Segment>
           <EntireList
-            view={ this.props.accountsView }
-            selectedId={ this.props.selectedAccountId }
-            pick={ this.props.onSelectAccountId }
+            as={ List }
+            view={ props.accountsView }
+            selectedId={ props.selectedAccountId }
+            pick={ props.onSelectAccountId }
             widget={ AccountListItem }
           />
         </Segment>
@@ -58,18 +63,16 @@ export default function SidebarMenu(props) {
         </Header>
         <Segment>
           <EntireList
-            view={ this.props.accountFoldersView }
-            selectedId={ this.props.selectedFolderId }
-            pick={ this.props.onSelectFolderId }
+            as={ List }
+            view={ props.accountFoldersView }
+            selectedId={ props.selectedFolderId }
+            pick={ props.onSelectFolderId }
             widget={ FolderListItem }
           />
         </Segment>
-      </Sidebar>
-    </Siderbar.Pushable>
+    </Segment.Group>
   );
-
-
-};
+}
 
 SidebarMenu.propTypes = {
   open: PropTypes.bool.isRequired,

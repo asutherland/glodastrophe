@@ -26,6 +26,17 @@ export default function FolderListItem(props) {
 
   const iconType = FOLDER_TYPE_TO_ICON_TYPE.get(folder.type) ||
     DEFAULT_FOLDER_ICON;
+
+  let content = (
+    <React.Fragment>
+      { folder.name }
+    </React.Fragment>
+  );
+  if (props.selected) {
+    content = (
+      <b>{ content }</b>
+    );
+  }
   // `nestedLevel`: It seems like this might have been part of the material UI
   // listItem, but because our representation is flattened in the virtual
   // list, we do want this to work.  Probably the best thing is just to go with
@@ -36,9 +47,11 @@ export default function FolderListItem(props) {
     <List.Item
       key={ folder.id }
       value={ folder.id }
-      content={ folder.name }
+      active={ props.selected }
+      content={ content }
       icon={ iconType }
       nestedLevel={ folder.depth }
+      onClick={ () => { props.pick(folder.id); } }
       />
   );
 };

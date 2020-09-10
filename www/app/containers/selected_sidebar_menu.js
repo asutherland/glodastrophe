@@ -2,6 +2,7 @@ import SidebarMenu from '../components/pages/sidebar_menu';
 
 import { connect } from 'react-redux';
 
+import { toggleSidebar } from '../actions/sidebar';
 import { selectAccountId, selectFolderId } from '../actions/viewing';
 
 const mapStateToProps = (state) => {
@@ -25,7 +26,10 @@ const mapDispatchToProps = (dispatch) => {
     },
     onSelectFolderId: (folderId) => {
       dispatch(selectFolderId(folderId));
-    }
+    },
+    onToggleSidebar: () => {
+      dispatch(toggleSidebar());
+    },
   };
 };
 

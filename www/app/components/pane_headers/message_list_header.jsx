@@ -34,4 +34,4 @@ export default class MessageListHeader extends React.Component {
       </div>
     );
   }
-};
+}
