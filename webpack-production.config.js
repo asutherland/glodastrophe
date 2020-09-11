@@ -3,6 +3,7 @@ var path = require('path');
 var buildPath = path.resolve(__dirname, 'build');
 var nodeModulesPath = path.resolve(__dirname, 'node_modules');
 var TransferWebpackPlugin = require('transfer-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 var gelamJSRoot = path.resolve(__dirname, 'deps/gelam/js');
 
@@ -78,6 +79,7 @@ var config = {
     globalObject: 'globalThis'
   },
   plugins: [
+    new CleanWebpackPlugin(),
     //Minify the bundle
     /*
     new webpack.optimize.UglifyJsPlugin({
@@ -98,7 +100,8 @@ var config = {
     //new webpack.NoErrorsPlugin(),
     //Transfer Files
     new TransferWebpackPlugin([
-      { from: 'static', to: '' }
+      { from: 'static', to: '' },
+      { from: 'deps/gelam/logic-inspector/build/', to: 'logic-inspector' },
     ], __dirname),
     new webpack.DefinePlugin({
       "process.env": {
