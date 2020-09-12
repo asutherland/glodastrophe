@@ -1,4 +1,3 @@
-/* eslint-disable react/no-deprecated */
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -34,15 +33,16 @@ import { QuantizedHeightList } from '../quantized-list';
  * and the new props.
  */
 export default class WindowedList extends React.PureComponent {
-  getInitialState() {
-    return {
+  constructor(props) {
+    super(props);
+    this.state = {
       // We haven't actually rendered anything at this point, don't latch the
       // current serial.
       serial: null
     };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.boundDirtyHandler = this.handleDirty.bind(this);
     this.boundRenderer = this.renderItem.bind(this);
     this.boundSeek = this.seek.bind(this);
@@ -57,7 +57,7 @@ export default class WindowedList extends React.PureComponent {
     view.removeListener('seeked', this.boundDirtyHandler);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     // TODO: consider whether we really want ourselves to morph like this.
     // I've already had to `key` the ReactList to insure that we get it to
     // generate a seek request against us.  That's sort of a weird regression
@@ -167,5 +167,5 @@ WindowedList.propTypes = {
   selectedId: PropTypes.string,
   unitSize: PropTypes.number.isRequired,
   view: PropTypes.object.isRequired,
-  widget: PropTypes.func,
+  widget: PropTypes.object,
 };

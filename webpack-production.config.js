@@ -103,11 +103,13 @@ var config = {
       { from: 'static', to: '' },
       { from: 'deps/gelam/logic-inspector/build/', to: 'logic-inspector' },
     ], __dirname),
+    /*
     new webpack.DefinePlugin({
       "process.env": {
         NODE_ENV: JSON.stringify("production")
       }
     })
+    */
   ],
   module: {
     rules: [

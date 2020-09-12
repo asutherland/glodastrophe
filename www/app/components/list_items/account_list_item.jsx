@@ -1,3 +1,4 @@
+import React from 'react';
 import { List } from 'semantic-ui-react';
 
 export default function AccountListItem(props) {
@@ -11,4 +12,4 @@ export default function AccountListItem(props) {
       icon='user circle outline'
       />
   );
-};
+}

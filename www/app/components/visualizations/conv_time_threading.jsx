@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { scaleLinear } from 'd3-scale';
-import { cluster } from 'd3-hierarchy';
+import { cluster as d3_cluster, hierarchy as d3_hierarchy } from 'd3-hierarchy';
 
 /**
  * Given the conversation tidbits representation where each message references
@@ -27,14 +27,14 @@ function deriveConvHierarchy(tidbits) {
     }
   }
 
-  return hierObjs[0];
+  return d3_hierarchy(hierObjs[0]);
 }
 
-const ConvTimeThreading = React.memo((props) => {
-  let conv = this.props.conv;
+const ConvTimeThreading = React.memo(function ConvTimeThreading(props) {
+  let conv = props.conv;
 
   let fullHeight = 40;
-  let fullWidth = this.props.widthBudget;
+  let fullWidth = props.widthBudget;
   let padding = 2;
   let height = fullHeight - padding * 2;
   let width = fullWidth - padding * 2;
@@ -42,9 +42,9 @@ const ConvTimeThreading = React.memo((props) => {
   // -- generate cluster
   // Note that we want this oriented horizontally, so width/height and x/y
   // get flipped.
-  let cluster = cluster()
+  let cluster = d3_cluster()
     .size([height, width]);
-  let nodes = cluster.nodes(deriveConvHierarchy(conv.messageTidbits));
+  let root = cluster(deriveConvHierarchy(conv.messageTidbits));
 
   // - X position fixup based on time.
   // The nodes have been laid out with a strict graph relationship.  But we
@@ -81,11 +81,12 @@ const ConvTimeThreading = React.memo((props) => {
     .range(timePixOffsets)
     .clamp(true);
 
+  let nodes = root.descendants();
   for (let node of nodes) {
-    node.y = xScale(node.date);
+    node.y = xScale(node.data.date);
   }
 
-  let links = cluster.links(nodes);
+  let links = root.links();
 
   // -- generate the actual graphics
   let svgLinks = links.map((link) => {
@@ -93,7 +94,7 @@ const ConvTimeThreading = React.memo((props) => {
     return (
       <line
           className='conv-time-threading-link'
-          key={ link.source.id + '-' + link.target.id }
+          key={ link.source.data.id + '-' + link.target.data.id }
           strokeWidth={ 1 }
           x1={ link.source.y } x2={ link.target.y }
           y1={ link.source.x } y2={ link.target.x } />
@@ -104,9 +105,9 @@ const ConvTimeThreading = React.memo((props) => {
     // as noted above, we're swapping x/y with the layout.
     let transform = 'translate(' + node.y + ',' + node.x + ')';
     let useStyle;
-    if (node.isStarred) {
+    if (node.data.isStarred) {
       useStyle = 'conv-time-threading-starred';
-    } else if (node.isRead) {
+    } else if (node.data.isRead) {
       useStyle = 'conv-time-threading-read';
     } else {
       useStyle = 'conv-time-threading-unread';
@@ -114,7 +115,7 @@ const ConvTimeThreading = React.memo((props) => {
     return (
       <g
         className='conv-time-threading-node-g'
-        key={ node.id }
+        key={ node.data.id }
         transform={ transform }
         >
         <circle

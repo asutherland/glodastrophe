@@ -13,7 +13,7 @@ export class List extends React.PureComponent {
     };
   }
 
-  componentWillReceiveProps(next) {
+  UNSAFE_componentWillReceiveProps(next) {
     const {size} = this.state;
     const {length, pageSize} = next;
     this.setState({size: Math.min(Math.max(size, pageSize), length)});

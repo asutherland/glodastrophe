@@ -1,6 +1,3 @@
-define(function() {
-'use strict';
-
 /**
  * ## Pre-convoy notifications used ##
  *
@@ -116,7 +113,7 @@ function churnPerAccount(multipleAccounts, accountInfo, newByConv) {
  *
  *
  */
-return function churnAllNewMessages(ctx, newSetsWithAccount) {
+export default function churnAllNewMessages(ctx, newSetsWithAccount) {
   let perAccountResults = new Map();
 
   for (let { accountInfo, newByConv } of newSetsWithAccount) {
@@ -126,5 +123,5 @@ return function churnAllNewMessages(ctx, newSetsWithAccount) {
   }
 
   return Promise.resolve(perAccountResults);
-};
-});
+}
+

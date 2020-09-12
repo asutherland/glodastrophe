@@ -3,7 +3,7 @@ import React from 'react';
 import Attachment from './message_attachment';
 
 export default function MessageAttachments(props) {
-  const msg = this.props.message;
+  const msg = props.message;
 
   const attachments = msg.attachments.map((attachment) => {
     return (
@@ -17,5 +17,4 @@ export default function MessageAttachments(props) {
       { attachments }
     </div>
   );
-};
-
+}

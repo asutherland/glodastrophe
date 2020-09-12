@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Localized } from "@fluent/react";
-import { FluentDateTime } from "@fluent/bundle";
+import { Localized } from '@fluent/react';
+//import { FluentDateTime } from '@fluent/bundle';
 
 import ComposePeep from '../actioners/compose_peep';
 import ComposePeepAdder from '../actioners/compose_peep_adder';
@@ -29,13 +29,16 @@ p:last-child { margin-block-end: 0; }
  */
 export default class DraftSummary extends React.PureComponent {
   constructor(props) {
-    super(props)
+    super(props);
 
     this.state = {
       composer: null,
       serial: 0,
       dirty: false
     };
+
+    this.fileRef = React.createRef();
+    this.immutableHtmlRef = React.createRef();
   }
 
   _getComposer() {
@@ -50,7 +53,7 @@ export default class DraftSummary extends React.PureComponent {
       this.setState({ composer });
       if (composer.htmlBlob) {
         embodyHTML(composer.htmlBlob,
-                   React.findDOMNode(this.refs.immutableHtml));
+                   this.immutableHtmlRef.current);
       }
     });
   }
@@ -65,7 +68,7 @@ export default class DraftSummary extends React.PureComponent {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     // Assert that our message never changes.
     if (nextProps.item !== this.props.item) {
       throw new Error('Our message must never change!');
@@ -126,8 +129,11 @@ export default class DraftSummary extends React.PureComponent {
       display: 'none'
     };
 
+    // This was unused... what was this for?
+    /*
     let dirtyMessage = this.state.dirty ? 'composeDirtyUnsaved'
                                         : 'composeCleanSaved';
+    */
 
     return (
       <div className="draft-item">
@@ -151,31 +157,31 @@ export default class DraftSummary extends React.PureComponent {
           <MediumEditor initialContent={ composer.textBody }
                         onDirty={ this.bodyDirtied }
                         options={ mediumOptions } />
-          <div ref="immutableHtml" />
+          <div ref={ this.immutableHtmlRef } />
         </div>
         <div className="draft-buttons">
           <button onClick={ this.sendMessage }>
-            <FormattedMessage
+            <Localized
               id='composeSend' />
           </button>
-          <input ref="file"
+          <input ref={ this.fileRef }
                  type="file"
                  style={ displayNone }
                  onChange={ this.attachFile }></input>
           <button onClick={ this.triggerAttach }>
-            <FormattedMessage
+            <Localized
               id='composeAttach' />
           </button>
           <button onClick={ this.saveDraft }>
-            <FormattedMessage
+            <Localized
               id='composeSave' />
           </button>
           <span>
-            <FormattedMessage
+            <Localized
               id='dirtyMessage' />
           </span>
           <button onClick={ this.deleteDraft }>
-            <FormattedMessage
+            <Localized
               id='composeDiscard' />
           </button>
         </div>
@@ -194,7 +200,8 @@ export default class DraftSummary extends React.PureComponent {
 
   _persistStateToComposer() {
     if (this.dirtiedBodyRetriever) {
-      this.state.composer.textBody = this.dirtiedBodyRetriever();
+      const composer = this.state.composer;
+      composer.textBody = this.dirtiedBodyRetriever();
       this.dirtiedBodyRetriever = null;
     }
   }
@@ -205,7 +212,9 @@ export default class DraftSummary extends React.PureComponent {
    * attachFile below.
    */
   triggerAttach() {
-    React.findDOMNode(this.refs.file).click();
+    if (this.fileRef.current) {
+      this.fileRef.current.click();
+    }
   }
 
   /**
@@ -236,4 +245,4 @@ export default class DraftSummary extends React.PureComponent {
     this.state.composer.saveDraft();
     this.setState({ dirty: false });
   }
-};
+}

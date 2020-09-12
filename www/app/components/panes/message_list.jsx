@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const WholeWindowedList = require('../whole_windowed_list');
+import WholeWindowedList from '../whole_windowed_list';
 
-const MessageSummary = require('../summaries/message');
-const DraftSummary = require('../summaries/draft');
+import MessageSummary from '../summaries/message';
+import DraftSummary from '../summaries/draft';
 
 /**
  * An expandable message list implementation.  Because we are a desktop client
@@ -47,7 +47,7 @@ export default class MessageListPane extends React.PureComponent {
       </div>
     );
   }
-};
+}
 
 MessageListPane.propTypes = {
   selectedMessageId: PropTypes.string,

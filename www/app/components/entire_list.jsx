@@ -33,6 +33,11 @@ export default function EntireList(props) {
   const view = props.view;
   const extra = props.extra;
 
+  // No view means nothing to do!
+  if (!view) {
+    return <div></div>;
+  }
+
   const [, setSerial] = useState(view.serial);
 
   useEffect(() => {

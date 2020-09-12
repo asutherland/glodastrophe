@@ -39,10 +39,10 @@ export default function SidebarMenu(props) {
         <Segment>
           <List>
             <List.Item
-              icon='home'
               onClick={ onGoHome }
               >
-              <Localized id='sidebar_home' />
+              <List.Icon name='home' />
+              <List.Content><Localized id='sidebar_home' /></List.Content>
             </List.Item>
           </List>
         </Segment>

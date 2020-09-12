@@ -42,6 +42,7 @@ export default function FolderListItem(props) {
   // list, we do want this to work.  Probably the best thing is just to go with
   // direct semantic mark-up as that will allow collapsing.
   //
+  // removed: nestedLevel={ folder.depth }
   // TODO: correct to do actual semantic nesting and collapsing
   return (
     <List.Item
@@ -50,9 +51,8 @@ export default function FolderListItem(props) {
       active={ props.selected }
       content={ content }
       icon={ iconType }
-      nestedLevel={ folder.depth }
       onClick={ () => { props.pick(folder.id); } }
       />
   );
-};
+}
 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Localized } from "@fluent/react";
+import { Localized } from '@fluent/react';
 
 import Star from '../actioners/star';
 import Unread from '../actioners/unread';
@@ -95,4 +95,4 @@ export default class MessageSummary extends React.PureComponent {
     // so it does't need us poking it and we don't need the promise.
     this.props.item.downloadEmbeddedImages();
   }
-};
+}

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Localized } from "@fluent/react";
+import { Localized } from '@fluent/react';
 
 export default function MessageAttachment(props) {
   const attachment = props.attachment;
@@ -27,7 +27,7 @@ export default function MessageAttachment(props) {
   var maybeDownload;
   if (attachment.isDownloaded) {
     maybeDownload = <div>
-      <button onClick={ this.viewAttachment }>
+      <button onClick={ onViewAttachment }>
         <Localized
           id='attachmentView' />
       </button>
@@ -39,7 +39,7 @@ export default function MessageAttachment(props) {
     </div>;
   } else if (attachment.isDownloadable) {
     maybeDownload = <div>
-      <button onClick={ this.download }>
+      <button onClick={ onDownload }>
         <Localized
           id='attachmentDownload' />
       </button>

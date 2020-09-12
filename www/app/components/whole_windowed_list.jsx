@@ -1,4 +1,3 @@
-/* eslint-disable react/no-deprecated */
 import React from 'react';
 
 /**
@@ -16,15 +15,15 @@ export default class WholeWindowedList extends React.PureComponent {
     this.state = {
       serial: this.props.view.serial,
     };
+
+    this.handleDirty = this.handleDirty.bind(this);
+    this.renderItem = this.renderItem.bind(this);
   }
 
-  componentWillMount() {
-    this.boundDirtyHandler = this.handleDirty; //.bind(this);
-    this.boundSeek = this.seek;
-
+  UNSAFE_componentWillMount() {
     var view = this.props.view;
     // seeked is for windowed list views
-    view.on('seeked', this.boundDirtyHandler);
+    view.on('seeked', this.handleDirty);
 
     // A thousand of whatever this is is enough!
     view.seekToTop(10, 990);
@@ -32,17 +31,17 @@ export default class WholeWindowedList extends React.PureComponent {
 
   componentWillUnmount() {
     if (this.props.view) {
-      this.props.view.removeListener('seeked', this.boundDirtyHandler);
+      this.props.view.removeListener('seeked', this.handleDirty);
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.view) {
-      this.props.view.removeListener('seeked', this.boundDirtyHandler);
+      this.props.view.removeListener('seeked', this.handleDirty);
     }
     if (nextProps.view) {
       this.setState({ serial: nextProps.view.serial });
-      nextProps.view.on('seeked', this.boundDirtyHandler);
+      nextProps.view.on('seeked', this.handleDirty);
       // A thousand of whatever this is is enough!
       nextProps.view.seekToTop(10, 990);
     }

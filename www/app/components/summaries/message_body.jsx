@@ -1,3 +1,4 @@
+/* eslint-disable react/no-deprecated */
 import React from 'react';
 
 import embodyPlain from 'gelam/clientapi/bodies/embody_plain';
@@ -19,11 +20,36 @@ import embodyHTML from 'gelam/clientapi/bodies/embody_html';
  */
 export default class MessageBody extends React.Component {
   constructor(props) {
+    super(props);
+
     this.state = {
       embodied: false
     };
 
     this.placeholderRef = React.createRef();
+
+    this._embody = this._embody.bind(this);
+    this._showEmbeddedImages = this._showEmbeddedImages.bind(this);
+  }
+
+  async _embodyAttr(contentBlob, node) {
+    const data = JSON.parse(await contentBlob.text());
+    // XXX this should absolutely be structured HTML, not this, but we need to
+    // make this section proper React and that might really might want to entail
+    // running an aggregation sweep over all of this.
+    for (const info of data) {
+      if (info.type === 'action') {
+        node.textContent = `Action: ${info.name}`;
+      } else if (info.type === 'string') {
+        node.textContent = `Changed: ${info.name}: to ${info.new} from ${info.old}`;
+      } else if (info.type === 'set') {
+        if (info.setType === 'identity') {
+          node.textContent = `${info.op}: ${info.value.name}`;
+        } else {
+          node.textContent = `${info.op}: ${info.value}`;
+        }
+      }
+    }
   }
 
   /**
@@ -43,7 +69,7 @@ export default class MessageBody extends React.Component {
     var contentNode = this.placeholderRef.current;
     var embodyPromises = [];
 
-    message.bodyReps.forEach(function(rep) {
+    message.bodyReps.forEach((rep) => {
       var node = document.createElement('div');
       contentNode.appendChild(node);
 
@@ -54,6 +80,9 @@ export default class MessageBody extends React.Component {
         node.setAttribute('class', 'message-text-html-container');
         let { loadedPromise } = embodyHTML(rep.contentBlob, node);
         embodyPromises.push(loadedPromise);
+      } else if (rep.type === 'attr') {
+        // XXX This really should be happening in React-space.
+        embodyPromises.push(this._embodyAttr(rep.contentBlob, node));
       }
     });
 
@@ -131,7 +160,6 @@ export default class MessageBody extends React.Component {
   }
 
   render() {
-    var msg = this.props.item;
     return (
       <div
         ref={ this.placeholderRef }
@@ -144,4 +172,4 @@ export default class MessageBody extends React.Component {
       this.props.pick(this.props.item);
     }
   }
-};
+}

@@ -1,7 +1,4 @@
-define(function() {
-'use strict';
-
-return function extractRelevantMessageInfoForChurning(message) {
+export default function extractRelevantMessageInfoForChurning(message) {
   return {
     // Extract the date and author so we can display the most recent authors.
     date: message.date,
@@ -11,5 +8,4 @@ return function extractRelevantMessageInfoForChurning(message) {
     // one message/conversation.
     subject: message.subject
   };
-};
-});
+}

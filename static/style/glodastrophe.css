@@ -141,6 +141,28 @@ body {
 
 /* ===== Conversation List Pane ===== */
 
+/**
+ * The conversation pane wants to be a flex-box header at the top that uses its
+ * native size and whose second child takes the remainder and which wants to
+ * be its own containing block for height sizing purposes.  The height need is
+ * driven by SplitPane's needs at this time.  We can change it in the future.
+ */
+.conversation-list-pane {
+}
+
+.conversation-list-pane-header {
+  height: 128px;
+}
+
+.conversation-list-scroll-region {
+  overflow: auto;
+  height: calc(100% - 128px);
+  width: 100%;
+  position: absolute;
+  top: 128px;
+  left: 0;
+}
+
 /* ===== Conversation Summaries ===== */
 
 .conv-summary {
@@ -268,6 +290,7 @@ body {
 /* ===== Message List Pane ===== */
 
 .message-list-pane {
+  height: 100%;
 }
 
 .message-list-header {
@@ -293,6 +316,8 @@ body {
 
 .message-list-scroll-region {
   padding: var(--pane-padding);
+  height: calc(100% - var(--pane-padding));
+  overflow: auto;
 }
 
 

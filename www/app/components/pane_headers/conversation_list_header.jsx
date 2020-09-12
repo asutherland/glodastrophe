@@ -19,10 +19,8 @@ export default class ConversationListHeader extends React.PureComponent {
     this.onRefreshView = this.onRefreshView.bind(this);
     this.onGrowView = this.onGrowView.bind(this);
     this.onBeginCompose = this.onBeginCompose.bind(this);
-  }
 
-  getInitialState() {
-    return {};
+    this.state = {};
   }
 
   componentDidMount() {
@@ -33,8 +31,7 @@ export default class ConversationListHeader extends React.PureComponent {
     }
   }
 
-  // eslint-disable-next-line react/no-deprecated
-  componentWillUpdate(nextProps/*, nextState*/) {
+  UNSAFE_componentWillUpdate(nextProps/*, nextState*/) {
     // We use this instead of componentWillReceiveProps because this only gets
     // called if shouldComponentUpdate returned true which means we're slightly
     // more debounced.
