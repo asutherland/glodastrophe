@@ -25,6 +25,9 @@ export default class AutoconfigSetup extends React.Component {
 
       phabServerUrl: 'https://phabricator.services.mozilla.com/',
       phabApiKey: '',
+
+      bugzillaServerUrl: 'https://bugzilla.mozilla.org/',
+      bugzillaApiKey: '',
     };
 
     this.handleNameChange = this.handleNameChange.bind(this);
@@ -32,9 +35,12 @@ export default class AutoconfigSetup extends React.Component {
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
     this.handlePhabServerChange = this.handlePhabServerChange.bind(this);
     this.handlePhabKeyChange = this.handlePhabKeyChange.bind(this);
+    this.handleBugzillaServerChange = this.handleBugzillaServerChange.bind(this);
+    this.handleBugzillaKeyChange = this.handleBugzillaKeyChange.bind(this);
 
     this.startAutoconfig = this.startAutoconfig.bind(this);
     this.startPhabricatorAdd = this.startPhabricatorAdd.bind(this);
+    this.startBugzillaAdd = this.startBugzillaAdd.bind(this);
   }
 
   render() {
@@ -133,6 +139,35 @@ export default class AutoconfigSetup extends React.Component {
             </Button>
           </Form>
         </section>
+        <Divider />
+        <section>
+          <h1><Localized id='setup_manual_bugzilla_header' /></h1>
+          <Form>
+            <Form.Field>
+              <label><Localized id='setup_manual_bugzilla_server_label' /></label>
+              <Localized id="setup_manual_bugzilla_server_input" attrs={{placeholder: true}}>
+                <input type="text"
+                  value={this.state.bugzillaServerUrl}
+                  onChange={this.handleBugzillaServerChange}
+                  />
+              </Localized>
+            </Form.Field>
+            <Form.Field>
+              <label><Localized id='setup_manual_bugzilla_apiKey_label' /></label>
+              <Localized id="setup_manual_bugzilla_apiKey_input" attrs={{placeholder: true}}>
+                <input type="text"
+                  value={this.state.bugzillaApiKey}
+                  onChange={this.handleBugzillaKeyChange}
+                  />
+              </Localized>
+            </Form.Field>
+            <Button onClick={ this.startBugzillaAdd }>
+              <Localized
+                id='setupAutoconfigTriggerAutoconfigButtonLabel'
+              />
+            </Button>
+          </Form>
+        </section>
       </div>
     );
   }
@@ -156,6 +191,14 @@ export default class AutoconfigSetup extends React.Component {
 
   handlePhabKeyChange(evt) {
     this.setState({ phabApiKey: evt.target.value });
+  }
+
+  handleBugzillaServerChange(evt) {
+    this.setState({ bugzillaServerUrl: evt.target.value });
+  }
+
+  handleBugzillaKeyChange(evt) {
+    this.setState({ bugzillaApiKey: evt.target.value });
   }
 
   learnAboutAccount() {
@@ -198,6 +241,41 @@ export default class AutoconfigSetup extends React.Component {
       },
       {
         type: 'phabricator',
+      });
+
+    if (error) {
+      this.setState({
+        autoconfigInProgress: false,
+        errorCode: error,
+        errorDetails
+      });
+      return;
+    }
+
+    this.props.onAccountCreated(account.id);
+  }
+
+  async startBugzillaAdd() {
+    var mailApi = this.props.mailApi;
+
+    // don't have multiple autoconfigs in flight at the same time
+    if (this.state.autoconfigInProgress) {
+      return;
+    }
+
+    // Indicate an autoconfig is in progress and clear existing error state.
+    this.setState({
+      autoconfigInProgress: true,
+      errorCode: null,
+      errorDetails: null
+    });
+    let { error, errorDetails, account } = await mailApi.tryToCreateAccount(
+      {
+        bugzillaServerUrl: this.state.bugzillaServerUrl,
+        bugzillaApiKey: this.state.bugzillaApiKey,
+      },
+      {
+        type: 'bugzilla',
       });
 
     if (error) {

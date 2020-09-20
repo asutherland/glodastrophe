@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { Localized } from "@fluent/react";
-import { FluentDateTime } from "@fluent/bundle";
+import { Localized } from '@fluent/react';
+import { FluentDateTime } from '@fluent/bundle';
 
 import Star from '../actioners/star';
 import Unread from '../actioners/unread';
@@ -10,7 +10,7 @@ import Drafts from '../actioners/drafts';
 import ConvTimeThreadingVis from '../visualizations/conv_time_threading';
 
 // item, pick, selected, serial
-const ConversationSummary = React.memo((props) => {
+const ConversationSummary = React.memo(function ConversationSummary(props) {
   const conv = props.item;
 
   var height = 40 * conv.height;

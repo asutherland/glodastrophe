@@ -49,6 +49,14 @@ setup_manual_phabricator_apiKey_label = API Key
 setup_manual_phabricator_apiKey_input =
   .placeholder = api-...
 
+setup_manual_bugzilla_header = Add Bugzilla Account
+setup_manual_bugzilla_server_label = Server URL
+setup_manual_bugzilla_server_input =
+  .placeholder = https://...
+setup_manual_bugzilla_apiKey_label = API Key
+setup_manual_bugzilla_apiKey_input =
+  .placeholder = api-...
+
 # -- folder_list.jsx
 refreshFolderList = Refresh folder list
 

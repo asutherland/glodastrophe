@@ -41,7 +41,11 @@ export default function EntireList(props) {
   const [, setSerial] = useState(view.serial);
 
   useEffect(() => {
-    view.on('complete', () => { setSerial(view.serial); });
+    const updateSerial = () => { setSerial(view.serial); };
+    view.on('complete', updateSerial);
+    return () => {
+      view.removeListener('complete', updateSerial);
+    };
   }, [view]);
 
   const renderedItems = view.items.map((item) => {
