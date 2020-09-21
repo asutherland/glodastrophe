@@ -152,19 +152,16 @@ body {
  * driven by SplitPane's needs at this time.  We can change it in the future.
  */
 .conversation-list-pane {
+  overflow: auto;
+  height: 100%;
 }
 
 .conversation-list-pane-header {
-  height: 128px;
+  position: sticky;
+  top: 0;
 }
 
 .conversation-list-scroll-region {
-  overflow: auto;
-  height: calc(100% - 128px);
-  width: 100%;
-  position: absolute;
-  top: 128px;
-  left: 0;
 }
 
 /* ===== Conversation Summaries ===== */
@@ -295,6 +292,7 @@ body {
 
 .message-list-pane {
   height: 100%;
+  overflow: auto;
 }
 
 .message-list-header {
@@ -303,9 +301,10 @@ body {
   position: sticky;
   /* The original implementing bug says we should be getting our own stacking
      context anyways.  I don't understand why we're not, so force the issue. */
-  z-index: 1;
+  /*z-index: 1;*/
   padding: var(--pane-padding);
   border-bottom: 2px solid var(--sticky-header-border);
+  margin-bottom: var(--pane-padding);
 }
 
 .conv-header-subject {
@@ -320,8 +319,6 @@ body {
 
 .message-list-scroll-region {
   padding: var(--pane-padding);
-  height: calc(100% - var(--pane-padding));
-  overflow: auto;
 }
 
 

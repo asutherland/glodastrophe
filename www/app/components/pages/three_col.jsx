@@ -57,22 +57,24 @@ export default class ThreeCol extends React.Component {
                     defaultSize={ splitRestore('3col:split1') }
                     onChange={ splitSave('3col:split1') }>
             <div className="conversation-list-pane">
-              <div className="conversation-list-pane-header">
-                <SelectedConversationListHeader />
-                <SelectedOverviewFacetsPane />
-              </div>
               <div className="conversation-list-scroll-region">
+                <div className="conversation-list-pane-header">
+                  <SelectedConversationListHeader />
+                  <SelectedOverviewFacetsPane />
+                </div>
                 {/*<SplitPane split="vertical"
                           defaultSize={ splitRestore('3col:split2') }
                           onChange={ splitSave('3col:split2') }>
                   <SelectedSidebarFacetsPane /> */}
-                  <SelectedConversationListPane />
+                <SelectedConversationListPane />
                 {/*</SplitPane>*/}
               </div>
             </div>
             <div className="message-list-pane">
-              <SelectedMessageListHeader />
-              <SelectedMessageListPane />
+              <div className="message-list-scroll-region">
+                <SelectedMessageListHeader />
+                <SelectedMessageListPane />
+              </div>
             </div>
           </SplitPane>
         </div>

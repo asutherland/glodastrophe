@@ -36,7 +36,7 @@ export default class MessageListPane extends React.PureComponent {
     };
 
     return (
-      <div className="message-list-scroll-region">
+      <div>
         <WholeWindowedList
           view={ view }
           conditionalWidget={ this._pickMessageWidget }

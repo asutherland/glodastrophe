@@ -121,7 +121,7 @@ export default class MessageBody extends React.Component {
     message.removeListener('change', this._showEmbeddedImages);
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     // Trigger body part download if they aren't already downloaded.
     var message = this.props.message;
     if (!message.bodyRepsDownloaded) {
@@ -142,7 +142,7 @@ export default class MessageBody extends React.Component {
     this.props.message.removeListener('change', this._showEmbeddedImages);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     // Assert that our message never changes.
     if (nextProps.message !== this.props.message) {
       throw new Error('Our message must never change!');
