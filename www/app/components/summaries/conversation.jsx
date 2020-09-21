@@ -8,6 +8,7 @@ import Unread from '../actioners/unread';
 import Drafts from '../actioners/drafts';
 
 import ConvTimeThreadingVis from '../visualizations/conv_time_threading';
+import ConvLogCalendar from '../visualizations/conv_log_calendar';
 
 // item, pick, selected, serial
 const ConversationSummary = React.memo(function ConversationSummary(props) {
@@ -39,6 +40,7 @@ const ConversationSummary = React.memo(function ConversationSummary(props) {
 
   var maybeVis;
   if (conv.messageTidbits.length > 1) {
+    /*
     maybeVis = (
       <ConvTimeThreadingVis
         key="vis"
@@ -46,6 +48,12 @@ const ConversationSummary = React.memo(function ConversationSummary(props) {
         widthBudget={ 426 }
         />
     );
+    */
+   maybeVis = (
+     <ConvLogCalendar
+       data={conv.messageTidbits}
+       />
+   );
   }
 
   // This allows us to provide some initial formatting guidance that the
@@ -75,7 +83,9 @@ const ConversationSummary = React.memo(function ConversationSummary(props) {
           { authorNames.join(', ') }
         </div>
       </div>
-      { maybeVis }
+      <div>
+        { maybeVis }
+      </div>
     </div>
   );
 });

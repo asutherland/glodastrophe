@@ -45,7 +45,7 @@ export default function FolderListItem(props) {
   // removed: nestedLevel={ folder.depth }
   // TODO: correct to do actual semantic nesting and collapsing
   return (
-    <List.Item
+    <List.Item className="clickable-list-item"
       key={ folder.id }
       value={ folder.id }
       active={ props.selected }

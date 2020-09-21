@@ -139,6 +139,10 @@ body {
 
 /* ===== Folder Summaries ====== */
 
+.clickable-list-item {
+  cursor: pointer;
+}
+
 /* ===== Conversation List Pane ===== */
 
 /**
