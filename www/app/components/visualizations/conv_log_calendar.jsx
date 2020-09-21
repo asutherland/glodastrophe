@@ -58,9 +58,9 @@ const TOTAL_MONTHS = FULL_MONTHS + HALF_MONTHS + QTR_MONTHS;
  * Month heights, where we must always allow 6 content rows.
  * - Full: 28 ((6 + 1) * 4)
  */
-const FULL_CELL_PX = 6;
-const HALF_CELL_PX = 3;
-const QTR_CELL_PX = 1.5;
+const FULL_CELL_PX = 4;
+const HALF_CELL_PX = 2;
+const QTR_CELL_PX = 1;
 const PADDING_PX = 1;
 const DAYS_IN_WEEK = 7;
 const GAP_CELLS = 1;
