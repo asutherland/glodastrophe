@@ -10,7 +10,7 @@
   --scheme-dark: #3d1255;
   --scheme-mid: #58a272;
   --scheme-lighter: #7e5595;
-  --scheme-lightest: #b295c3;
+  --scheme-lightest: #d8c0e4;
   --scheme-light-text: #ffffff;
 
   /* got this by spreading the brightness out */
@@ -138,6 +138,11 @@ body {
 }
 
 /* ===== Folder Summaries ====== */
+
+.sidebar-pane {
+  overflow: auto;
+  height: 100%;
+}
 
 .clickable-list-item {
   cursor: pointer;

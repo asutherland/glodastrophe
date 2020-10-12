@@ -10,13 +10,17 @@ import { oldToNewConversationMessageComparator } from 'gelam/db/comparators';
  *
  *
  */
-export default function churnConversation(convInfo, messages/*, oldConvInfo */) {
+export default function churnConversation(convInfo, messages, oldConvInfo, convType, convMeta) {
   // Ensure the messages are sorted oldest to newest.  We do this because for
   // simplicity for gaia mail's UX decisions we initially opted to do
   // NEW-TO-OLD.  A more rigorous treatment and rationale is needed, however.
   messages = messages.concat();
   messages.sort(oldToNewConversationMessageComparator);
 
+  // ## TIDBITS
+  // This previously was just brief coverage of the first N unread messages but
+  // now powers time based visualizations.  It should likely go back to being
+  // the first N unread, but the time digests could be their own thing.
   let tidbits = convInfo.app.tidbits = [];
 
   let midToIndex = new Map();
@@ -55,5 +59,13 @@ export default function churnConversation(convInfo, messages/*, oldConvInfo */) 
     convInfo.height = 1;
   } else {
     convInfo.height = 2;
+  }
+
+  // ## Phabricator Revision stuff
+  if (convType === 'phab-drev') {
+    const patchInfo = convInfo.app.patchInfo = convMeta.patchInfo;
+    for (const folderId of patchInfo.virtFolderIds) {
+      convInfo.folderIds.add(folderId);
+    }
   }
 }

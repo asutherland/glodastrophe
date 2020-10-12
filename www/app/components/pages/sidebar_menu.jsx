@@ -35,7 +35,7 @@ export default function SidebarMenu(props) {
   // problems when interacting with the react-split-pane.  I'm reverting this
   // to be its own always-present split-pane for sanity.
   return (
-    <Segment.Group>
+    <Segment.Group className="sidebar-pane">
         <Segment>
           <List>
             <List.Item

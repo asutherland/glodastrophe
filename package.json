@@ -44,7 +44,6 @@
     "d3-scale-chromatic": "^2.0.0",
     "d3-time": "^2.0.0",
     "intl-pluralrules": "^1.2.0",
-    "parse-git-patch": "^1.0.7",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
