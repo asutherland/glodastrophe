@@ -227,8 +227,13 @@ body {
   white-space: nowrap;
 }
 
-.conv-sumary-vis {
+.conv-summary-vis {
 
+}
+
+.conv-summary-details {
+  display: flex;
+  flex-direction: row;
 }
 
 .conv-time-threading-link {
@@ -291,6 +296,29 @@ body {
   color: gray;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.phab-drev-summary {
+  padding-left: 4px;
+}
+.phab-drev-summary h3 {
+  margin: 0;
+  margin-bottom: 3px;
+}
+
+.patch-summary {
+
+}
+.patch-deltas {
+  font-family: monospace;
+  font-size: 90%;
+}
+.patch-add {
+  color: darkgreen;
+}
+.patch-del {
+  color: darkred;
+  font-weight: bold;
 }
 
 /* ===== Message List Pane ===== */

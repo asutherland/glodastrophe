@@ -63,6 +63,8 @@ export default function churnConversation(convInfo, messages, oldConvInfo, convT
 
   // ## Phabricator Revision stuff
   if (convType === 'phab-drev') {
+    convInfo.app.drevInfo = convMeta.drevInfo;
+
     const patchInfo = convInfo.app.patchInfo = convMeta.patchInfo;
     for (const folderId of patchInfo.virtFolderIds) {
       convInfo.folderIds.add(folderId);

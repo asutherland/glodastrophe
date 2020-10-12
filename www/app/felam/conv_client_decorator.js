@@ -23,4 +23,9 @@ export default function decorateConversation(mailConversation, wireRep, firstTim
       parentIndex: tidbit.parent
     };
   });
+
+  if (wireRep.app.patchInfo) {
+    mailConversation.drevInfo = wireRep.app.drevInfo;
+    mailConversation.patchInfo = wireRep.app.patchInfo;
+  }
 }

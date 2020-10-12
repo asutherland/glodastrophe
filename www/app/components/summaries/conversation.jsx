@@ -7,6 +7,8 @@ import Star from '../actioners/star';
 import Unread from '../actioners/unread';
 import Drafts from '../actioners/drafts';
 
+import PatchSummary from '../summaries/patch';
+
 import ConvTimeThreadingVis from '../visualizations/conv_time_threading';
 import ConvLogCalendar from '../visualizations/conv_log_calendar';
 
@@ -14,10 +16,13 @@ import ConvLogCalendar from '../visualizations/conv_log_calendar';
 const ConversationSummary = React.memo(function ConversationSummary(props) {
   const conv = props.item;
 
+  // XXX this was from the old quantized height magic, currently disabled.
+  /*
   var height = 40 * conv.height;
   var inlineStyle = {
     height: height,
   };
+  */
 
   var authorNames = conv.authors.slice(0, 6).map(x => (x.name || x.address));
 
@@ -56,6 +61,18 @@ const ConversationSummary = React.memo(function ConversationSummary(props) {
    );
   }
 
+  let maybeAppInfo;
+  if (conv.convType === 'phab-drev') {
+    if (conv.patchInfo) {
+      maybeAppInfo = (
+        <div className="phab-drev-summary">
+          <h3>{ conv.drevInfo.status }</h3>
+          <PatchSummary patchInfo={ conv.patchInfo } />
+        </div>
+      );
+    }
+  }
+
   // This allows us to provide some initial formatting guidance that the
   // localization can then override.  There currently does not appear to be any
   // Intl.RelativeTimeFormat magic in fluent.js, so we likely need to create
@@ -65,7 +82,7 @@ const ConversationSummary = React.memo(function ConversationSummary(props) {
   return (
     <div className={ rootClasses }
           onClick={ onClickConversation }
-          style={ inlineStyle } >
+          >
       <div className="conv-summary-envelope-row">
         <Unread {...props} item={ conv } />
         <Star {...props} item={ conv } />
@@ -83,8 +100,9 @@ const ConversationSummary = React.memo(function ConversationSummary(props) {
           { authorNames.join(', ') }
         </div>
       </div>
-      <div>
+      <div className="conv-summary-details">
         { maybeVis }
+        { maybeAppInfo }
       </div>
     </div>
   );

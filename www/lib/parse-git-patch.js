@@ -30,13 +30,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-const fileNameRegex = /^diff --git "?a\/(.*)"?\s*"?b\/(.*)"?/
+// changed: this regex was missing a "$" and the whitespace between the 'a' and
+// 'b' clauses wasn't required.  really this would be better to use the
+// dedicated "---" and "+++" lines to supersede this.
+const fileNameRegex = /^diff --git "?a\/(.*)"?\s+"?b\/(.*)"?$/
 const fileLinesRegex = /^@@ -([0-9]*),?\S* \+([0-9]*),?/
 const similarityIndexRegex = /^similarity index /
 const addedFileModeRegex = /^new file mode /
 const deletedFileModeRegex = /^deleted file mode /
 
-function parseGitPatch(patch) {
+export default function parseGitPatch(patch) {
   if (typeof patch !== 'string') {
     throw new Error('Expected first argument (patch) to be a string')
   }
@@ -134,5 +137,3 @@ function splitIntoParts(lines, separator) {
 
   return parts
 }
-
-module.exports = parseGitPatch
