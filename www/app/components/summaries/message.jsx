@@ -39,7 +39,7 @@ export default class MessageSummary extends React.PureComponent {
           !msg.isDownloadingEmbeddedImages) {
         maybeDownloadEmbeddedImages = (
           <div className='message-download-embedded-images'
-            onClick={ this.downloadEmbeddedImages } >
+            onClick={ this.downloadEmbeddedImages.bind(this) } >
             <Localized
               id='messageDownloadEmbeddedImages' />
           </div>
@@ -60,9 +60,44 @@ export default class MessageSummary extends React.PureComponent {
       bodyish = <div className="message-snippet">{ msg.snippet || '' }</div>;
     }
 
+    let maybeRecipients = null;
+    if ((msg.to && msg.to.length) ||
+        (msg.cc && msg.cc.length) ||
+        (msg.bcc && msg.bcc.length)) {
+      let recipientRows = [];
+      const emitRecipients = (listName, peeps) => {
+        let recipientsList = [];
+        for (const peep of peeps) {
+          recipientsList.push(
+            <li key={ peep.address }>{ peep.name || peep.address }</li>
+          );
+        }
+        recipientRows.push(
+          <div className="message-recipients-row" key={listName}>
+            <label>{ listName }: </label>
+            <ul className="message-recipients-list">{ recipientsList }</ul>
+          </div>
+        );
+      };
+      if (msg.to) {
+        emitRecipients('to', msg.to);
+      }
+      if (msg.cc) {
+        emitRecipients('cc', msg.cc);
+      }
+      if (msg.bcc) {
+        emitRecipients('bcc', msg.bcc);
+      }
+      maybeRecipients = (
+        <div className="message-recipients">
+          { recipientRows }
+        </div>
+      );
+    }
+
     return (
       <div className={ itemClassNames }>
-        <div className={ envClassNames } onClick={ this.toggleExpanded }>
+        <div className={ envClassNames } onClick={ this.toggleExpanded.bind(this) }>
           <div className="message-envelope-row">
             <Unread item={ msg } />
             <Star item={ msg } />
@@ -77,6 +112,7 @@ export default class MessageSummary extends React.PureComponent {
               <MessageReply {...this.props} item={ msg } />
             </div>
           </div>
+          { maybeRecipients }
         </div>
         { bodyish }
       </div>

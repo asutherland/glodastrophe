@@ -24,6 +24,7 @@
   "permissions": [
     "https://phabricator.services.mozilla.com/*",
     "https://bugzilla.mozilla.org/*",
+    "<all_urls>",
     "unlimitedStorage"
   ]
 }

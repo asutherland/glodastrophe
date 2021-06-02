@@ -28,6 +28,8 @@ export default class AutoconfigSetup extends React.Component {
 
       bugzillaServerUrl: 'https://bugzilla.mozilla.org/',
       bugzillaApiKey: '',
+
+      icalCalendarUrl: '',
     };
 
     this.handleNameChange = this.handleNameChange.bind(this);
@@ -37,10 +39,12 @@ export default class AutoconfigSetup extends React.Component {
     this.handlePhabKeyChange = this.handlePhabKeyChange.bind(this);
     this.handleBugzillaServerChange = this.handleBugzillaServerChange.bind(this);
     this.handleBugzillaKeyChange = this.handleBugzillaKeyChange.bind(this);
+    this.handleIcalCalendarUrlChange = this.handleIcalCalendarUrlChange.bind(this);
 
     this.startAutoconfig = this.startAutoconfig.bind(this);
     this.startPhabricatorAdd = this.startPhabricatorAdd.bind(this);
     this.startBugzillaAdd = this.startBugzillaAdd.bind(this);
+    this.startIcalAdd = this.startIcalAdd.bind(this);
   }
 
   render() {
@@ -168,6 +172,26 @@ export default class AutoconfigSetup extends React.Component {
             </Button>
           </Form>
         </section>
+        <Divider />
+        <section>
+          <h1><Localized id='setup_manual_ical_header' /></h1>
+          <Form>
+            <Form.Field>
+              <label><Localized id='setup_manual_ical_calendar_url_label' /></label>
+              <Localized id="setup_manual_ical_calendar_url_input" attrs={{placeholder: true}}>
+                <input type="text"
+                  value={this.state.icalCalendarUrl}
+                  onChange={this.handleIcalCalendarUrlChange}
+                  />
+              </Localized>
+            </Form.Field>
+            <Button onClick={ this.startIcalAdd }>
+              <Localized
+                id='setupAutoconfigTriggerAutoconfigButtonLabel'
+              />
+            </Button>
+          </Form>
+        </section>
       </div>
     );
   }
@@ -199,6 +223,10 @@ export default class AutoconfigSetup extends React.Component {
 
   handleBugzillaKeyChange(evt) {
     this.setState({ bugzillaApiKey: evt.target.value });
+  }
+
+  handleIcalCalendarUrlChange(evt) {
+    this.setState({ icalCalendarUrl: evt.target.value });
   }
 
   learnAboutAccount() {
@@ -276,6 +304,40 @@ export default class AutoconfigSetup extends React.Component {
       },
       {
         type: 'bugzilla',
+      });
+
+    if (error) {
+      this.setState({
+        autoconfigInProgress: false,
+        errorCode: error,
+        errorDetails
+      });
+      return;
+    }
+
+    this.props.onAccountCreated(account.id);
+  }
+
+  async startIcalAdd() {
+    var mailApi = this.props.mailApi;
+
+    // don't have multiple autoconfigs in flight at the same time
+    if (this.state.autoconfigInProgress) {
+      return;
+    }
+
+    // Indicate an autoconfig is in progress and clear existing error state.
+    this.setState({
+      autoconfigInProgress: true,
+      errorCode: null,
+      errorDetails: null
+    });
+    let { error, errorDetails, account } = await mailApi.tryToCreateAccount(
+      {
+        calendarUrl: this.state.icalCalendarUrl,
+      },
+      {
+        type: 'ical',
       });
 
     if (error) {

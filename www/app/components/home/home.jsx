@@ -50,6 +50,12 @@ export default class Home extends React.Component {
               id='debugCronSync'
               />
           </Link>
+          <br />
+          <a href="/logic-inspector/index.html?&broadcast=true">
+            <Localized
+                id='debugShowLogicInspector'
+                />
+          </a>
         </div>
       </div>
     );

@@ -48,6 +48,11 @@ export default class MessageBody extends React.Component {
         } else {
           node.textContent = `${info.op}: ${info.value}`;
         }
+      } else if (info.type === 'date-range') {
+        // XXX obviously this needs to be pushed through an l10n/relative date layer
+        node.textContent = `${info.name}: ${new Date(info.startDate)}-${new Date(info.endDate)}`;
+      } else if (info.type === 'string-value') {
+        node.textContent = `${info.name}: ${info.value}`;
       }
     }
   }

@@ -43,6 +43,7 @@
     "d3-scale": "^3.2.1",
     "d3-scale-chromatic": "^2.0.0",
     "d3-time": "^2.0.0",
+    "ical.js": "^1.4.0",
     "intl-pluralrules": "^1.2.0",
     "prop-types": "^15.7.2",
     "react": "^16.13.1",

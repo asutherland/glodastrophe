@@ -57,6 +57,11 @@ setup_manual_bugzilla_apiKey_label = API Key
 setup_manual_bugzilla_apiKey_input =
   .placeholder = api-...
 
+setup_manual_ical_header = Add iCalendar Account
+setup_manual_ical_calendar_url_label = Calendar URL
+setup_manual_ical_calendar_url_input =
+  .placeholder = https://...
+
 # -- folder_list.jsx
 refreshFolderList = Refresh folder list
 
@@ -140,6 +145,7 @@ undoButton = Undo
 # -- Home exposure
 debugHomeHeader = Debug Stuff
 debugCronSync = Debug CronSync
+debugShowLogicInspector = Show logic-inspector logging UI
 
 # -- Debug: Cronsync
 forceCronSync = Force CronSync
