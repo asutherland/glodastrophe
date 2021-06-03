@@ -19,6 +19,7 @@ import Home from './components/home/home';
 
 import WrappedAutoconfigSetup from './containers/wrapped_autoconfig_setup';
 
+import Sidebar from './components/pages/sidebar';
 import ThreeCol from './components/pages/three_col';
 
 import { selectDefaultAccount } from './actions/viewing';

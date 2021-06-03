@@ -10,6 +10,11 @@
     "default_icon": "glast-64.png",
     "default_title": "Glodastrophe"
   },
+  "sidebar_action": {
+    "default_title": "Glodastrophe Sidebar",
+    "default_panel": "sidebar.html#/sidebar",
+    "default_icon": "glast-64.png"
+  },
   "description": "Technically a Messaging Client",
   "homepage_url": "https://github.com/asutherland/glodastrophe",
   "icons": {
