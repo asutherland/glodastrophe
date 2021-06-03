@@ -1,8 +1,8 @@
 default: build
-.PHONY: build npm-build webext-build
+.PHONY: build logic-inspector-build npm-build webext-build
 
 logic-inspector-build:
-	cd deps/gelam/logic-inspector && make build
+	cd deps/gelam/logic-inspector && make
 
 npm-build:
 	npm run build
