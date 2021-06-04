@@ -40,6 +40,9 @@ var config = {
   },
   // Render source-map file for final build
   devtool: 'source-map',
+  optimization: {
+    minimize: false,
+  },
   resolve: {
     modules: [
       // glodastrophe
@@ -80,15 +83,6 @@ var config = {
   },
   plugins: [
     new CleanWebpackPlugin(),
-    //Minify the bundle
-    /*
-    new webpack.optimize.UglifyJsPlugin({
-      compress: {
-        //supresses warnings, usually from module minification
-        warnings: false
-      }
-    }),
-    */
     // This prevents a million billion unique hash bundles from being created,
     // but it would be better to have explicitly named chunks since there is the
     // intent that account types are dynamically loaded.  This may result in
@@ -102,6 +96,7 @@ var config = {
     new TransferWebpackPlugin([
       { from: 'static', to: '' },
       { from: 'deps/gelam/logic-inspector/build/', to: 'logic-inspector' },
+      { from: 'autoconfig', to: 'autoconfig' }
     ], __dirname),
     /*
     new webpack.DefinePlugin({
