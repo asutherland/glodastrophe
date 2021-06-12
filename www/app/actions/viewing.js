@@ -4,7 +4,7 @@ import { SELECT_ACCOUNT, SELECT_FOLDER, SELECT_CONVERSATION, SELECT_MESSAGE,
   from './actionTypes';
 
 import mailApi  from 'gelam/main-frame-setup';
-import { convIdFromMessageId } from 'gelam/id_conversions';
+import { convIdFromMessageId } from 'gelam/shared/id_conversions';
 
 /**
  * Select an account and its inbox (or other specified folder type) for

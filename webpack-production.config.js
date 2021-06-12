@@ -5,7 +5,7 @@ var nodeModulesPath = path.resolve(__dirname, 'node_modules');
 var TransferWebpackPlugin = require('transfer-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
-var gelamJSRoot = path.resolve(__dirname, 'deps/gelam/js');
+var gelamJSRoot = path.resolve(__dirname, 'deps/gelam/src');
 
 /**
  * Configuration strongly derived from the example at
@@ -48,7 +48,7 @@ var config = {
       // glodastrophe
       path.resolve(__dirname, 'www/lib'),
       // gelam libs
-      path.resolve(__dirname, 'deps/gelam/js/ext'),
+      path.resolve(__dirname, 'deps/gelam/src/vendored'),
       "node_modules"
     ],
     extensions: [".js", ".jsx"],
@@ -56,22 +56,25 @@ var config = {
       // glodastrophe mappings
       app: path.resolve(__dirname, 'www/app'),
       gelam: gelamJSRoot,
-      logic: path.resolve(gelamJSRoot, 'logic.js'),
+      shared: path.resolve(gelamJSRoot, 'shared'),
+      vendored: path.resolve(gelamJSRoot, 'vendored'),
+      logic: path.resolve(gelamJSRoot, 'shared/logic.js'),
       app_logic: path.resolve(__dirname, 'www/app/felam'),
       locales: path.resolve(__dirname, 'www/locales'),
 
       // extra gelam mappings
-      bleach: path.resolve(gelamJSRoot, 'ext/bleach.js/lib/bleach'),
+      bleach: path.resolve(gelamJSRoot, 'vendored/bleach.js/lib/bleach'),
+      equal: path.resolve(gelamJSRoot, 'vendored/equal'),
       'imap-formal-syntax':
-        path.resolve(gelamJSRoot, 'ext/imap-handler/src/imap-formal-syntax'),
+        path.resolve(gelamJSRoot, 'vendored/imap-handler/src/imap-formal-syntax'),
       'smtpclient-response-parser':
           path.resolve(
-            gelamJSRoot, 'ext/smtpclient/src/smtpclient-response-parser'),
-      'wbxml': path.resolve(gelamJSRoot, 'ext/activesync-lib/wbxml/wbxml'),
+            gelamJSRoot, 'vendored/smtpclient/src/smtpclient-response-parser'),
+      'wbxml': path.resolve(gelamJSRoot, 'vendored/activesync-lib/wbxml/wbxml'),
       'activesync/codepages':
-        path.resolve(gelamJSRoot, 'ext/activesync-lib/codepages'),
+        path.resolve(gelamJSRoot, 'vendored/activesync-lib/codepages'),
       'activesync/protocol':
-        path.resolve(gelamJSRoot, 'ext/activesync-lib/protocol'),
+        path.resolve(gelamJSRoot, 'vendored/activesync-lib/protocol'),
     }
     //node_modules: ["web_modules", "node_modules"]  (Default Settings)
   },

@@ -11,5 +11,5 @@ Set.prototype.toJSON = function toJSON() {
 
 console.log('worker requiring worker-setup');
 // XXX I think the evaluation of this gets hoisted?
-import 'gelam/worker-setup';
+import 'gelam/backend/worker-setup';
 console.log('worker required worker-setup');

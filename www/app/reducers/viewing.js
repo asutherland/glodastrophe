@@ -1,6 +1,6 @@
 import mailApi from 'gelam/main-frame-setup';
 import { accountIdFromFolderId, accountIdFromConvId }
-  from 'gelam/id_conversions';
+  from 'gelam/shared/id_conversions';
 
 import { SELECT_ACCOUNT, SELECT_FOLDER, SELECT_CONVERSATION, SELECT_MESSAGE,
         NAVIGATE_TO_DRAFT,

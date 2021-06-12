@@ -1,4 +1,4 @@
-import { oldToNewConversationMessageComparator } from 'gelam/db/comparators';
+import { oldToNewConversationMessageComparator } from 'gelam/backend/db/comparators';
 
 /**
  * Churn up our application-specific summary stuff:
