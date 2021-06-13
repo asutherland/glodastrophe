@@ -63,18 +63,13 @@ var config = {
       locales: path.resolve(__dirname, 'www/locales'),
 
       // extra gelam mappings
-      bleach: path.resolve(gelamJSRoot, 'vendored/bleach.js/lib/bleach'),
+      bleach: path.resolve(gelamJSRoot, 'vendored/bleach/bleach'),
       equal: path.resolve(gelamJSRoot, 'vendored/equal'),
       'imap-formal-syntax':
         path.resolve(gelamJSRoot, 'vendored/imap-handler/src/imap-formal-syntax'),
       'smtpclient-response-parser':
           path.resolve(
             gelamJSRoot, 'vendored/smtpclient/src/smtpclient-response-parser'),
-      'wbxml': path.resolve(gelamJSRoot, 'vendored/activesync-lib/wbxml/wbxml'),
-      'activesync/codepages':
-        path.resolve(gelamJSRoot, 'vendored/activesync-lib/codepages'),
-      'activesync/protocol':
-        path.resolve(gelamJSRoot, 'vendored/activesync-lib/protocol'),
     }
     //node_modules: ["web_modules", "node_modules"]  (Default Settings)
   },
